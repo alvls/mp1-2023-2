@@ -2,6 +2,25 @@
 #include <locale.h>
 #include <math.h>
 
+
+float max(float x, float y) {
+	if (x > y) {
+		return x;
+	}
+	else {
+		return y;
+	}
+}
+
+float min(float x, float y) {
+	if (x > y) {
+		return y;
+	}
+	else {
+		return x;
+	}
+}
+
 void main() {
 	float x1, y1, r1, x2, y2, r2;
 	setlocale(LC_ALL, "Rus");
@@ -10,8 +29,8 @@ void main() {
 	printf("Введите координаты и радиус второй окружности: ");
 	scanf_s("%f %f %f", &x2, &y2, &r2);
 	// касаются внутри, касаются снаружи, совпадают, не касаются, пересекаются
-	float rasst = sqrt(fabs(x2 - x1) * fabs(x2 - x1) + fabs(y2 - y1) * fabs(y2 - y1));
-	if (x1 == x2 & y1 == y2 & r1 == r2) {
+	double rasst = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+	if (x1 == x2 && y1 == y2 && r1 == r2) {
 		printf("Совпадают. ");
 	}
 	else if (rasst > (r1 + r2)) { // не касаются
@@ -23,14 +42,14 @@ void main() {
 	else if (rasst == fabs(r1 - r2)) {
 		printf("Касаются внутри. ");
 	}
-	else if (x1 == x2 & y1 == y2 & r1 != r2) {
+	else if (x1 == x2 && y1 == y2 && r1 != r2) {
 		printf("Центры окружностей совпадают, радиусы не совпадают. ");
 	} 
-	else if (rasst < (r1 + r2)) {
-		printf("Пересекаются. ");
+	else if ((rasst < max(r1, r2)) && (max(r1, r2) > rasst + min(r1, r2))) {
+		printf("Одна окружность внутри другой. ");
 	}
 	else {
-		printf("Одна окружность внутри другой. ");
+		printf("Пересекаются. ");
 	}
 	system("pause");
 
