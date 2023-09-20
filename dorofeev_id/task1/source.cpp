@@ -2,7 +2,7 @@
 #include <math.h>
 #include <locale.h>
 
-float max(float a, float b)
+float max(float a, float b) //оказывается оно не надо
 {
     if (a > b)
     {
