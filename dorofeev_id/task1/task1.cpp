@@ -6,7 +6,7 @@
 int main()
 {
     setlocale (LC_ALL, "rus");
-    double PlDvp = (950*0.00001);
+    double PlDvp = (950*0.000001);
     double PlDsp = (750*0.000001);
     double PlWood = (700*0.000001);
     double WDsp = 1.5;
