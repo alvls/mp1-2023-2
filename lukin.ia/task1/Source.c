@@ -1,3 +1,4 @@
+/*
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <math.h>
@@ -34,4 +35,66 @@ int main(){
 	
 	system("pause");
 
+}
+*/
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+#include <locale.h>
+
+int main() 
+{
+	setlocale(LC_ALL, "rus");
+	float zadst, bok, kr, door, polk;//масса деталей
+	float h, w, d;//характеристические показатели
+	float pldvp, pldsp, pld;//плотности материалов
+	float kolpol, hvsp, i;//вспомогательные переменные дл€ вычислени€ количества полок
+	float masshk;//масса самого шкафа
+	do
+	{
+		printf("¬ведите высоту\n");
+		scanf("%f", &h);
+		if (h < 180.0 || h > 220.0)
+		{
+			printf("¬ведите значение высоты от 180 до 220 см  \n");
+		}
+	} while (h < 180.0 || h > 220.0);
+	do
+	{
+		printf("¬ведите ширину\n");
+		scanf("%f", &w);
+		if (w < 80 || w>120)
+		{
+			printf("¬ведите значение ширины от 80 до 120 см  \n");
+		}
+	} while (w < 80 || w>120);
+	do
+	{
+		printf("¬ведите глубину\n");
+		scanf("%f", &d);
+		if (d < 50 || d>90)
+		{
+			printf("¬ведите значение глубины от 50 до 90 см  \n");
+		}
+	} while (d < 50 || d>90);
+	hvsp = h;
+	i = 0;
+	do
+	{
+		i++;
+		hvsp = hvsp - 41.5;
+	} while (hvsp > 41.5);
+	kolpol = i;
+	pldvp = 0.82;
+	pldsp = 0.55;
+	pld = 0.7;
+	zadst = h * w * 0.5*pldvp;
+	bok = h * d * 1.5 * pldsp;
+	kr = w * d * 1.5 * pldsp;
+	door = h * w * 1 * pld;
+	polk = d * (w - 1.5 * 2) * 1.5 * pldsp;//если прин€ть толщину полки равной 15 мм, как и листы дсп до этого
+	//также мною были учтены две боковые стенки по 1.5 см кажда€
+	masshk = (zadst + 2 * bok + 2 * kr + 2 * door + kolpol * polk)/1000;
+	printf("ћасса шкафа = %f", masshk);
+	system("pause");
 }
