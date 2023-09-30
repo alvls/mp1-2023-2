@@ -90,7 +90,7 @@ int main() {
 	int polki = d * (w - bok_t * 2) * 1.5 * kol_p * dsp_den; // 5
 	ans = zad_stenka + dve_bokovini + krishki + dveri + polki;
 	ans /= 1000;
-	printf("Вес шкафа: %g кг\n", ans);
+	printf("Вес шкафа: %g кг\n", ans); // cabinet weight: ans kg
 	system("pause");
 	return 0;
 }
