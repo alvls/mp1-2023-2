@@ -6,17 +6,17 @@
 
 int main()
 {
-    setlocale (LC_ALL, "rus");
-    double PlDvp = (950*0.000001);
-    double PlDsp = (750*0.000001);
-    double PlWood = (700*0.000001);
+    setlocale(LC_ALL, "rus");
+    double PlDvp = (950 * 0.000001*0.5);
+    double PlDsp = (750 * 0.000001);
+    double PlWood = (700 * 0.000001);
     double WDsp = 1.5;
 
     int h, w, d;
     while (1 == 1)
     {
         printf("Введите высоту\n");
-        scanf("%d", &h);
+        scanf_s("%d", &h);
         if (h >= 180 && h <= 220)
         {
             break;
@@ -30,7 +30,7 @@ int main()
     while (1 == 1)
     {
         printf("Введите ширину\n");
-        scanf("%d", &w);
+        scanf_s("%d", &w);
         if (w >= 80 && w <= 120)
         {
             break;
@@ -44,7 +44,7 @@ int main()
     while (1 == 1)
     {
         printf("Введите глубину\n");
-        scanf("%d", &d);
+        scanf_s("%d", &d);
         if (d >= 50 && d <= 90)
         {
             break;
@@ -57,12 +57,12 @@ int main()
 
 
 
-    double WeightSt = h*w*PlDvp;
-    double WeightBok = 2*(h*d*WDsp*PlDsp);
-    double WeightKr = 2*(w*d*WDsp*PlDsp);
-    double WeightDoor = 2*(h*(w/2)*1*PlWood);
+    double WeightSt = h * w * PlDvp;
+    double WeightBok = 2 * (h * d * WDsp * PlDsp);
+    double WeightKr = 2 * (w * d * WDsp * PlDsp);
+    double WeightDoor = 2 * (h * (w / 2) * 1 * PlWood);
 
-    double WPolka = w - 0.3;
+    double WPolka = w - 2*WDsp;
     int KolPolok = 0;
     double HPolki = 40.15;
     double hh = h;
@@ -72,11 +72,9 @@ int main()
         hh -= HPolki;
     }
 
-    double WeightPolok = KolPolok*(WPolka * WDsp * d * PlDsp);
+    double WeightPolok = KolPolok * (WPolka * WDsp * d * PlDsp);
     double Weight = WeightBok + WeightDoor + WeightKr + WeightSt + WeightPolok;
     printf("Вес шкафа %g кг\n", Weight);
 
     return 0;
 }
-
-
