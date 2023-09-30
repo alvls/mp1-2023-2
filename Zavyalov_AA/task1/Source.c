@@ -69,15 +69,15 @@ int main() {
 	scanf_s("%d %d", &h, &w); // 1.h and 1.w
 	printf("Введите глубину боковин: "); // Enter the depth of the sidewalls: 
 	scanf_s("%d", &d);
-	while (!(180 <= h <= 220)) {
+	while (!(180 <= h && h <= 220)) {
 		printf("Введите высоту от 180 см 220 см: "); // Enter the height from 180 cm 220 cm:
 		scanf_s("%d", &h);
 	}
-	while (!(80 <= w <= 120)) {
+	while (!(80 <= w && w <= 120)) {
 		printf("Введите ширину от 80 см 120 см: "); // Enter a width from 80 cm to 120 cm:
 		scanf_s("%d", &w);
 	}
-	while (!(50 <= d <= 90)) {
+	while (!(50 <= d && d <= 90)) {
 		printf("Введите глубину от 50 см до 90 см: "); // Enter a depth of 50 cm to 90 cm:
 		scanf_s("%d", &d);
 	}
@@ -90,7 +90,7 @@ int main() {
 	int polki = d * (w - bok_t * 2) * 1.5 * kol_p * dsp_den; // 5
 	ans = zad_stenka + dve_bokovini + krishki + dveri + polki;
 	ans /= 1000;
-	printf("%f\n", ans);
+	printf("Вес шкафа: %g кг\n", ans);
 	system("pause");
 	return 0;
 }
