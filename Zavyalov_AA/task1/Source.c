@@ -1,3 +1,4 @@
+/*
 #include <stdio.h>
 #include <locale.h>
 #include <math.h>
@@ -53,4 +54,43 @@ void main() {
 	}
 	system("pause");
 
+}
+*/
+
+#include <stdio.h>
+#include <locale.h>
+
+int main() {
+	int h, w, d;
+	float zad_t = 0.5, bok_t = 1.5, krish_t = 1.5, dv_t = 1;
+	float dsp_den = 0.75, dvp_den = 0.95, der_den = .7;
+	setlocale(LC_ALL, "rus");
+	printf("¬ведите высоту и ширину задней стенки: "); // Enter the height and width of the back wall: 
+	scanf_s("%d %d", &h, &w); // 1.h and 1.w
+	printf("¬ведите глубину боковин: "); // Enter the depth of the sidewalls: 
+	scanf_s("%d", &d);
+	while (!(180 <= h <= 220)) {
+		printf("¬ведите высоту от 180 см 220 см: "); // Enter the height from 180 cm 220 cm:
+		scanf_s("%d", &h);
+	}
+	while (!(80 <= w <= 120)) {
+		printf("¬ведите ширину от 80 см 120 см: "); // Enter a width from 80 cm to 120 cm:
+		scanf_s("%d", &w);
+	}
+	while (!(50 <= d <= 90)) {
+		printf("¬ведите глубину от 50 см до 90 см: "); // Enter a depth of 50 cm to 90 cm:
+		scanf_s("%d", &d);
+	}
+	int kol_p = h / (41.5);
+	float ans = 0;
+	int zad_stenka = h * w * zad_t * dvp_den; // 1
+	int dve_bokovini =  h * d * bok_t * dsp_den * 2; // 2
+	int krishki = w * d * krish_t * dsp_den * 2; // 3
+	int dveri = h * w * dv_t * der_den; // 4
+	int polki = d * (w - bok_t * 2) * 1.5 * kol_p * dsp_den; // 5
+	ans = zad_stenka + dve_bokovini + krishki + dveri + polki;
+	ans /= 1000;
+	printf("%f\n", ans);
+	system("pause");
+	return 0;
 }
