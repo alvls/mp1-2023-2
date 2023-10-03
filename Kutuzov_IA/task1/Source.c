@@ -1,6 +1,83 @@
 #include "stdio.h"
 #include "math.h"
+#include <stdio.h>
 
+// Task 1
+int main()
+{
+	int h, w, d = 0;
+
+	// Densities
+	double DSP_Dens = 750.f / 1000000.f;
+	double DVP_Dens = 950.f / 1000000.f;
+	double Wood_Dens = 700.f / 1000000.f;
+
+
+	// Inputting Data
+	int Inputing = 0;
+
+	do
+	{
+		printf("Input: h w d: ");
+		scanf_s("%i %i %i", &h, &w, &d);
+
+		int ch;
+		while (ch = getchar() != '\n')
+			;
+
+		h = h * 10;
+		w = w * 10;
+		d = d * 10;
+
+		Inputing = !(((h >= 1800) && (h <= 2200)) && ((w >= 800) && (w <= 1200)) && ((d >= 500) && (d <= 900)));
+
+		if (Inputing)
+		{
+			printf("\nData is incorrect, please try again: \n \n");
+		}
+	} while (Inputing);
+
+	// Volume Calculation
+	int DSP_Volume = 0;
+	int DVP_Volume = 0;
+	int Wood_Volume = 0;
+
+	// Basic Volume
+	DVP_Volume = h * w * 5;
+	DSP_Volume = (2 * h * d * 15) + (2 * w * d * 15);
+	Wood_Volume = h * w * 10;
+
+	// Shelf Volume
+	int Single_Shelf_Volume = (w - 30) * d * 15;
+
+	int Shelf_Count = 0;
+	int h_left = h;
+
+	// Packing as much shelves as we can
+	while (h_left >= 415)
+	{
+		Shelf_Count++;
+
+		h_left -= 415;
+	}
+
+	// Finalizing volume calculation
+	DSP_Volume = DSP_Volume + Shelf_Count * Single_Shelf_Volume;
+
+	// Mass calculation
+	double Mass = (DVP_Volume * DVP_Dens / 1000) + (DSP_Volume * DSP_Dens / 1000) + (Wood_Volume * Wood_Dens / 1000);
+
+	// Answer print out
+	printf("Mass: %lg \n", Mass);
+
+	system("pause");
+
+	return 0;
+}
+
+
+
+/* Task 0
 // Define Min and Max functions
 float Min(float a, float b)
 {
@@ -98,3 +175,4 @@ int main()
 	system("pause");
 	return 0;
 }
+*/
