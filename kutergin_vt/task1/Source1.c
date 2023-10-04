@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 void main(){
-    int DVP, DSP, wood; // плотности ДВП, ДСП И древесины дверей (кг/м^3)
+    int DVP = 950, DSP = 750, wood = 700; // плотности ДВП, ДСП И древесины дверей (кг/м^3)
     int num_of_shelves; // число полок (нужно рассчитать в программе)
     // размеры в метрах
     float h, w, t1 = 0.005; // накладная задняя стенка
@@ -11,9 +11,6 @@ void main(){
     float t4 = 0.01; // 2 накладные двери с той же высотой h и общей шириной w
     float t5 = 0.015; // несколько полок с уменьшенной шириной и той же глубиной d
     float M, M1, M2, M3, M4, M5; // массы позиций с 1 по 5 + масса всего шкафа
-    
-    printf("Enter the densities of DVP, DSP and wood (in kg per m^3): \n");
-    scanf("%d %d %d", &DVP, &DSP, &wood);
     
     printf("Enter the height h (from 1.8 to 2.2 m) and width w (from 0.8 to 1.2 m) of the back panel: \n");
     scanf("%f %f", &h, &w);
@@ -32,5 +29,5 @@ void main(){
     M = M1 + M2 + M3 + M4 + M5;
     printf("Cabinet weight: %.3f \n", M);
 }
-// Проверка: DVP = 950, DSP = 750, wood = 700, h = 2, w = 1, d = 0.7 ; Результат: M = 101.305
+// Проверка: h = 2, w = 1, d = 0.7 ; Результат: M = 101.305
 
