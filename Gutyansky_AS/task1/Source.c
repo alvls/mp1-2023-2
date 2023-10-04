@@ -58,7 +58,7 @@ void main() {
 
 	mass = (back_mass + sides_mass + top_down_mass + doors_mass + shelves_mass) * GRAM_TO_KG;
 
-	printf("\nШкаф\nВысота: %f\nШирина: %f\nГлубина: %f\nМасса: %f\n", h, w, d, mass);
+	printf("\nШкаф\nВысота: %fсм\nШирина: %fсм\nГлубина: %fсм\nМасса: %fкг\n", h, w, d, mass);
 	
 	system("pause");
 }
