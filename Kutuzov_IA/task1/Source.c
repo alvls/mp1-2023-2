@@ -1,6 +1,116 @@
 #include "stdio.h"
 #include "math.h"
+#include <stdio.h>
 
+// Task 1
+// These fucntions are here just so I dont have to write same things all over again
+void ClearKeyBuffer()
+{
+	int ch;
+	while (ch = getchar() != '\n')
+		;	
+}
+
+void IncorrectDataMessage(int Condition)
+{
+	if (Condition)
+		printf("\nData is incorrect, please try again: \n \n");	
+}
+
+
+int main()
+{
+	int h, w, d = 0;
+
+	// Densities
+	double DSP_Dens = 750.f / 1000000.f;
+	double DVP_Dens = 950.f / 1000000.f;
+	double Wood_Dens = 700.f / 1000000.f;
+
+	// Inputting Data
+	int Inputing = 0;
+	
+	// Input h
+	do
+	{
+		printf("Input h (180 - 220): ");
+		scanf("%i", &h);
+		ClearKeyBuffer();
+		
+		Inputing = ! ((h >= 180) && (h <= 220));
+		IncorrectDataMessage(Inputing);
+			
+	} while (Inputing);
+	
+	// input w
+	do
+	{
+		printf("Input w (80 - 120): ");
+		scanf("%i", &w);
+		ClearKeyBuffer();
+		
+		Inputing = ! ((w >= 80) && (w <= 120));
+		IncorrectDataMessage(Inputing);
+			
+	} while (Inputing);
+	
+	// input d
+	do
+	{
+		printf("Input d (50 - 90): ");
+		scanf("%i", &d);
+		ClearKeyBuffer();
+		
+		Inputing = ! ((d >= 50) && (d <= 90));
+		IncorrectDataMessage(Inputing);
+			
+	} while (Inputing);
+	
+	h = h * 10;
+	w = w * 10;
+	d = d * 10;
+
+	// Volume Calculation
+	int DSP_Volume = 0;
+	int DVP_Volume = 0;
+	int Wood_Volume = 0;
+
+	// Basic Volume
+	DVP_Volume = h * w * 5;
+	DSP_Volume = (2 * h * d * 15) + (2 * w * d * 15);
+	Wood_Volume = h * w * 10;
+
+	// Shelf Volume
+	int Single_Shelf_Volume = (w - 30) * d * 15;
+
+	int Shelf_Count = 0;
+	int h_left = h;
+
+	// Packing as much shelves as we can
+	while (h_left >= 415)
+	{
+		Shelf_Count++;
+
+		h_left -= 415;
+	}
+
+	// Finalizing volume calculation
+	DSP_Volume = DSP_Volume + Shelf_Count * Single_Shelf_Volume;
+
+	// Mass calculation
+	double Mass = (DVP_Volume * DVP_Dens / 1000) + (DSP_Volume * DSP_Dens / 1000) + (Wood_Volume * Wood_Dens / 1000);
+
+	// Answer print out
+	printf("Mass: %lg \n", Mass);
+
+	system("pause");
+
+	return 0;
+}
+
+
+
+/* Task 0
 // Define Min and Max functions
 float Min(float a, float b)
 {
@@ -98,3 +208,4 @@ int main()
 	system("pause");
 	return 0;
 }
+*/
