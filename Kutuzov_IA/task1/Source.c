@@ -3,6 +3,21 @@
 #include <stdio.h>
 
 // Task 1
+// These fucntions are here just so I dont have to write same things all over again
+void ClearKeyBuffer()
+{
+	int ch;
+	while (ch = getchar() != '\n')
+		;	
+}
+
+void IncorrectDataMessage(int Condition)
+{
+	if (Condition)
+		printf("\nData is incorrect, please try again: \n \n");	
+}
+
+
 int main()
 {
 	int h, w, d = 0;
@@ -12,30 +27,48 @@ int main()
 	double DVP_Dens = 950.f / 1000000.f;
 	double Wood_Dens = 700.f / 1000000.f;
 
-
 	// Inputting Data
 	int Inputing = 0;
-
+	
+	// Input h
 	do
 	{
-		printf("Input: h w d: ");
-		scanf_s("%i %i %i", &h, &w, &d);
-
-		int ch;
-		while (ch = getchar() != '\n')
-			;
-
-		h = h * 10;
-		w = w * 10;
-		d = d * 10;
-
-		Inputing = !(((h >= 1800) && (h <= 2200)) && ((w >= 800) && (w <= 1200)) && ((d >= 500) && (d <= 900)));
-
-		if (Inputing)
-		{
-			printf("\nData is incorrect, please try again: \n \n");
-		}
+		printf("Input h (180 - 220): ");
+		scanf("%i", &h);
+		ClearKeyBuffer();
+		
+		Inputing = ! ((h >= 180) && (h <= 220));
+		IncorrectDataMessage(Inputing);
+			
 	} while (Inputing);
+	
+	// input w
+	do
+	{
+		printf("Input w (80 - 120): ");
+		scanf("%i", &w);
+		ClearKeyBuffer();
+		
+		Inputing = ! ((w >= 80) && (w <= 120));
+		IncorrectDataMessage(Inputing);
+			
+	} while (Inputing);
+	
+	// input d
+	do
+	{
+		printf("Input d (50 - 90): ");
+		scanf("%i", &d);
+		ClearKeyBuffer();
+		
+		Inputing = ! ((d >= 50) && (d <= 90));
+		IncorrectDataMessage(Inputing);
+			
+	} while (Inputing);
+	
+	h = h * 10;
+	w = w * 10;
+	d = d * 10;
 
 	// Volume Calculation
 	int DSP_Volume = 0;
