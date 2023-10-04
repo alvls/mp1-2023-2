@@ -18,7 +18,7 @@
 #define SHELF_DISTANCE 40.0f
 #define GRAM_TO_KG 0.001f
 
-float read_value(char* question, float minValue, float maxValue);
+float read_int(char* question, float minValue, float maxValue);
 
 void main() {
 	float h, w, d;
@@ -36,9 +36,9 @@ void main() {
 	float mass;
 	
 	setlocale(LC_ALL, "rus");
-	h = read_value("Введите высоту шкафа h в сантиметрах (180 <= h <= 220): ", MIN_HEIGHT, MAX_HEIGHT);
-	w = read_value("Введите ширину шкафа w в сантиметрах (80 <= w <= 120): ", MIN_WIDTH, MAX_WIDTH);
-	d = read_value("Введите глубину шкафа d в сантиметрах (50 <= d <= 90): ", MIN_DEPTH, MAX_DEPTH);
+	h = read_int("Введите высоту шкафа h в сантиметрах (180 <= h <= 220): ", MIN_HEIGHT, MAX_HEIGHT);
+	w = read_int("Введите ширину шкафа w в сантиметрах (80 <= w <= 120): ", MIN_WIDTH, MAX_WIDTH);
+	d = read_int("Введите глубину шкафа d в сантиметрах (50 <= d <= 90): ", MIN_DEPTH, MAX_DEPTH);
 
 	back_volume = w * h * FIBERBOARD_THICKNESS;
 	back_mass = FIBERBOARD_DENSITY * back_volume;
@@ -63,7 +63,7 @@ void main() {
 	system("pause");
 }
 
-float read_value(char* const question, float minValue, float maxValue) {
+float read_int(char* const question, float minValue, float maxValue) {
 	int read_arguments;
 	float value;
 
