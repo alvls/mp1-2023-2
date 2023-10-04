@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+/*#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <locale.h>
@@ -58,5 +58,51 @@ void main()
 		}
 		
 	}
+	system("pause");
+}*/
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <locale.h>
+#include <math.h>
+#include <stdlib.h>
+
+void main()
+{
+	float h, w, d; //h - высота, w - ширина, d - глубина
+	float zs; // масса задней стенки
+	float bs; // масса боковых стенок
+	float kr; // масса нижней и верхней крышек
+	float nd; // масса двух дверей
+	float p; // масса полок
+
+	setlocale(LC_ALL, "rus");
+	printf("Введите высоту шкафа, принимающую значения от 180 до 220 см:");
+	scanf("%f", &h);
+	while ((h < 180) || (h > 220))
+	{
+		printf("Данные не корректны, введите высоту шкафа ещё раз:");
+		scanf("%f", &h);
+	}
+	printf("Введите ширину шкафа, принимающую значения от 80 до 120 см:");
+	scanf("%f", &w);
+	while ((w < 80) || (w > 120))
+	{
+		printf("Данные не корректны, введите высоту шкафа ещё раз:");
+		scanf("%f", &w);
+	}
+	printf("Введите глубину шкафа, принимающую значения от 50 до 90 см:");
+	scanf("%f", &d);
+	while ((d < 50) || (d > 90))
+	{
+		printf("Данные не корректны, введите высоту шкафа ещё раз:");
+		scanf("%f", &d);
+	}
+	zs = h * 0.01 * w * 0.01 * 0.5 * 0.01 * 850;
+	bs = 2 * (h * 0.01 * d * 0.01 * 1.5 * 0.01 * 650);
+	kr = 2 * (w * 0.01 * d * 0.01 * 1.5 * 0.01 * 650);
+	nd = (h * 0.01 * w * 0.01 * 1 * 0.01 * 680);
+	p = ((w - 3) * 0.01 * d * 0.01 * 1.5 * 0.01 * 650) * (int)(h / 41.5);
+	printf("Масса шкафа равна: %f кг", (zs + bs + kr + nd + p));
 	system("pause");
 }
