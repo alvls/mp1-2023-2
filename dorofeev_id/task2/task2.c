@@ -58,7 +58,7 @@ int mode2(int UgadNumber)
             LeftGr = (LeftGr + RightGr) / 2;
         else
         {
-            printf("Программа угадали число за %d попыток\n", KolPop);
+            printf("Программа угадала число за %d попыток\n", KolPop);
             return 0;
         }
 
@@ -99,7 +99,7 @@ int main()
         {
             printf("Загадайте число от 1 до 999, программа попытается его угадать\n");
             scanf("%d", &ZagadNumber);
-            if (ZagadNumber > 1000 || ZagadNumber < 0)
+            if (ZagadNumber >= 1000 || ZagadNumber < 0)
                 printf("Некорректный ввод. Попробуйте ещё раз!\n");
             else
                 break;
