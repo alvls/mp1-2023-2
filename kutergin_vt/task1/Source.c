@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 
-void main(){
+void main1(){
     float x1, y1, x2, y2; //координаты центров
     float r1, r2; //радиусы окружностей
     float dist; //расстояние между центрами
