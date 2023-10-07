@@ -48,10 +48,24 @@ int main()
    
     int h, w, d;
 
+
+    printf_s("Enter the height of the cabinet: \n");
     do {
-        printf_s("Parametri shkafa \n");
-        scanf_s("%i %i %i", &h, &w, &d);
-    } while (!((180 <= h) && (h <= 220)) || !((80 <= w) && (w <= 120)) || !((50 <= d) && (d <= 90)));
+        printf_s("Remember that the height must be from 180 to 220 cm \n");
+        scanf_s("%i", &h);
+    } while (  !((180 <= h) && (h <= 220))  );
+    
+    printf_s("Enter the weight of the cabinet: \n");
+    do {
+        printf_s("Remember that the weight must be from 80 to 120 cm \n");
+        scanf_s("%i", &w);
+    } while (  !((80 <= w) && (w <= 120))  );
+
+    printf_s("Enter the depth of the cabinet: \n");
+    do {
+        printf_s("Remember that the depth must be from 50 to 90 cm \n");
+        scanf_s("%i", &d);
+    } while (  !((50 <= d) && (d <= 90))  );
 
 
     int pl_dvp = 950;
@@ -75,7 +89,7 @@ int main()
     double m = zadnya_stenka + bokovina_1 * 2 + krishki_1 * 2 + dveri + polki_mnogo * kolvo_polok;
     printf_s("%lg Kg", m);
 
-
+    system("pause");
 }
 
 
