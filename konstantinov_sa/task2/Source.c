@@ -15,7 +15,7 @@ int main() {
 
 	if (mode == 1) {
 		int tries = 0;
-		int r = (int)(rand() * 998.0f / RAND_MAX + 1.0f); //RAND_MAX
+		int r = (int)(rand() * 998.0f / RAND_MAX + 1.0f);
 		printf("Óדאהûגאיעו\n");
 		int g = -1;
 		while (g != r) {
@@ -72,7 +72,6 @@ int main() {
 			printf("\n");
 
 			scanf("\n%c", &a);              //ÂÂÎÄ
-
 			if (a == '<') {
 				r = g;
 				g = (int)((l + r) / 2.0f);
