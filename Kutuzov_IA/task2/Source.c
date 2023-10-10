@@ -85,7 +85,7 @@ int CheckMode_2(int a)
 }
 
 
-// Searching algorith (Extracted into function for easy replacement)
+// Searching algorithms (Extracted into function for easy replacement)
 // Returns a new a value
 int Acceleration_Search(int a, int Response, int* LastResponse, int* Count_LastResponse)
 {
