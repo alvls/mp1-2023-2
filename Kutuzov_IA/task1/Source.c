@@ -8,13 +8,21 @@ void ClearKeyBuffer()
 {
 	int ch;
 	while (ch = getchar() != '\n')
+<<<<<<< HEAD
 		;
+=======
+		;	
+>>>>>>> d912c057eff5c167b5802db777b884ebf5ea1716
 }
 
 void IncorrectDataMessage(int Condition)
 {
 	if (Condition)
+<<<<<<< HEAD
 		printf("\nData is incorrect, please try again: \n \n");
+=======
+		printf("\nData is incorrect, please try again: \n \n");	
+>>>>>>> d912c057eff5c167b5802db777b884ebf5ea1716
 }
 
 
@@ -29,18 +37,57 @@ int main()
 
 	// Inputting Data
 	int Inputing = 0;
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> d912c057eff5c167b5802db777b884ebf5ea1716
 	// Input h
 	do
 	{
 		printf("Input h (180 - 220): ");
 		scanf("%i", &h);
 		ClearKeyBuffer();
+<<<<<<< HEAD
 
 		Inputing = !((h >= 180) && (h <= 220));
 		IncorrectDataMessage(Inputing);
 
+=======
+		
+		Inputing = ! ((h >= 180) && (h <= 220));
+		IncorrectDataMessage(Inputing);
+			
+>>>>>>> d912c057eff5c167b5802db777b884ebf5ea1716
 	} while (Inputing);
+	
+	// input w
+	do
+	{
+		printf("Input w (80 - 120): ");
+		scanf("%i", &w);
+		ClearKeyBuffer();
+		
+		Inputing = ! ((w >= 80) && (w <= 120));
+		IncorrectDataMessage(Inputing);
+			
+	} while (Inputing);
+	
+	// input d
+	do
+	{
+		printf("Input d (50 - 90): ");
+		scanf("%i", &d);
+		ClearKeyBuffer();
+		
+		Inputing = ! ((d >= 50) && (d <= 90));
+		IncorrectDataMessage(Inputing);
+			
+	} while (Inputing);
+	
+	h = h * 10;
+	w = w * 10;
+	d = d * 10;
 
 	// input w
 	do
