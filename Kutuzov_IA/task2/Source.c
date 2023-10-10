@@ -133,7 +133,7 @@ int BinarySearch(int a, int Response, int* BottomValue, int* TopValue)
 	else if (Response == 2 && a > (*BottomValue)) // Updates bottom border if necessary
 		(*BottomValue) = a;
 
-	return ((*BottomValue) + (*TopValue)) / 2; // Restuns the middle value
+	return ((*BottomValue) + (*TopValue)) / 2; // Returns the middle value
 }
 
 
