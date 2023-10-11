@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+п»ї#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <locale.h>
@@ -20,10 +20,10 @@ void main() {
 	int mode;
 
 	setlocale(LC_ALL, "rus");
-	mode = read_int("Введите режим работы:\n\
-1. Угадывает человек\n\
-2. Угадывает компьютер\n\
-Выбор: ", 1, 2);
+	mode = read_int("Р’РІРµРґРёС‚Рµ СЂРµР¶РёРј СЂР°Р±РѕС‚С‹:\n\
+1. РЈРіР°РґС‹РІР°РµС‚ С‡РµР»РѕРІРµРє\n\
+2. РЈРіР°РґС‹РІР°РµС‚ РєРѕРјРїСЊСЋС‚РµСЂ\n\
+Р’С‹Р±РѕСЂ: ", 1, 2);
 
 	
 	if (mode == 1) {
@@ -85,20 +85,20 @@ void human_mode() {
 	srand(time(NULL));
 	number = rand() % RANDOM_MOD + MIN_CHOICE;
 	
-	printf("Компьютер загадал какое-то число. Попробуйте угадать.\n");
+	printf("РљРѕРјРїСЊСЋС‚РµСЂ Р·Р°РіР°РґР°Р» РєР°РєРѕРµ-С‚Рѕ С‡РёСЃР»Рѕ. РџРѕРїСЂРѕР±СѓР№С‚Рµ СѓРіР°РґР°С‚СЊ.\n");
 
 	attempts = 0;
 	while (1) {
-		human_choice = read_int("Введите ваш ответ (число от " STR(MIN_CHOICE) " до " STR(MAX_CHOICE) " включительно): ", MIN_CHOICE, MAX_CHOICE);
+		human_choice = read_int("Р’РІРµРґРёС‚Рµ РІР°С€ РѕС‚РІРµС‚ (С‡РёСЃР»Рѕ РѕС‚ " STR(MIN_CHOICE) " РґРѕ " STR(MAX_CHOICE) " РІРєР»СЋС‡РёС‚РµР»СЊРЅРѕ): ", MIN_CHOICE, MAX_CHOICE);
 		attempts++;
 		if (human_choice > number) {
-			printf("Загаданное число меньше.\n");
+			printf("Р—Р°РіР°РґР°РЅРЅРѕРµ С‡РёСЃР»Рѕ РјРµРЅСЊС€Рµ.\n");
 		}
 		else if (human_choice < number) {
-			printf("Загаданное число больше.\n");
+			printf("Р—Р°РіР°РґР°РЅРЅРѕРµ С‡РёСЃР»Рѕ Р±РѕР»СЊС€Рµ.\n");
 		}
 		else {
-			printf("Вы угадали за %d попыток.\n", attempts);
+			printf("Р’С‹ СѓРіР°РґР°Р»Рё Р·Р° %d РїРѕРїС‹С‚РѕРє.\n", attempts);
 			break;
 		}
 	}
@@ -111,8 +111,8 @@ void computer_mode() {
 	int attempts;
 	char user_input;
 
-	number = read_int("Вы загадываете число (от " STR(MIN_CHOICE) " до " STR(MAX_CHOICE) " включительно): ", MIN_CHOICE, MAX_CHOICE);
-	printf("Теперь комрьютер попытается его угададать.\n");
+	number = read_int("Р’С‹ Р·Р°РіР°РґС‹РІР°РµС‚Рµ С‡РёСЃР»Рѕ (РѕС‚ " STR(MIN_CHOICE) " РґРѕ " STR(MAX_CHOICE) " РІРєР»СЋС‡РёС‚РµР»СЊРЅРѕ): ", MIN_CHOICE, MAX_CHOICE);
+	printf("РўРµРїРµСЂСЊ РєРѕРјСЂСЊСЋС‚РµСЂ РїРѕРїС‹С‚Р°РµС‚СЃСЏ РµРіРѕ СѓРіР°РґР°РґР°С‚СЊ.\n");
 
 	attempts = 0;
 	l = MIN_CHOICE; r = MAX_CHOICE;
@@ -120,8 +120,8 @@ void computer_mode() {
 		computer_choice = (l + r) / 2;
 		attempts++;
 
-		printf("Вы загадали число %d?\n", computer_choice);
-		user_input = read_char("Ответ (<, >, =): ", "<>=", 3);
+		printf("Р’С‹ Р·Р°РіР°РґР°Р»Рё С‡РёСЃР»Рѕ %d?\n", computer_choice);
+		user_input = read_char("РћС‚РІРµС‚ (<, >, =): ", "<>=", 3);
 
 		if (user_input == '<') {
 			r = computer_choice - 1;
@@ -130,10 +130,10 @@ void computer_mode() {
 			l = computer_choice + 1;
 		}
 		else {
-			printf("Компьютер угадал ваше число за %d попыток.\n", attempts);
+			printf("РљРѕРјРїСЊСЋС‚РµСЂ СѓРіР°РґР°Р» РІР°С€Рµ С‡РёСЃР»Рѕ Р·Р° %d РїРѕРїС‹С‚РѕРє.\n", attempts);
 			return;
 		}
 	}
 
-	printf("Эй, похоже вы играли неправильно!\n");
+	printf("Р­Р№, РїРѕС…РѕР¶Рµ РІС‹ РёРіСЂР°Р»Рё РЅРµРїСЂР°РІРёР»СЊРЅРѕ!\n");
 }

@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+п»ї#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <locale.h>
@@ -36,9 +36,9 @@ void main() {
 	float mass;
 	
 	setlocale(LC_ALL, "rus");
-	h = read_int("Введите высоту шкафа h в сантиметрах (180 <= h <= 220): ", MIN_HEIGHT, MAX_HEIGHT);
-	w = read_int("Введите ширину шкафа w в сантиметрах (80 <= w <= 120): ", MIN_WIDTH, MAX_WIDTH);
-	d = read_int("Введите глубину шкафа d в сантиметрах (50 <= d <= 90): ", MIN_DEPTH, MAX_DEPTH);
+	h = read_int("Р’РІРµРґРёС‚Рµ РІС‹СЃРѕС‚Сѓ С€РєР°С„Р° h РІ СЃР°РЅС‚РёРјРµС‚СЂР°С… (180 <= h <= 220): ", MIN_HEIGHT, MAX_HEIGHT);
+	w = read_int("Р’РІРµРґРёС‚Рµ С€РёСЂРёРЅСѓ С€РєР°С„Р° w РІ СЃР°РЅС‚РёРјРµС‚СЂР°С… (80 <= w <= 120): ", MIN_WIDTH, MAX_WIDTH);
+	d = read_int("Р’РІРµРґРёС‚Рµ РіР»СѓР±РёРЅСѓ С€РєР°С„Р° d РІ СЃР°РЅС‚РёРјРµС‚СЂР°С… (50 <= d <= 90): ", MIN_DEPTH, MAX_DEPTH);
 
 	back_volume = w * h * FIBERBOARD_THICKNESS;
 	back_mass = FIBERBOARD_DENSITY * back_volume;
@@ -58,7 +58,7 @@ void main() {
 
 	mass = (back_mass + sides_mass + top_down_mass + doors_mass + shelves_mass) * GRAM_TO_KG;
 
-	printf("\nШкаф\nВысота: %fсм\nШирина: %fсм\nГлубина: %fсм\nМасса: %fкг\n", h, w, d, mass);
+	printf("\nРЁРєР°С„\nР’С‹СЃРѕС‚Р°: %fСЃРј\nРЁРёСЂРёРЅР°: %fСЃРј\nР“Р»СѓР±РёРЅР°: %fСЃРј\nРњР°СЃСЃР°: %fРєРі\n", h, w, d, mass);
 	
 	system("pause");
 }
