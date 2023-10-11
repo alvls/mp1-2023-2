@@ -89,7 +89,7 @@ void human_mode() {
 
 	attempts = 0;
 	while (1) {
-		human_choice = read_int("Введите ваш ответ (число от " STR(MIN_CHOICE) " до " STR(MAX_CHOICE) " включительно): ", 1, 999);
+		human_choice = read_int("Введите ваш ответ (число от " STR(MIN_CHOICE) " до " STR(MAX_CHOICE) " включительно): ", MIN_CHOICE, MAX_CHOICE);
 		attempts++;
 		if (human_choice > number) {
 			printf("Загаданное число меньше.\n");
