@@ -56,11 +56,13 @@ int mode2(int UgadNumber)
             RightGr = (LeftGr + RightGr) / 2;
         else if (Verdikt == '<')
             LeftGr = (LeftGr + RightGr) / 2;
-        else
+        else if (Verdikt == '=')
         {
             printf("Программа угадала число за %d попыток\n", KolPop);
             return 0;
         }
+        else
+          continue;
 
     }
 
