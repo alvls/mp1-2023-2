@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <locale.h>
 
-void main()
+void main1()
 {
 	setlocale(LC_ALL, "Rus");
 	int shelf; // количество полок
@@ -38,7 +38,7 @@ void main()
 		scanf_s("%lf", &d);
 	} while ((d < 50) || (d > 90));
 	
-	if (h > 201.5)
+	if (h > 200.5)
 	{
 		shelf = 5;
 	}
