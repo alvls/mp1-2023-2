@@ -111,7 +111,7 @@ int main()
     m2 = (2 * P1 * h * d * S2) / 1000;
     m3 = (2 * P1 * w * d * S2) / 1000;
     m4 = (P3 * h * w * S3) / 1000;
-    count_shelf = floor(h / 40.15);
+    count_shelf = floor(h / 41.5);
     m5 = (count_shelf * P1 * (w - 3) * d * S2) / 1000;
     m = m1 + m2 + m3 + m4 + m5;
     printf("Масса задней стенки: %g кг\n", m1);
