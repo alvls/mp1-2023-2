@@ -1,5 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include<stdio.h>
+#include <stdio.h>
 #include <locale.h>
 //плотности материалов в кг/м^2
 #define P_DVP_5MM (600.0f * 0.005f)
