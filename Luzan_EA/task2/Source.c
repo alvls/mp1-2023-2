@@ -9,7 +9,6 @@ void mode_1() {
 	int inp = 0, count = 0;
 	printf_s("Try to guess my number. Note: it's between 0 and 1000\n");
 
-
 	while (inp != n) {
 		count += 1;
 		scanf_s("%i", &inp);
@@ -34,14 +33,12 @@ int mode_2() {
 	int counter = 0;
 	char inp = "1";
 
-
 	while (guessed == 0)
 	{
 		our_num = (v_gr + n_gr) / 2;
 
 		printf_s("Your number is %i?\n", our_num);
 		scanf_s("\n%c", &inp);
-
 
 		if (inp == '>')
 		{
@@ -62,7 +59,6 @@ int mode_2() {
 			}
 		}
 
-
 		if ((v_gr - n_gr < 2) || (guessed == -1)) 
 		{ 
 			printf_s("Error, please restart..\n"); 
@@ -77,20 +73,20 @@ int mode_2() {
 
 
 
-void main() {
-
+void main() 
+{
 	srand(time(NULL));
 	printf_s("Hello, what mode do you want to play?\n");
+	printf_s("Enter '1' or '2'\n");
 	char inp = ' ';
 	int res = 0;
 
-
-	while (inp != 'l')
+	while (inp != 'q')
 	{
 		scanf_s("\n%c", &inp);
 		while (getchar() != '\n') {}
 
-		if (inp == 'l') { continue; }
+		if (inp == 'q') { continue; }
 
 		if (inp == '1') 
 		{ 
@@ -110,11 +106,9 @@ void main() {
 				continue;
 			}
 		}
-		printf_s("Enter 'l' if you want to leave and '1' or '2' if you want to play again\n");
+		printf_s("Enter 'q' if you want to leave and '1' or '2' if you want to play again\n");
 	}
 
 	printf_s("This is the end of user-friendly programm \n");
 	system("pause");
-
-
 }
