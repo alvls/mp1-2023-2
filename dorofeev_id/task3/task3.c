@@ -62,44 +62,34 @@ int DlinaChisla(int chislo)
 
 char* Sravnitel(int c1, int c2)
 {
-    int pos_match = 0;
-    int dig_match = 0;
-    int byks = 0;
-    int tmp1 = c1, tmp2 = c2;
-    int checked[10] = {0};
+    char c1s[50], c2s[50];
+    int pos_match = 0, dig_match = 0;
+    sprintf(c1s, "%d", c1);
+    sprintf(c2s, "%d", c2);
 
-    while (tmp1 > 0)
+    int len1 = strlen(c1s);
+    int len2 = strlen(c2s);
+
+    for (int i = 0; i < len1; i++)
     {
-        int dig1 = tmp1 % 10;
-        int tmp = tmp2;
-        int pos_fnd = 0;
-
-        while(tmp > 0)
+        for (int j = 0; j < len2; j++)
         {
-            int dig2 = tmp % 10;
-
-            if (dig1 == dig2)
+            if (c1s[i] == c2s[j])
             {
-                dig_match++;
-                if (!checked[dig2])
+                if (i == j)
                 {
-                    checked[dig2] = 1;
                     pos_match++;
-                    pos_fnd = 1;
-                    break;
+                }
+                else
+                {
+                    dig_match++;
                 }
             }
-            tmp /= 10;
         }
-
-        if (pos_fnd)
-        {
-            checked[dig1] = 1;
-        }
-        tmp1 /= 10;
     }
+
     char* ans = malloc(50); 
-    sprintf(ans, "%d коров, %d быков", dig_match - pos_match, pos_match);
+    sprintf(ans, "%d коров, %d быков\n", dig_match, pos_match);
     return ans;
 }
 
@@ -108,21 +98,29 @@ int game(int chislo, int dlina)
     int dogadka;
     while (1 == 1)
     {
-        printf("Введите свою догадку");
-        scanf("%d", dogadka);
-        if (DlinaChisla(dogadka) > dlina || DlinaChisla(dogadka) < dlina || check(dogadka, dlina) == 1)
+        printf("Введите свою догадку\n");
+        scanf("%d", &dogadka);
+        int ChislDl = DlinaChisla(dogadka);
+        int ChislCheck = check(dogadka, dlina);
+        if (ChislDl == dlina && ChislCheck == 0)
         {
-            printf("Вы ввели неподходящее число, повторите");
+            char* verdikt;
+            if (dogadka == chislo)
+            {
+                printf("Поздравляю, вы выиграли!");
+                return 0;
+            }
+            verdikt = Sravnitel(dogadka, chislo);
+            printf("%s", verdikt);
+            free(verdikt);
+            printf("Если вы хотите сдаться, введите \"s\", иначе введите догадку\n");
+            
         }
         else
         {
-            break;
+            printf("Вы ввели неподходящее число, повторите\n");
         }
-        char* verdikt;
-        verdikt = Sravnitel(dogadka, chislo);
-        printf("%s", verdikt);
-        free(verdikt);
-        printf("Если вы хотите сдаться, введите \"s\", иначе введите догадку");
+        
     }
 }
 
@@ -136,6 +134,9 @@ int main()
     scanf("%d", &n);
 
     game(1251, 4);
+    //printf("%d\n", check(1520, 4));
+    //printf("%d", DlinaChisla(1520));
+    
     
     return 0;
 }
