@@ -5,7 +5,7 @@
 #include <time.h>
 #include <math.h>
 
-int GetRandomNumber (int mn,  int mx)
+int GetRandomNumber(int mn, int mx)
 {
     return mn + rand() % (mx - mn + 1);
 }
@@ -15,7 +15,7 @@ int check(int chislo, int dlina)
     int pred = chislo % 10;
     chislo /= 10;
     int tmp;
-    for(int i = 0; i < dlina; i++)
+    for (int i = 0; i < dlina; i++)
     {
         tmp = chislo % 10;
         if (tmp == pred)
@@ -28,25 +28,34 @@ int check(int chislo, int dlina)
             pred = tmp;
         }
     }
-    
+
     return 0;
 }
 
 int ChislGenerator(int dlina)
 {
-    int PredCifra = GetRandomNumber(1, 9);
-    int chislo = PredCifra * pow(10, dlina - 1);
-    int tmp = -1;
-    for (int i = 0; i < dlina - 1; i++)
+    int* Cifri = malloc(dlina);
+    int UsedCifri[10] = { 0 };
+
+    for (int i = 0; i < dlina; i++)
     {
-        do
+        int Cifra = GetRandomNumber(1, 9);
+        while (UsedCifri[Cifra] == 1)
         {
-            tmp = GetRandomNumber(0, 9);
-        } while(tmp == PredCifra);
-        chislo += tmp * pow(10, i);
-        PredCifra = tmp;
+            Cifra = GetRandomNumber(1, 9);
+        }
+
+        UsedCifri[Cifra] = 1;
+        Cifri[i] = Cifra;
     }
-    return chislo;
+
+    int Chislo = 0;
+    for (int i = 0; i < dlina; i++)
+    {
+        Chislo = Chislo * 10 + Cifri[i];
+    }
+
+    return Chislo;
 }
 
 int DlinaChisla(int chislo)
@@ -88,7 +97,7 @@ char* Sravnitel(int c1, int c2)
         }
     }
 
-    char* ans = malloc(50); 
+    char* ans = malloc(50);
     sprintf(ans, "%d коров, %d быков\n", dig_match, pos_match);
     return ans;
 }
@@ -113,14 +122,14 @@ int game(int chislo, int dlina)
             verdikt = Sravnitel(dogadka, chislo);
             printf("%s", verdikt);
             free(verdikt);
-            printf("Если вы хотите сдаться, введите \"s\", иначе введите догадку\n");
-            
+            printf("Если вы хотите сдаться, нажмите \"CTRL+C\", иначе введите догадку\n");
+
         }
         else
         {
             printf("Вы ввели неподходящее число, повторите\n");
         }
-        
+
     }
 }
 
@@ -128,15 +137,27 @@ int main()
 {
     setlocale(LC_ALL, "rus");
     srand(time(NULL));
-    
-    int n;
-    printf("Введите длину загадываемого числа\n");
-    scanf("%d", &n);
 
-    game(1251, 4);
-    //printf("%d\n", check(1520, 4));
-    //printf("%d", DlinaChisla(1520));
-    
-    
+    int n = 0;
+    while (1 == 1)
+    {
+        printf("Введите длину загадываемого числа\n");
+        scanf("%d", &n);
+        if (n >= 2 && n <= 5)
+        {
+            break;
+        }
+        else
+        {
+            printf("Некорректный ввод. Попробуйте ещё раз!\n");
+        }
+    }
+
+    int Chislo = ChislGenerator(n);
+
+    printf("%d\n", Chislo);
+
+    game(Chislo, n);
+
     return 0;
 }
