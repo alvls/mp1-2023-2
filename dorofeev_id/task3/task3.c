@@ -54,7 +54,7 @@ int ChislGenerator(int dlina)
     {
         Chislo = Chislo * 10 + Cifri[i];
     }
-
+    free(Cifri);
     return Chislo;
 }
 
