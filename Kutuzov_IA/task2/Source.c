@@ -85,7 +85,7 @@ int CheckMode_2(int a)
 }
 
 
-// Searching algorith (Extracted into function for easy replacement)
+// Searching algorithms (Extracted into function for easy replacement)
 // Returns a new a value
 int Acceleration_Search(int a, int Response, int* LastResponse, int* Count_LastResponse)
 {
@@ -133,7 +133,7 @@ int BinarySearch(int a, int Response, int* BottomValue, int* TopValue)
 	else if (Response == 2 && a > (*BottomValue)) // Updates bottom border if necessary
 		(*BottomValue) = a;
 
-	return ((*BottomValue) + (*TopValue)) / 2; // Restuns the middle value
+	return ((*BottomValue) + (*TopValue)) / 2; // Returns the middle value
 }
 
 
