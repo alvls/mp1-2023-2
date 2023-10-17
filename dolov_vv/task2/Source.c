@@ -5,7 +5,7 @@
 
 int res_1()
 {
-	int a=0;//вводимое пользователем число
+	int a = 0;//вводимое пользователем число
 	int count = 0;
 	srand(time(0));
 	int rand_ch = rand() % 1000;
