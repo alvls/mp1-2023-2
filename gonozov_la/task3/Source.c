@@ -16,7 +16,9 @@ void main() {
 	scanf("%d", &n);
 	while (!(2 <= n && n <= 5)) {
 		printf("Вы ввели длину числа неправильно, введите число в промежутке от 2 до 5 включительно: ");
+		int а;
 		scanf("%d", &n);
+		while ((а = getchar()) != '\n' && а != EOF) {}
 	} 
 	int p = 1;
 	while (!(pow(10, (n-1)) <= num && num < pow(10, n))) {
@@ -33,10 +35,16 @@ void main() {
 		k++;
 	}
 	printf("Программа загадала число длинной %d с неповторяющимися цифрами\n", n);
-	printf("%d %d", (int)pow(10, n), (int)pow(10, (n - 2)));
 	while (attempt != num) {
+		attempt = 0;
 		printf("Сделайте попытку угадать число: ");
 		scanf("%d", &attempt);
+		int а;
+		while ((а = getchar()) != '\n' && а != EOF) {}
+		while (!(pow(10, (n - 1)) <= attempt && attempt < pow(10, n))) {
+			printf("Вы ввели число для попытки неправильно, введите ещё раз: ");
+			scanf("%d", &attempt);
+		}
 		for (int i = 0; i < n; i++)
 		{
 			int figure_attempt = attempt % (int)pow(10, (n - i)) / pow(10, (n - i - 1));
@@ -59,13 +67,13 @@ void main() {
 		printf("<< Количество коров: %d. Количество быков: %d.\n", cow, bull);
 		printf("Если хотите закончить игру, нажмите 0, если хотите продолжить введите любой другой символ: ");
 		char d;
-		scanf("%c", &d);
-		int а;
 		while ((а = getchar()) != '\n' && а != EOF) {}
+		scanf("%c", &d);
 		if (d == '0') {
 			printf("Вы закончили игру, до свидания, до новых встреч! ");
 			break;
 		}
+		//while ((а = getchar()) != '\n' && а != EOF) {}
 		bull = 0;
 		cow = 0;
 	}
