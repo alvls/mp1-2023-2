@@ -219,14 +219,25 @@ void set_cursor_visible(bool isVisible)
     SetConsoleCursorInfo(console, &buf);
 }
 
-void print_at(const char* format, int x, int y, bool clearScreen, ...) {
-    if (clearScreen) {
-        clear_screen();
-    }
+void print_at(const char* format, int x, int y, ...) {
     set_cursor_at(x, y);
 
     va_list args;
-    va_start(args, clearScreen);
+    va_start(args, y);
     vprintf(format, args);
     va_end(args);
+}
+
+bool try_read_int(int* result, int minValue, int maxValue, int screen_x, int screen_y) {
+    int read_arguments;
+
+    print_at(">>> ", screen_x, screen_y);
+
+    read_arguments = scanf_s("%d", result);
+    while (getchar() != '\n');
+    if (read_arguments == 1 && *result >= minValue && *result <= maxValue) {
+        return true;
+    }
+
+    return false;
 }

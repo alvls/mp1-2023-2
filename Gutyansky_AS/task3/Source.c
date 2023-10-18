@@ -9,18 +9,23 @@
 
 #define MIN_LENGTH 2
 #define MAX_LENGTH 5
-#define INTERFACE_OFFSET_X 20
+#define INTERFACE_OFFSET_X 15
 #define INTERFACE_OFFSET_Y 10
+#define CONSOLE_WIDTH 120
+#define CONSOLE_HEIGHT 40
 
 #define STR_(X) #X
 #define STR(X) STR_(X)
 
 void welcome_screen();
 void win_screen(int attempts);
+void exit_screen();
+void game_loop(int number, int min_choice, int max_choice);
+int ask_number_length();
+void calc_min_max_choices(int length, int* min_choice, int* max_choice);
 void get_bulls_and_cows(int* bulls, int* cows, int choice, int number);
 int all_digits_unique(int n);
 int generate_number(int length);
-int read_int(char* const question, int minValue, int maxValue);
 void shuffle(int* arr, int n);
 void swap(int* a, int* b);
 
@@ -29,41 +34,57 @@ void main() {
 	int number;
 	int min_choice;
 	int max_choice;
-	int i;
-	int user_choice;
-	int bulls;
-	int cows;
-	int attempts;
 
 	srand(time(NULL));
 	setlocale(LC_ALL, "rus");
+	set_window_wh(CONSOLE_WIDTH, CONSOLE_HEIGHT);
 	welcome_screen();
 
-	clear_screen();
-	length = read_int("Введите длину числа, которое будете угадывать (" STR(MIN_LENGTH) " <= n <= " STR(MAX_LENGTH) ") : ", MIN_LENGTH, MAX_LENGTH);
+	length = ask_number_length();
+	calc_min_max_choices(length, &min_choice, &max_choice);
 
 	number = generate_number(length);
 
-	min_choice = 1;
-	max_choice = 10;
-	for (i = 1; i < length; i++) {
-		min_choice *= 10;
-		max_choice *= 10;
-	}
-	max_choice--;
+	game_loop(number, min_choice, max_choice);
+}
 
-	attempts = 0;
-	print_at("Компьютер загадал число от %d до %d включительно. Попробуйте угадать!",
-		INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y - 1, true, min_choice, max_choice);
+void game_loop(int number, int min_choice, int max_choice) {
+	int user_choice = 0;
+	int valid_choice = 0;
+	int bulls = 0;
+	int cows = 0;
+	int attempts = 0;
+
+
 	while (1) {
 		attempts++;
-		user_choice = read_int("Ваш вариант: ", min_choice, max_choice);
-		
+
+		do {
+			clear_screen();
+
+			if (attempts > 1) {
+				print_at("Ваш вариант: %d\tБыков: %d\tКоров: %d",
+					INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y - 1, valid_choice, bulls, cows);
+			}
+
+			print_at("Компьютер загадал число от %d до %d включительно.",
+				INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y + 1, min_choice, max_choice);
+			print_at("Попробуйте угадать! (или введите %d, чтобы выйти)",
+				INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y + 2, max_choice + 1);
+		} while (!try_read_int(&user_choice, min_choice, max_choice + 1, INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y + 3));
+
+		if (user_choice == max_choice + 1) {
+			exit_screen();
+			break;
+		}
+
 		if (!all_digits_unique(user_choice)) {
-			print_at("Пожалуйста, введите число, в котором все цифры различны.", 
+			print_at("Пожалуйста, введите число, в котором все цифры различны.",
 				INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y - 1, true);
 			continue;
 		}
+
+		valid_choice = user_choice;
 
 		if (user_choice == number) {
 			win_screen(attempts);
@@ -71,16 +92,51 @@ void main() {
 		}
 		else {
 			get_bulls_and_cows(&bulls, &cows, user_choice, number);
-			print_at("Ваш вариант: %d\tБыков: %d\tКоров: %d",
-				INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y - 1, true, user_choice, bulls, cows);
 		}
 	}
+}
+
+void calc_min_max_choices(int length, int* min_choice, int* max_choice) {
+	int i;
+
+	*min_choice = 1;
+	*max_choice = 10;
+	for (i = 1; i < length; i++) {
+		*min_choice *= 10;
+		*max_choice *= 10;
+	}
+	(*max_choice)--;
+}
+
+int ask_number_length() {
+	int length;
+
+	do {
+		clear_screen();
+		print_at("Введите длину числа, которое будете угадывать (" STR(MIN_LENGTH) " <= n <= " STR(MAX_LENGTH) ") : ", INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y);
+	} while (!try_read_int(&length, MIN_LENGTH, MAX_LENGTH, INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y + 1));
+
+	return length;
+}
+
+void exit_screen() {
+	clear_screen();
+	set_cursor_visible(0);
+
+	set_cursor_at(INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y);
+	text_background(BLUE);
+	text_color(WHITE);
+	printf("ДО НОВЫХ ВСТРЕЧ!");
+
+	set_cursor_at(INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y + 10);
+	text_color(DARKGRAY);
+	printf("Нажмите Enter, чтобы выйти...");
+	while (getchar() != '\n');
 }
 
 void win_screen(int attempts) {
 	clear_screen();
 	set_cursor_visible(0);
-	set_window_wh(120, 40);
 
 	set_cursor_at(INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y);
 	text_background(BLUE);
@@ -131,26 +187,6 @@ void welcome_screen() {
 
 	text_color(WHITE);
 	set_cursor_visible(1);
-}
-
-int read_int(char* const question, int minValue, int maxValue) {
-	int read_arguments;
-	int value;
-
-	while (1) {
-		print_at(question, INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y, false);
-		print_at(">>> ", INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y + 3, false);
-
-		read_arguments = scanf("%d", &value);
-		while (getchar() != '\n');
-		if (read_arguments == 1 && value >= minValue && value <= maxValue) {
-			break;
-		}
-
-		clear_screen();
-	}
-
-	return value;
 }
 
 int generate_number(int length) {
@@ -233,7 +269,6 @@ void get_bulls_and_cows(int* bulls, int* cows, int choice, int number) {
 		digit_mask[number_digit] = 1;
 		number_decomp /= 10;
 	}
-	
 
 	*bulls = *cows = 0;
 

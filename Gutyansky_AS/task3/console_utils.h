@@ -23,4 +23,5 @@ void set_window_wh(int width, int height);
 void set_window_rs(SMALL_RECT rect, COORD size);
 void get_window(SMALL_RECT* rect, COORD* size);
 void set_cursor_visible(bool isVisible);
-void print_at(const char* format, int x, int y, bool clearScreen, ...);
+void print_at(const char* format, int x, int y, ...);
+bool try_read_int(int* result, int minValue, int maxValue, int screen_x, int screen_y);
