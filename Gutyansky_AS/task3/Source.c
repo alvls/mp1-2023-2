@@ -71,7 +71,8 @@ void game_loop(int number, int min_choice, int max_choice) {
 				INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y + 1, min_choice, max_choice);
 			print_at("Попробуйте угадать! (или введите %d, чтобы выйти)",
 				INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y + 2, max_choice + 1);
-		} while (!try_read_int(&user_choice, min_choice, max_choice + 1, INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y + 3));
+		} while (!try_read_int(&user_choice, min_choice, max_choice + 1,
+			INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y + 3));
 
 		if (user_choice == max_choice + 1) {
 			exit_screen();
@@ -113,8 +114,10 @@ int ask_number_length() {
 
 	do {
 		clear_screen();
-		print_at("Введите длину числа, которое будете угадывать (" STR(MIN_LENGTH) " <= n <= " STR(MAX_LENGTH) ") : ", INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y);
-	} while (!try_read_int(&length, MIN_LENGTH, MAX_LENGTH, INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y + 1));
+		print_at("Введите длину числа, которое будете угадывать (" STR(MIN_LENGTH) " <= n <= " STR(MAX_LENGTH) ") : ",
+			INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y);
+	} while (!try_read_int(&length, MIN_LENGTH, MAX_LENGTH,
+		INTERFACE_OFFSET_X, INTERFACE_OFFSET_Y + 1));
 
 	return length;
 }
