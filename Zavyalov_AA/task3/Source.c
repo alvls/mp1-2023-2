@@ -62,7 +62,6 @@ int main() { // outputs are in english because of "кодировка" problem.
 	}
 	int surrender = 0;
 	while (!surrender) {
-		// start of while 
 		printf("\nEnter Your guess: ");
 		int* guess = malloc(n * sizeof(int));
 		int very_fine = 0; // flag for unique figures in number
@@ -110,7 +109,6 @@ int main() { // outputs are in english because of "кодировка" problem.
 
 		printf("Number of cows: %d\n", cows(mas, guess, n));
 		printf("Number of bulls: %d\n", bulls(mas, guess, n));
-//		printf("CORRECT YOUUDSFS %d%d%d\n", guess[0], guess[1], guess[2]);
 		if (bulls(mas, guess, n) == n) {
 			printf("You've won!\n");
 			break;
@@ -135,7 +133,6 @@ int main() { // outputs are in english because of "кодировка" problem.
 				pus = getchar();
 			}
 		}
-		// end of while
 	}
 	system("pause");
 	return 0;
