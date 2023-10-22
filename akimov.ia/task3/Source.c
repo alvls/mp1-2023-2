@@ -130,12 +130,15 @@ void main()
 		} while (flag);
 		cows = CountCows(n, ComputerNumber, try);
 		bulls = CountBulls(n, ComputerNumber, try);
-		printf("Количество коров: %d\n", cows);
-		printf("Количество быков: %d\n", bulls);
+		if (try == 0)
+			printf("Вы проиграли\n");
+		else
+		{
+			printf("Количество коров: %d\n", cows);
+			printf("Количество быков: %d\n", bulls);
+		}
 	} while (try != 0 && bulls != n);
-	if (try == 0)
-		printf("Вы проиграли\n");
-	else
+	if (try != 0)
 		printf("Вы победили\n");
 	system("pause");
 }
