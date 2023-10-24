@@ -67,7 +67,7 @@ int main()
 {
     srand(time(NULL));
 
-    // блок ввода длины
+    // length input block
     int n = 0;
     printf_s("Choose the length of the number (from 2 to 5): ");
     while ((n > 5) || (n < 2))
@@ -76,7 +76,7 @@ int main()
         scanf_s("%i", &n);
     }
 
-    // блок генерации числа
+    // number generation block
     int pc_num = 0;
     int a[5] = { 100, 100, 100, 100, 100 };
     while ((a[0] = rand() % 10) == 0) {}
@@ -90,14 +90,14 @@ int main()
     }
     pc_num = mas_to_num(a, n);
 
-    // пользователь вводит число
+    // the user enters a number
     int num = 0, flag = 0, user_len = NULL, b[5] = { 0 };
     while (flag == 0) 
     {
         printf_s("Enter your number or '0' to give up\n");
         scanf_s("%i", &num);
         
-        // проверка пользовательского ввода
+        // checking user input
         if (num == 0)
         {
             flag = -1;
@@ -120,14 +120,14 @@ int main()
             continue;
         }
 
-        // перевод пользовательского числа в массив (для удобства)
+        // converting user's number to an array (for my convenience)
         for (int i = 0; i < n; i++)
         {
             b[n - i - 1] = num % 10;
             num /= 10;
         }
 
-        // подсчёт быков и коров
+        // counting bulls and cows
         int cow = 0, ox = 0;
         for (int i = 0; i < n; i++)
         {
@@ -145,7 +145,7 @@ int main()
         printf("cows = %i, oxen = %i \n", cow, ox);
     }
     
-    // завершение
+    // ending
     if (flag == 1) { printf_s("\nYes, it was %i\n", pc_num); }
     else { printf_s("\nIt was %i, try harder next time\n", pc_num); }
    
