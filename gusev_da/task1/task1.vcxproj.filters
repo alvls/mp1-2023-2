@@ -9,19 +9,13 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Source Files\task0">
-      <UniqueIdentifier>{1c86d869-6039-4966-818d-fd0ff7a0a9d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\task1">
-      <UniqueIdentifier>{6f51f93c-5e7f-4bca-888d-9e9e1d4b9fd1}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.c">
-      <Filter>Source Files\task0</Filter>
-    </ClCompile>
     <ClCompile Include="task1.c">
-      <Filter>Source Files\task1</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="task0.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
