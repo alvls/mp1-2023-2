@@ -3,7 +3,7 @@
 #include <time.h>
 #include <math.h>
 
-int number(int random, int n)
+int digit(int random, int n)
 {
     int new_arr[10] = { 0 };
     int edit_input;
@@ -65,7 +65,7 @@ void main()
     do
     {
         rand_ch = rand() % ((int)(pow(10, n) - pow(10, n - 1))) + (int)pow(10, n - 1);
-        if (number(rand_ch, n))
+        if (digit(rand_ch, n))
             flag = 1;
         else
             flag = 0;
