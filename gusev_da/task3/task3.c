@@ -34,32 +34,32 @@ void main()
     srand(time(0));
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
 
-    int n; // Ââîäèìîå ïîëüçîâàòåëåì ÷èñëî (äëèíà ÷èñëà - îò 2 äî 5 öèôð)
-    int rand_ch; // ×èñëî, êîòîðîå çàãàäàë êîìïüþòåð
-    int input_p = 0; // Ââîäèìîå ïîëüçîâàòåëåì ÷èñëî
-    int cows = 0; // Êîë-âî êîðîâ
-    int bulls = 0; // Êîë-âî áûêîâ
-    int arr_a[10] = { 0 }; // Ìàññèâ öèôð (âû÷èñëåíèå ïîâòîðà)
-    int arr_rand[10] = { 0 }; // Ìàññèâ ðàíäîìà (âû÷èñëåíèå ïîâòîðà)
-    int last; // Ïîñëåäíåå ÷èñëî ìàññèâà
-    int last_rand; //  Ïîñëåäíåå ÷èñëî ìàññèâà ðàíäîìà
-    int r_ch, new_input; // Çàìåíÿåìûå çíà÷åíèÿ ââîäà â öèêëàõ è ò.ä.
-    int attemts = 0; // Ââîäèìîå ïîëüçîâàòåëåì ÷èñëî
+    int n; // Вводимое пользователем число (длина числа - от 2 до 5 цифр)
+    int rand_ch; // Число, которое загадал компьютер    
+    int input_p = 0; // Вводимое пользователем число
+    int cows = 0; // Кол-во коров
+    int bulls = 0; // Кол-во быков
+    int arr_a[10] = { 0 }; // Массив цифр (вычисление повтора)
+    int arr_rand[10] = { 0 }; // Массив рандома (вычисление повтора)
+    int last; // Последнее число массива
+    int last_rand; //  Последнее число массива рандома
+    int r_ch, new_input; // Заменяемые значения ввода в циклах и т.д.
+    int attemts = 0; // Кол-во попыток
     int flag = 0;
 
-    printf("Ïðèâåò! Ýòî èãðà 'Áûêè è Êîðîâû' \n");
+    printf("Привет! Это игра 'Быки и Коровы'.\n");
 
     do
     {
-        printf("Âïèøè äëèíó ÷èñëà, êîòîðîå òåáå çàãàäàåò êîìïüþòåð.\n"
-                "Ýòî äîëæíà áûòü öèôðà, ðàâíàÿ äëèíå îò 2 äî 5.\n"
-                "Äëèíà ÷èñëà - ");
+        printf("Впиши длину числа, которое тебе загадает компьютер.\n"
+                "Это должна быть цифра, равная длине от 2 до 5.\n"
+                "Длина числа - ");
         scanf_s("%d", &n);
 
         if ((n < 2) || (n > 5))
         {
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
-            printf("Ïîïðîáóé ñíîâà - íåâåðíàÿ äëèíà. \n");
+            printf("Попробуй снова - неверная длина.\n");
             flag = 1;
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
         }
@@ -90,8 +90,8 @@ void main()
     for (int i = 1; i <= n; i++)
         r_ch = r_ch / 10;
 
-    printf("×èñëî çàãàäàíî, ïîïðîáóé îòãàäàòü.\n"
-            "Åñëè ðåøèøüñÿ ñäàòüñÿ, ââåäè 0 â ëþáîå âðåìÿ.\n");
+    printf("Число загадано, попробуй отгадать.\n"
+            "Если решишься сдаться, введи 0 в любое время.\n");
 
     while (1)
     {
@@ -102,12 +102,12 @@ void main()
 
         do
         {
-            printf("Ââåäè ñâîé âàðèàíò îòâåòà ñ öèôðàìè áåç ïîâòîðåíèé.\n");
+            printf("Введи свой вариант ответа с цифрами без повторений.\n");
             scanf_s("%d", &input_p);
             if (input_p >= pow(10, n))
             {
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
-                printf("Âíå äèàïîçîíà.\n");
+                printf("Вне диапозона.\n");
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
             }
         } while (input_p >= pow(10, n));
@@ -115,14 +115,14 @@ void main()
         if (input_p == 0)
         {
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
-            printf("Æàëü, ÷òî òû ñäàëñÿ! ß çàãàäàë ÷èñëî %d!\nÊîë-âî ïîïûòîê - %d\nÏîêà!\n", rand_ch, attemts);
+            printf("Жаль, что ты сдался! Я загадал число %d!\nКол-во попыток - %d\nПока!\n", rand_ch, attemts);
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
             break;
         }
         if (input_p == rand_ch)
         {
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
-            printf("Óðà! Òû óãàäàë ÷èñëî!\n");
+            printf("Ура! Ты угадал число!\n");
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
             break;
         }
@@ -147,7 +147,7 @@ void main()
         }
         attemts++;
 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
-        printf("Êîë-âî êîðîâ - %d, êîë-âî áûêîâ - %d\nÊîë-âî ïîïûòîê - %d\n", cows - bulls, bulls, attemts);
+        printf("Кол-во коров - %d, кол-во быков - %d\nКол-во попыток - %d\n", cows - bulls, bulls, attemts);
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
     }
     system("pause");
