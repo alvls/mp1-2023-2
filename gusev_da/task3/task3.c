@@ -90,7 +90,7 @@ void main()
         r_ch = r_ch / 10;
 
     printf("×èñëî çàãàäàíî, ïîïðîáóé îòãàäàòü.\n"
-            "Åñëè ðåøèøüñÿ ñäàòüñÿ, ââåäè -1 â ëþáîå âðåìÿ.\n");
+            "Åñëè ðåøèøüñÿ ñäàòüñÿ, ââåäè 0 â ëþáîå âðåìÿ.\n");
 
     while (1)
     {
@@ -111,7 +111,7 @@ void main()
             }
         } while (input_p >= pow(10, n));
 
-        if (input_p == -1)
+        if (input_p == 0)
         {
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
             printf("Æàëü, ÷òî òû ñäàëñÿ! ß çàãàäàë ÷èñëî %d!\nÊîë-âî ïîïûòîê - %d\nÏîêà!\n", rand_ch, attemts);
