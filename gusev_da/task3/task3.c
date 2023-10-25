@@ -2,6 +2,8 @@
 #include <locale.h>
 #include <time.h>
 #include <math.h>
+#include <Windows.h>
+#include <wincon.h>
 
 int digit(int random, int n)
 {
@@ -31,32 +33,34 @@ void main()
     setlocale(LC_ALL, "Rus");
     srand(time(0));
 
-    int n; // Вводимое пользователем число (длина числа - от 2 до 5 цифр)
-    int rand_ch; // Число, которое загадал компьютер
-    int input_p = 0; // Вводимое пользователем число
-    int cows = 0; // Кол-во коров
-    int bulls = 0; // Кол-во быков
-    int arr_a[10] = { 0 }; // Массив цифр (вычисление повтора)
-    int arr_rand[10] = { 0 }; // Массив рандома (вычисление повтора)
-    int last; // Последнее число массива
-    int last_rand; //  Последнее число массива рандома
-    int r_ch, new_input; // Заменяемые значения ввода в циклах и т.д.
-    int attemts = 0; // Вводимое пользователем число
+    int n; // Г‚ГўГ®Г¤ГЁГ¬Г®ГҐ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ¬ Г·ГЁГ±Г«Г® (Г¤Г«ГЁГ­Г  Г·ГЁГ±Г«Г  - Г®ГІ 2 Г¤Г® 5 Г¶ГЁГґГ°)
+    int rand_ch; // Г—ГЁГ±Г«Г®, ГЄГ®ГІГ®Г°Г®ГҐ Г§Г ГЈГ Г¤Г Г« ГЄГ®Г¬ГЇГјГѕГІГҐГ°
+    int input_p = 0; // Г‚ГўГ®Г¤ГЁГ¬Г®ГҐ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ¬ Г·ГЁГ±Г«Г®
+    int cows = 0; // ГЉГ®Г«-ГўГ® ГЄГ®Г°Г®Гў
+    int bulls = 0; // ГЉГ®Г«-ГўГ® ГЎГ»ГЄГ®Гў
+    int arr_a[10] = { 0 }; // ГЊГ Г±Г±ГЁГў Г¶ГЁГґГ° (ГўГ»Г·ГЁГ±Г«ГҐГ­ГЁГҐ ГЇГ®ГўГІГ®Г°Г )
+    int arr_rand[10] = { 0 }; // ГЊГ Г±Г±ГЁГў Г°Г Г­Г¤Г®Г¬Г  (ГўГ»Г·ГЁГ±Г«ГҐГ­ГЁГҐ ГЇГ®ГўГІГ®Г°Г )
+    int last; // ГЏГ®Г±Г«ГҐГ¤Г­ГҐГҐ Г·ГЁГ±Г«Г® Г¬Г Г±Г±ГЁГўГ 
+    int last_rand; //  ГЏГ®Г±Г«ГҐГ¤Г­ГҐГҐ Г·ГЁГ±Г«Г® Г¬Г Г±Г±ГЁГўГ  Г°Г Г­Г¤Г®Г¬Г 
+    int r_ch, new_input; // Г‡Г Г¬ГҐГ­ГїГҐГ¬Г»ГҐ Г§Г­Г Г·ГҐГ­ГЁГї ГўГўГ®Г¤Г  Гў Г¶ГЁГЄГ«Г Гµ ГЁ ГІ.Г¤.
+    int attemts = 0; // Г‚ГўГ®Г¤ГЁГ¬Г®ГҐ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ¬ Г·ГЁГ±Г«Г®
     int flag = 0;
 
-    printf("Привет! Это игра 'Быки и Коровы' \n");
+    printf("ГЏГ°ГЁГўГҐГІ! ГќГІГ® ГЁГЈГ°Г  'ГЃГ»ГЄГЁ ГЁ ГЉГ®Г°Г®ГўГ»' \n");
 
     do
     {
-        printf("Впиши длину числа, которое тебе загадает компьютер.\n"
-                "Это должна быть цифра, равная длине от 2 до 5.\n"
-                "Длина числа - ");
+        printf("Г‚ГЇГЁГёГЁ Г¤Г«ГЁГ­Гі Г·ГЁГ±Г«Г , ГЄГ®ГІГ®Г°Г®ГҐ ГІГҐГЎГҐ Г§Г ГЈГ Г¤Г ГҐГІ ГЄГ®Г¬ГЇГјГѕГІГҐГ°.\n"
+                "ГќГІГ® Г¤Г®Г«Г¦Г­Г  ГЎГ»ГІГј Г¶ГЁГґГ°Г , Г°Г ГўГ­Г Гї Г¤Г«ГЁГ­ГҐ Г®ГІ 2 Г¤Г® 5.\n"
+                "Г„Г«ГЁГ­Г  Г·ГЁГ±Г«Г  - ");
         scanf_s("%d", &n);
 
         if ((n < 2) || (n > 5))
         {
-            printf("Попробуй снова - неверная длина. \n");
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
+            printf("ГЏГ®ГЇГ°Г®ГЎГіГ© Г±Г­Г®ГўГ  - Г­ГҐГўГҐГ°Г­Г Гї Г¤Г«ГЁГ­Г . \n");
             flag = 1;
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
         }
         else
            flag = 0;
@@ -85,8 +89,8 @@ void main()
     for (int i = 1; i <= n; i++)
         r_ch = r_ch / 10;
 
-    printf("Число загадано, попробуй отгадать.\n"
-            "Если решишься сдаться, введи -1 в любое время.\n");
+    printf("Г—ГЁГ±Г«Г® Г§Г ГЈГ Г¤Г Г­Г®, ГЇГ®ГЇГ°Г®ГЎГіГ© Г®ГІГЈГ Г¤Г ГІГј.\n"
+            "Г…Г±Г«ГЁ Г°ГҐГёГЁГёГјГ±Гї Г±Г¤Г ГІГјГ±Гї, ГўГўГҐГ¤ГЁ -1 Гў Г«ГѕГЎГ®ГҐ ГўГ°ГҐГ¬Гї.\n");
 
     while (1)
     {
@@ -97,20 +101,28 @@ void main()
 
         do
         {
-            printf("Введи свой вариант ответа с цифрами без повторений.\n");
+            printf("Г‚ГўГҐГ¤ГЁ Г±ГўГ®Г© ГўГ Г°ГЁГ Г­ГІ Г®ГІГўГҐГІГ  Г± Г¶ГЁГґГ°Г Г¬ГЁ ГЎГҐГ§ ГЇГ®ГўГІГ®Г°ГҐГ­ГЁГ©.\n");
             scanf_s("%d", &input_p);
             if (input_p >= pow(10, n))
-                printf("Вне диапозона.\n");
+            {
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
+                printf("Г‚Г­ГҐ Г¤ГЁГ ГЇГ®Г§Г®Г­Г .\n");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
+            }
         } while (input_p >= pow(10, n));
 
         if (input_p == -1)
         {
-            printf("Жаль, что ты сдался! Я загадал число %d!\nКол-во попыток - %d\nПока!\n", rand_ch, attemts);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
+            printf("Г†Г Г«Гј, Г·ГІГ® ГІГ» Г±Г¤Г Г«Г±Гї! Гџ Г§Г ГЈГ Г¤Г Г« Г·ГЁГ±Г«Г® %d!\nГЉГ®Г«-ГўГ® ГЇГ®ГЇГ»ГІГ®ГЄ - %d\nГЏГ®ГЄГ !\n", rand_ch, attemts);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
             break;
         }
         if (input_p == rand_ch)
         {
-            printf("Ура! Ты угадал число!\n");
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
+            printf("Г“Г°Г ! Г’Г» ГіГЈГ Г¤Г Г« Г·ГЁГ±Г«Г®!\n");
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
             break;
         }
 
@@ -133,7 +145,9 @@ void main()
                 cows = cows + arr_a[i];
         }
         attemts++;
-        printf("Кол-во коров - %d, кол-во быков - %d\nКол-во попыток - %d\n", cows - bulls, bulls, attemts);
+SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_YELLOW);
+        printf("ГЉГ®Г«-ГўГ® ГЄГ®Г°Г®Гў - %d, ГЄГ®Г«-ГўГ® ГЎГ»ГЄГ®Гў - %d\nГЉГ®Г«-ГўГ® ГЇГ®ГЇГ»ГІГ®ГЄ - %d\n", cows - bulls, bulls, attemts);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
     }
     system("pause");
 }
