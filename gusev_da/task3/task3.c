@@ -146,7 +146,7 @@ void main()
                 cows = cows + arr_a[i];
         }
         attemts++;
-SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
         printf("Кол-во коров - %d, кол-во быков - %d\nКол-во попыток - %d\n", cows - bulls, bulls, attemts);
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
     }
