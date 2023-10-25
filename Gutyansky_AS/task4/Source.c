@@ -16,10 +16,10 @@ typedef enum ApplicationState {
 	EXIT
 } ApplicationState;
 
-void user_loop(void);
+void user_loop(ProductDatabase database);
 Barcode read_barcode(void);
 ApplicationState main_menu(void);
-ApplicationState product_info_menu(void);
+ApplicationState product_info_menu(ProductDatabase database);
 ApplicationState scan_and_add_menu(void);
 ApplicationState check_info_menu(void);
 ApplicationState total_price_menu(void);
@@ -27,10 +27,15 @@ ApplicationState total_price_menu(void);
 void main(void) {
 	setlocale(LC_ALL, "rus");
 	set_window_wh(120, 40);
-	user_loop();
+
+	ProductDatabase database = load_product_database();
+
+	user_loop(database);
+
+	free_product_database(database);
 }
 
-void user_loop() {
+void user_loop(ProductDatabase database) {
 	ApplicationState app_state = MAIN_MENU;
 
 	while (app_state != EXIT) {
@@ -39,7 +44,7 @@ void user_loop() {
 			app_state = main_menu();
 			break;
 		case PRODUCT_INFO:
-			app_state = product_info_menu();
+			app_state = product_info_menu(database);
 			break;
 		case SCAN_AND_ADD:
 			app_state = scan_and_add_menu();
@@ -103,14 +108,14 @@ ApplicationState main_menu(void) {
 	}
 }
 
-ApplicationState product_info_menu(void)
+ApplicationState product_info_menu(ProductDatabase database)
 {
 	Barcode barcode;
 	Product* product;
 	int choice;
 
 	barcode = read_barcode();
-	product = get_product_by_barcode(barcode);
+	product = get_product_by_barcode(database, barcode);
 	
 	if (product == NULL) {
 		do {

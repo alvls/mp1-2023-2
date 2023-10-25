@@ -116,6 +116,7 @@
     <ClInclude Include="product.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="barcode.c" />
     <ClCompile Include="console_utils.c" />
     <ClCompile Include="product.c" />
     <ClCompile Include="Source.c" />
