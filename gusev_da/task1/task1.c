@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <locale.h>
 
-void main1()
+void main()
 {
 	setlocale(LC_ALL, "Rus");
 	int shelf; // количество полок

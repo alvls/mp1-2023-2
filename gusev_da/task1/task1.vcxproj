@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.c" />
+    <ClCompile Include="task0.c" />
     <ClCompile Include="task1.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

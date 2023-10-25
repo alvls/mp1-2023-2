@@ -2,7 +2,7 @@
 #include <math.h>
 #include <locale.h>
 
-void main0()
+void main()
 {
 	float x1, x2; // расположение центра окружности по координате x
 	float y1, y2; // расположение центра окружности по координате y
