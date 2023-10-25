@@ -105,7 +105,7 @@ int main()
 				{
 					buk++;
 				}
-				else if (arr_player[i] != arr_bot[i] && (arr_player[i] == arr_bot[1] || arr_player[i] == arr_bot[2] || arr_player[i] == arr_bot[3] || arr_player[i] == arr_bot[4] || arr_player[i] == arr_bot[0]))
+				else if (arr_player[i] != arr_bot[i] && (arr_player[i] == arr_bot[n-1] || arr_player[i] == arr_bot[n-2] || arr_player[i] == arr_bot[n-3] || arr_player[i] == arr_bot[n-4] || arr_player[i] == arr_bot[n-5]))
 				{
 					kor++;
 				}
