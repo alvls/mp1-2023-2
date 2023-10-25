@@ -48,7 +48,7 @@ int main()
    
     int h, w, d;
 
-
+    
     printf_s("Enter the height of the cabinet: \n");
     do {
         printf_s("Remember that the height must be from 180 to 220 cm \n");
