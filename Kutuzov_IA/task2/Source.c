@@ -106,7 +106,7 @@ int Acceleration_Search(int a, int Response, int* LastResponse, int* Count_LastR
 		// Offset has exponential acceleration to make it more efficient
 		Offset *= (int)powf(Count + 1, 2.f);
 
-		(*Count_LastResponse) ++;
+		(*Count_LastResponse)++;
 	}
 
 	// In case the response is different from the previous one we reset the counter and update last response
