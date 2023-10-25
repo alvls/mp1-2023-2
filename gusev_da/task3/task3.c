@@ -32,6 +32,7 @@ void main()
 {
     setlocale(LC_ALL, "Rus");
     srand(time(0));
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
 
     int n; // Ââîäèìîå ïîëüçîâàòåëåì ÷èñëî (äëèíà ÷èñëà - îò 2 äî 5 öèôð)
     int rand_ch; // ×èñëî, êîòîðîå çàãàäàë êîìïüþòåð
@@ -60,7 +61,7 @@ void main()
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
             printf("Ïîïðîáóé ñíîâà - íåâåðíàÿ äëèíà. \n");
             flag = 1;
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
         }
         else
            flag = 0;
@@ -107,7 +108,7 @@ void main()
             {
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
                 printf("Âíå äèàïîçîíà.\n");
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
             }
         } while (input_p >= pow(10, n));
 
@@ -115,14 +116,14 @@ void main()
         {
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
             printf("Æàëü, ÷òî òû ñäàëñÿ! ß çàãàäàë ÷èñëî %d!\nÊîë-âî ïîïûòîê - %d\nÏîêà!\n", rand_ch, attemts);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
             break;
         }
         if (input_p == rand_ch)
         {
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
             printf("Óðà! Òû óãàäàë ÷èñëî!\n");
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
             break;
         }
 
@@ -145,9 +146,9 @@ void main()
                 cows = cows + arr_a[i];
         }
         attemts++;
-SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_YELLOW);
+SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
         printf("Êîë-âî êîðîâ - %d, êîë-âî áûêîâ - %d\nÊîë-âî ïîïûòîê - %d\n", cows - bulls, bulls, attemts);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
     }
     system("pause");
 }
