@@ -11,11 +11,11 @@ int main() {
 	int num[5] = { 0 };
 	int g[] = { 0 };
 	int len, guess, bulls = 0, cows = 0;
-	
+
 	printf("Какой длины должно быть число? (от 2 до 5)\n");
-	
+
 	scanf("%d", &len);
-	
+
 
 	srand(time(NULL));
 	if (len == 4 || len == 5) {
@@ -31,12 +31,12 @@ int main() {
 			num[1] == num[4] || num[2] == num[3] || num[2] == num[4] ||
 			num[3] == num[4]);
 	}
-	else if (len == 2){
+	else if (len == 2) {
 		do
 		{
 			num[0] = 1 + rand() % 9;
 			num[1] = rand() % 10;
-			
+
 		} while (num[0] == num[1]);
 	}
 	else if (len == 3) {
@@ -52,9 +52,12 @@ int main() {
 	else {
 		printf("Неверное число");
 	}
-	
+	//for (int i = 0; i < len; i++) {
+	//	printf("%d", num[i]);
+	//}
+	//код для проверки
 	//the number has been got
-	
+
 	do
 	{
 		printf("\nПостарайтесь угадать число из %d цифр\n", len);
@@ -74,16 +77,17 @@ int main() {
 			if (g[i] == num[i]) {
 				bulls++;
 			}
-
+			
 			for (int j = 0; j < len; j++) {
 
 				if (g[i] == num[j]) {
 					cows++;
 				}
+				
 			}
 		}
 
-		printf("Коров: %d\n", cows);
+		printf("Коров: %d\n", cows - bulls);
 		printf("Быков: %d\n", bulls);
 
 	} while (bulls != len);
