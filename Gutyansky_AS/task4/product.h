@@ -16,6 +16,7 @@ typedef struct {
 } ProductDatabase;
 
 ProductDatabase load_product_database();
+int is_valid(ProductDatabase database);
 void free_product_database(ProductDatabase database);
 
 void print_product_info(const Product* product);

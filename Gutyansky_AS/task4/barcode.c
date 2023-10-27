@@ -1,4 +1,4 @@
-#include "barcode.h"
+﻿#include "barcode.h"
 
 Barcode create_barcode(char a, char b, char c, char d)
 {

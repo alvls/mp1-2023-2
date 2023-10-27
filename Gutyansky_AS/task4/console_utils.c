@@ -1,4 +1,4 @@
-#include <stdbool.h>
+﻿#include <stdbool.h>
 #include <Windows.h>
 #include <stdio.h>
 #include <memory.h>

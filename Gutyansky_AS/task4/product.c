@@ -1,22 +1,29 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #include <malloc.h>
 #include "product.h"
 
 ProductDatabase load_product_database()
 {
 	const int products_amount = 1;
-	Product* productArray = (Product*)malloc(products_amount * sizeof(Product));
-	productArray[0].barcode = create_barcode('0','0','0','1');
-	productArray[0].name = "Ñîê J7 Àïåëüñèí ñ ìÿêîòüþ";
-	productArray[0].price = 165;
-	productArray[0].discount = 10;
+	Product* products = (Product*)malloc(products_amount * sizeof(Product));
+	if (products != NULL) {
+		products[0].barcode = create_barcode('0', '0', '0', '1');
+		products[0].name = "Ð¡Ð¾Ðº J7 ÐÐ¿ÐµÐ»ÑŒÑÐ¸Ð½ Ñ Ð¼ÑÐºÐ¾Ñ‚ÑŒÑŽ";
+		products[0].price = 165;
+		products[0].discount = 10;
+	}
 	
 	ProductDatabase database = {
-		.products = productArray,
+		.products = products,
 		.products_amount = products_amount
 	};
 
 	return database;
+}
+
+int is_valid(ProductDatabase database)
+{
+	return database.products != NULL;
 }
 
 void free_product_database(ProductDatabase database)
@@ -26,9 +33,9 @@ void free_product_database(ProductDatabase database)
 
 void print_product_info(const Product* product)
 {
-	printf("Íàèìåíîâàíèå: %s\n\
-Öåíà: %d\n\
-Ñêèäêà: %d%%", product->name, product->price, product->discount);
+	printf("ÐÐ°Ð¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½Ð¸Ðµ: %s\n\
+Ð¦ÐµÐ½Ð°: %d\n\
+Ð¡ÐºÐ¸Ð´ÐºÐ°: %d%%", product->name, product->price, product->discount);
 }
 
 Product* get_product_by_barcode(ProductDatabase database, Barcode barcode)

@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+ï»¿#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <locale.h>
@@ -29,6 +29,12 @@ void main(void) {
 	set_window_wh(120, 40);
 
 	ProductDatabase database = load_product_database();
+	if (!is_valid(database)) {
+		text_color(RED);
+		printf("ÐžÑˆÐ¸Ð±ÐºÐ°: Ð½Ðµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ð±Ð°Ð·Ñƒ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ñ‚Ð¾Ð²Ð°Ñ€Ð¾Ð²!\n");
+		system("pause");
+		return;
+	}
 
 	user_loop(database);
 
@@ -70,21 +76,21 @@ ApplicationState main_menu(void) {
 		set_cursor_at(0, 0);
 		text_background(BLUE);
 		text_color(WHITE);
-		printf("E-ÊÀÑÑÀ");
+		printf("E-ÐšÐÐ¡Ð¡Ð");
 
 		set_cursor_at(0, 2);
 		text_background(BLACK);
-		printf("Âûáåðèòå äåéñòâèå:");
+		printf("Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ðµ:");
 		set_cursor_at(0, 3);
-		printf("1. Óçíàòü èíôîðìàöèþ î òîâàðå");
+		printf("1. Ð£Ð·Ð½Ð°Ñ‚ÑŒ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸ÑŽ Ð¾ Ñ‚Ð¾Ð²Ð°Ñ€Ðµ");
 		set_cursor_at(0, 4);
-		printf("2. Îòñêàíèðîâàòü è äîáàâèòü â ÷åê");
+		printf("2. ÐžÑ‚ÑÐºÐ°Ð½Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð¸ Ð´Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð² Ñ‡ÐµÐº");
 		set_cursor_at(0, 5);
-		printf("3. Ïîñìîòðåòü ÷åê");
+		printf("3. ÐŸÐ¾ÑÐ¼Ð¾Ñ‚Ñ€ÐµÑ‚ÑŒ Ñ‡ÐµÐº");
 		set_cursor_at(0, 6);
-		printf("4. Óçíàòü èòîãîâóþ ñòîèìîñòü");
+		printf("4. Ð£Ð·Ð½Ð°Ñ‚ÑŒ Ð¸Ñ‚Ð¾Ð³Ð¾Ð²ÑƒÑŽ ÑÑ‚Ð¾Ð¸Ð¼Ð¾ÑÑ‚ÑŒ");
 		set_cursor_at(0, 7);
-		printf("5. Âûéòè");
+		printf("5. Ð’Ñ‹Ð¹Ñ‚Ð¸");
 		set_cursor_at(0, 8);
 		printf(">>> ");
 	} while (!try_read_int(&choice, 1, 5));
@@ -121,9 +127,9 @@ ApplicationState product_info_menu(ProductDatabase database)
 		do {
 			set_cursor_at(0, 0);
 			clear_screen();
-			printf("Òîâàð ñ òàêèì øòðèõêîäîì íå ñóùåñòâóåò!\n\n\
-1. Ñêàíèðîâàòü äðóãîé òîâàð\n\
-2. Íàçàä\n\
+			printf("Ð¢Ð¾Ð²Ð°Ñ€ Ñ Ñ‚Ð°ÐºÐ¸Ð¼ ÑˆÑ‚Ñ€Ð¸Ñ…ÐºÐ¾Ð´Ð¾Ð¼ Ð½Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚!\n\n\
+1. Ð¡ÐºÐ°Ð½Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð´Ñ€ÑƒÐ³Ð¾Ð¹ Ñ‚Ð¾Ð²Ð°Ñ€\n\
+2. ÐÐ°Ð·Ð°Ð´\n\
 >>> ");
 		} while (!try_read_int(&choice, 1, 2));
 
@@ -139,15 +145,15 @@ ApplicationState product_info_menu(ProductDatabase database)
 			set_cursor_at(0, 0);
 			clear_screen();
 			print_product_info(product);
-			printf("\n\n1. Äîáàâèòü â ÷åê\n\
-2. Ñêàíèðîâàòü äðóãîé òîâàð\n\
-3. Íàçàä\n\
+			printf("\n\n1. Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð² Ñ‡ÐµÐº\n\
+2. Ð¡ÐºÐ°Ð½Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð´Ñ€ÑƒÐ³Ð¾Ð¹ Ñ‚Ð¾Ð²Ð°Ñ€\n\
+3. ÐÐ°Ð·Ð°Ð´\n\
 >>> ");
 		} while (!try_read_int(&choice, 1, 3));
 
 		switch (choice) {
 		case 1:
-			printf("Äîààà");
+			printf("Ð”Ð¾Ð°Ð°Ð°");
 			return MAIN_MENU;
 		case 2:
 			return PRODUCT_INFO;
@@ -185,7 +191,7 @@ Barcode read_barcode(void)
 	do {
 		clear_screen();
 		set_cursor_at(0, 0);
-		printf("Ââåäèòå øòðèõêîä (4 ñèìâîëà îò 0 äî 9):\n>>> ");
+		printf("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÑˆÑ‚Ñ€Ð¸Ñ…ÐºÐ¾Ð´ (4 ÑÐ¸Ð¼Ð²Ð¾Ð»Ð° Ð¾Ñ‚ 0 Ð´Ð¾ 9):\n>>> ");
 		is_barcode_valid = 1;
 		read_params = scanf("%4s%n", buffer, &read_chars);
 		while (getchar() != '\n');
