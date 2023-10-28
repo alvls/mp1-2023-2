@@ -112,11 +112,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="barcode.h" />
+    <ClInclude Include="check.h" />
     <ClInclude Include="console_utils.h" />
     <ClInclude Include="product.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="barcode.c" />
+    <ClCompile Include="check.c" />
     <ClCompile Include="console_utils.c" />
     <ClCompile Include="product.c" />
     <ClCompile Include="Source.c" />

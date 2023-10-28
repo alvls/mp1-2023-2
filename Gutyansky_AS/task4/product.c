@@ -1,48 +1,74 @@
 ﻿#include <stdio.h>
 #include <malloc.h>
 #include "product.h"
+#include "console_utils.h"
 
-ProductDatabase load_product_database()
-{
-	const int products_amount = 1;
-	Product* products = (Product*)malloc(products_amount * sizeof(Product));
+ProductDatabase* product_database_load() {
+	const int products_amount = 5;
+
+	ProductDatabase* database;
+	Product* products;
+
+	database = malloc(sizeof(ProductDatabase));
+	if (database == NULL) {
+		return NULL;
+	}
+
+	products = (Product*)malloc(products_amount * sizeof(Product));
 	if (products != NULL) {
 		products[0].barcode = create_barcode('0', '0', '0', '1');
 		products[0].name = "Сок J7 Апельсин с мякотью";
 		products[0].price = 165;
 		products[0].discount = 10;
+
+		products[1].barcode = create_barcode('0', '0', '2', '1');
+		products[1].name = "Драже M&M's с арахисом";
+		products[1].price = 60;
+		products[1].discount = 15;
+
+		products[2].barcode = create_barcode('0', '5', '2', '1');
+		products[2].name = "Масло сливочное Экомилк";
+		products[2].price = 200;
+		products[2].discount = 30;
+
+		products[3].barcode = create_barcode('0', '6', '6', '0');
+		products[3].name = "Шоколадный батончик";
+		products[3].price = 80;
+		products[3].discount = 20;
+
+		products[4].barcode = create_barcode('1', '2', '3', '4');
+		products[4].name = "Чеснок";
+		products[4].price = 34;
+		products[4].discount = 10;
 	}
 	
-	ProductDatabase database = {
-		.products = products,
-		.products_amount = products_amount
-	};
+	database->products = products;
+	database->products_amount = products_amount;
 
 	return database;
 }
 
-int is_valid(ProductDatabase database)
-{
-	return database.products != NULL;
+int product_database_valid(const ProductDatabase* database) {
+	return database != NULL && database->products != NULL;
 }
 
-void free_product_database(ProductDatabase database)
-{
-	free(database.products);
+void product_database_free(ProductDatabase* database) {
+	free(database->products);
+	free(database);
 }
 
-void print_product_info(const Product* product)
-{
-	printf("Наименование: %s\n\
-Цена: %d\n\
-Скидка: %d%%", product->name, product->price, product->discount);
+void product_print_info(const Product* product) {
+	text_background(DARKGRAY);
+	text_color(WHITE);
+	printf("%-40s %-15s %-10s\n", "Название", "Цена/шт(руб.)", "Скидка");
+	text_background(BLACK);
+	printf("%-40s %-15u %u%%\n", product->name, product->price, product->discount);
 }
 
-Product* get_product_by_barcode(ProductDatabase database, Barcode barcode)
-{
+Product* product_get_by_barcode(const ProductDatabase* database, Barcode barcode) {
 	int i;
-	int amount = database.products_amount;
-	Product* products = database.products;
+	int amount = database->products_amount;
+	Product* products = database->products;
 
 	for (i = 0; i < amount; i++) {
 		if (barcodes_equal(products[i].barcode, barcode)) {
