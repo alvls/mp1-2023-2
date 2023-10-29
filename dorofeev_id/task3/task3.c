@@ -34,7 +34,7 @@ int check(int chislo, int dlina)
 
 int ChislGenerator(int dlina)
 {
-    int* Cifri = malloc(dlina);
+    int* Cifri = malloc(dlina * sizeof(int));
     int UsedCifri[10] = { 0 };
 
     for (int i = 0; i < dlina; i++)
@@ -109,6 +109,11 @@ int game(int chislo, int dlina)
     {
         printf("Введите свою догадку\n");
         scanf("%d", &dogadka);
+        if (dogadka == -1)
+        {
+            printf("Вы сдались, правильный ответ - %d", chislo);
+            return 0;
+        }
         int ChislDl = DlinaChisla(dogadka);
         int ChislCheck = check(dogadka, dlina);
         if (ChislDl == dlina && ChislCheck == 0)
@@ -122,7 +127,7 @@ int game(int chislo, int dlina)
             verdikt = Sravnitel(dogadka, chislo);
             printf("%s", verdikt);
             free(verdikt);
-            printf("Если вы хотите сдаться, нажмите \"CTRL+C\", иначе введите догадку\n");
+            printf("Если вы хотите сдаться, введите -1, иначе введите догадку\n");
 
         }
         else
