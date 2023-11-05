@@ -4,7 +4,10 @@
 #include <stdlib.h>
 
 #define N 7
-#define N 7
+
+int check(char k) {
+	return (0 <= k - '0' && k - '0' <= 9);
+}
 
 int main() { // name - cost for 1 item (rub) - amount - total cost
 	srand(time(NULL));
@@ -48,6 +51,14 @@ int main() { // name - cost for 1 item (rub) - amount - total cost
 				printf("The length of the barcode must be equal to 4!\n");
 				fine = 0;
 				while ((ch = getchar()) != '\n' && ch != EOF);
+				continue;
+			}
+			for (int i = 0; i < 4; i++) {
+				if (!check(bar[i])) {
+					fine = 0;
+					printf("Characters in the barcode must be numbers from 0 to 9!\n");
+					break;
+				}
 			}
 		}
 
