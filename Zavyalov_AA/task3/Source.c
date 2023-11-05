@@ -18,7 +18,7 @@ int cows(int* loc_mas, int* loc_guess, int len) {
 
 int bulls(int* loc_mas, int* loc_guess, int len) {
 	int res = 0;
-	for (int it = 0; it < len; it++) 
+	for (int it = 0; it < len; it++)
 		if (loc_mas[it] == loc_guess[it])
 			res++;
 	return res;
