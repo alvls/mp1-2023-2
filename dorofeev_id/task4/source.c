@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
+#include <Windows.h>
 //Ёмкость чека - количество товаров в чеке
 
 // Структура для хранения информации о товаре
@@ -48,13 +49,16 @@ chek* create_chek(int capacity)
 // Функция для добавления нового товара в чек с заданным количеством
 void add_product(chek* p, product* item, int quantity) 
 {
-    if (p->size == p->capacity) { // Если чек заполнен до предела, то увеличиваем его ёмкость в два раза
+    if (p->size == p->capacity) // Если чек заполнен до предела, то увеличиваем его ёмкость в два раза
+    { 
         p->capacity *= 2; // Увеличиваем ёмкость в два раза
         p->items = (product*)realloc(p->items, p->capacity * sizeof(product)); // Перевыделяем память под массив товаров с новой ёмкостью
         p->kolvo = (int*)realloc(p->kolvo, p->capacity * sizeof(int)); // Перевыделяем память под массив количества товаров с новой ёмкостью
     }
-    for (int i = 0; i < p->size; i++) { // Проходим по всем товарам в покупке и ищем совпадение по штрих-коду с добавляемым товаром
-        if (strcmp(p->items[i].barcode, item->barcode) == 0) { // Если нашли, то увеличиваем количество этого товара
+    for (int i = 0; i < p->size; i++) // Проходим по всем товарам в покупке и ищем совпадение по штрих-коду с добавляемым товаром
+    { 
+        if (strcmp(p->items[i].barcode, item->barcode) == 0) // Если нашли, то увеличиваем количество этого товара
+        { 
             p->kolvo[i] += quantity;
             return;
         }
@@ -70,8 +74,9 @@ void print_product(product* p)
 {
     printf("Штрих-код: %s\n", p->barcode); // Выводим ШК товара
     printf("Наименование: %s\n", p->name); // Выводим название товара
-    printf("Стоимость за единицу: %d руб.\n", p->price); // Выводим цену товара
+    printf("Цена: %d руб.\n", p->price); // Выводим цену товара
     printf("Скидка: %d%%\n", p->discount); // Выводим скидку на товар
+    printf("\n\n");
 }
 
 // Функция для вывода информации о покупке на экран в виде чека
@@ -82,7 +87,8 @@ void print_chek(chek* p)
     int final_price = 0;
     printf("Чек за покупку:\n");
     printf("-----------------------------------------------------------------\n");
-    for (int i = 0; i < p->size; i++) { // Проходим по всем товарам в покупке и выводим информацию о каждом из них
+    for (int i = 0; i < p->size; i++) // Проходим по всем товарам в покупке и выводим информацию о каждом из них
+    { 
         printf("%s - %d руб. - %d шт. - %d руб.\n", p->items[i].name, p->items[i].price, p->kolvo[i], p->items[i].price * p->kolvo[i]);
         total_price += p->items[i].price * p->kolvo[i]; // Увеличиваем общую стоимость товаров на стоимость текущего товара
         total_discount += p->items[i].price * p->kolvo[i] * p->items[i].discount / 100; // Увеличиваем суммарную скидку на скидку текущего товара
@@ -92,6 +98,79 @@ void print_chek(chek* p)
     printf("Общая стоимость товаров: %d руб.\n", total_price);
     printf("Суммарная скидка: %d руб.\n", total_discount);
     printf("Итоговая сумма к оплате: %d руб.\n", final_price);
+    printf("\n\n");
+}
+
+// Функция для поиска товаров в базе данных
+product* find_product(char* barcode, product* moloko, product* tvorog, product* cir, product* hleb, product* sloyka, product* baranki, product* kartofel, product* arbuz, product* dinya, product* bag_b, product* bag_s)
+{
+    product* p = NULL;
+    while(1 == 1)
+    {
+        if (strcmp(barcode, moloko->barcode) == 0)
+        {
+            p = moloko;
+            break;
+        }
+        else if (strcmp(barcode, tvorog->barcode) == 0)
+        {
+            p = tvorog;
+            break;
+        }
+        else if (strcmp(barcode, cir->barcode) == 0)
+        {
+            p = cir;
+            break;
+        }
+        else if (strcmp(barcode, hleb->barcode) == 0)
+        {
+            p = hleb;
+            break;
+        }
+        else if (strcmp(barcode, sloyka->barcode) == 0)
+        {
+            p = sloyka;
+            break;
+        }
+        else if (strcmp(barcode, baranki->barcode) == 0)
+        {
+            p = baranki;
+            break;
+        }
+        else if (strcmp(barcode, kartofel->barcode) == 0)
+        {
+            p = kartofel;
+            break;
+        }
+        else if (strcmp(barcode, arbuz->barcode) == 0)
+        {
+            p = arbuz;
+            break;
+        }
+        else if (strcmp(barcode, dinya->barcode) == 0)
+        {
+            p = dinya;
+            break;
+        }
+        else if (strcmp(barcode, bag_b->barcode) == 0)
+        {
+            p = bag_b;
+            break;
+        }
+        else if (strcmp(barcode, bag_s->barcode) == 0)
+        {
+            p = bag_s;
+            break;
+        }
+        else
+        {
+            printf("Товар не найден\n");
+            printf("Введите Штрих-код товара\n");
+            p = NULL;
+            scanf("%s", &barcode);
+        }
+    }
+    return p;
 }
 
 // Функция для освобождения памяти, выделенной под покупку
@@ -106,26 +185,35 @@ void free_chek(chek* p)
 int main()
 {
     setlocale(LC_ALL, "rus");
+    
     // начало БД продуктов
 
     // молочные продукты
-    product* moloko = create_product("0001", "Молоко", 80, 10); // Создаем новый товар "Молоко" со штрих-кодом "1234", стоимостью 60 руб. и скидкой 10%
-    product* tvorog = create_product("0003", "Творог", 49, 10);
-    product* cir = create_product("0004", "Сыр", 71, 10);
+    product* moloko = create_product("0001", "Молоко Отборное", 80, 10);
+    product* tvorog = create_product("0003", "Творог Обезжиренный", 49, 10);
+    product* cir = create_product("0004", "Сыр Российский", 71, 10);
 
     // ХБ изделия   
-    product* hleb = create_product("1001", "Хлеб", 30, 5);
+    product* hleb = create_product("1001", "Хлеб Бородинский", 30, 5);
     product* sloyka = create_product("1002", "Слойка с малиной", 15, 5);
-    product* baranki = create_product("1003", "Слойка с малиной", 70, 5);
+    product* baranki = create_product("1003", "Баранки с маком", 70, 5);
 
     // фрукты/овощи
-    product* kartofel = create_product("2001", "Картофель", 30, 3);
-    product* arbuz = create_product("2001", "Арбуз", 25, 3);
-    product* dinya = create_product("2001", "Дыня", 40, 3);
+    product* kartofel = create_product("2001", "Картофель Отечественный", 30, 3);
+    product* arbuz = create_product("2002", "Арбуз Отечественный", 25, 3);
+    product* dinya = create_product("2003", "Дыня Торпеда", 40, 3);
+
+    //прочие товары
+    product* bag_b = create_product("3001", "Пакет 65*40см", 10, 0);
+    product* bag_s = create_product("3002", "Пакет 57*30см", 7, 0);
 
     // конец БД продуктов
 
-    chek* p = create_chek(10); // Создаем новую покупку с емкостью 10 товаров
+    chek* p = create_chek(10);
+    int action;
+    int kol;
+    char barcode[5];
+    product* pr = NULL;
 
     while (1 == 1)
     {
@@ -134,36 +222,53 @@ int main()
         printf("2 - вывести описание товара\n");
         printf("3 - добавить товар в чек\n");
         printf("4 - сформировать чек за покупку\n");
+        printf("5 - завершить работу с программой\n");
 
-        break;
+        
+        scanf("%d", &action);
+        switch (action)
+        {
+        case 1:
+            printf("Введите штрих-код товара.\n");
+            scanf("%s", &barcode);
+            pr = find_product(barcode, moloko, tvorog, cir, hleb, sloyka, baranki, kartofel, arbuz, dinya, bag_b, bag_s);
+            break;
+
+        case 2:
+            if (pr == NULL)
+            {
+                printf("Введите штрих-код товара.\n");
+                scanf("%s", &barcode);
+                pr = find_product(barcode, moloko, tvorog, cir, hleb, sloyka, baranki, kartofel, arbuz, dinya, bag_b, bag_s);
+            }
+            system("cls");
+            print_product(pr);
+            break;
+
+        case 3:
+            if (pr == NULL)
+            {
+                printf("Введите штрих-код товара.\n");
+                scanf("%s", &barcode);
+                pr = find_product(barcode, moloko, tvorog, cir, hleb, sloyka, baranki, kartofel, arbuz, dinya, bag_b, bag_s);
+            }
+            printf("Введите количество товара\n");
+            scanf("%d", &kol);
+            add_product(p, pr, kol);
+            break;
+
+        case 4:
+            system("cls");
+            print_chek(p);
+            break;
+
+        case 5:
+            free_chek(p);
+            return 0;
+
+        default:
+            printf("Такого действия нет. Попробуйте ещё раз.\n");
+            break;
+        }
     }
-
-    print_product(moloko);
-
-    free_chek(p);
-    return 0;
 }
-
-
-/*
-// Функция для поиска товара по штрих-коду среди тех, которые создаются в функции main
-product *find_product_main(char *barcode, product *hleb, product *sloyka, product *baranki) 
-{
-    product *p = NULL;
-    if (strcmp(barcode, hleb->barcode) == 0) 
-    {
-        p = hleb;
-    } 
-
-    else if (strcmp(barcode, sloyka->barcode) == 0) 
-    {
-        p = sloyka;
-    } 
-
-    else if (strcmp(barcode, baranki->barcode) == 0) 
-    {
-        p = baranki;
-    }
-    return p;
-}
-*/
