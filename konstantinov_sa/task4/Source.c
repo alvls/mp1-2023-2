@@ -6,26 +6,35 @@
 #include<windows.h>
 
 typedef struct  {
-	char code[5]; //без терминатора неудобно выводить и сравнивать
+	char code[4]; //без терминатора неудобно выводить и сравнивать, но по тз длина кода 4 символа...
 	char* name;
 	unsigned int qty;
 	unsigned int cost;
 	unsigned int skid;
 }tovar;
 
+//char* terminated(char code[4]) { // Отмена претензий, терминировать не обязательно //каждый раз придётся освобождать память после этого... А могло бы быть так удобно с терминатором...
+//	char* tcode = malloc(5*sizeof(char));
+//	strncpy(tcode, code, 4);
+//	tcode[4] = 0;
+//	return tcode;
+//}
+
 void printtovar(tovar t, int mode) {
 	if (mode == 0)
-		printf("%s %s %u руб. скидка %u%% = %u руб./шт.\n", t.code, t.name, t.cost, t.skid, t.cost*(100-t.skid)/100);
+	{
+		//char* tcode = terminated(t.code);//оказывается можно выводить строки без терминатора
+		printf("%.*s %s %u руб. скидка %u%% = %u руб./шт.\n", 4, t.code, t.name, t.cost, t.skid, t.cost * (100 - t.skid) / 100);
+		//free(tcode); //Всего-то надо вывести строку, а уже риск утечки памяти...
+	}
 	else if (mode == 1)
-		printf("%s %uшт %u руб./шт. всего %u руб.\n", t.name,t.qty, t.cost * (100 - t.skid) / 100, t.cost* (100 - t.skid) / 100*t.qty);
+		printf("%s %u руб./шт. %uшт всего %u руб.\n", t.name,t.cost * (100 - t.skid) / 100, t.qty, t.cost* (100 - t.skid) / 100*t.qty);
 }
 
 void append(tovar** check, unsigned* size, tovar t) {
 	tovar* newcheck;
 	if (*size > 0) {
 		newcheck = (tovar*)realloc(*check, (*size + 1) * sizeof(tovar));
-		//memcpy(newcheck, *check, (*size) * sizeof(tovar));
-		//free(*check);
 		if (newcheck != NULL)
 			*check = newcheck;
 		//printf("realloc\n");
@@ -42,27 +51,17 @@ void append(tovar** check, unsigned* size, tovar t) {
 	(*size)++;
 }
 
-long int codefind(char code[5], tovar arr[], unsigned size) {
+long int codefind(char code[4], tovar arr[], unsigned size) {
+	//char* tcode = terminated(code);
 	for (int i = 0; i < size; i++) {
-		if (strcmp(arr[i].code, code) == 0) {
+		if (memcmp(code, arr[i].code, 4*sizeof(char)) == 0) { //strcmp(terminated(arr[i].code), tcode)
 			return i;
 			break;
 		}
 	}
+	//free(tcode);
 	return -1;
 }
-
-//tovar tovarfind(char code[5], tovar assort[], unsigned asssize) {
-//	long findex = codefind(code, assort, asssize);
-//	/*for (int i = 0; i < asssize; i++) {
-//		if (strcmp(assort[i].code, code) == 0) {
-//			return assort[i];
-//			break;
-//		}
-//	}*/
-//	tovar notfound = { "0000","notfound", 0, 0, 0 };
-//	return notfound;
-//}
 
 int isvalidcode(char code[5]) {
 	for (int i = 0;i<4;i++) {
@@ -73,24 +72,29 @@ int isvalidcode(char code[5]) {
 }
 
 void printcheck(tovar** check, unsigned* csize) {
-	printf("Чек: %i\n", *csize);
+	unsigned sum = 0, sskid = 0;
+	printf("\nЧек: %i позиций\n", *csize);
 	for (unsigned i = 0;i < *csize;i++) {
-		//Sleep(50);
-		printtovar((*check)[i], 1);
-		Beep(100, 200);
+		tovar t = (*check)[i];
+		sum += t.cost * t.qty;
+		sskid += t.cost * t.skid / 100 * t.qty;
+		printtovar(t, 1);
+		Beep(150, 250);
 	}
+	printf("------------------------------------\n");
+	printf("Сумма без скидок %u руб.\nСуммарная скидка %u руб.\nИТОГО %u руб.\n", sum, sskid, sum-sskid);
+	Beep(250, 500);
 }
 
 int main() {
 	setlocale(LC_ALL, "");
 	srand(time(NULL));
-	//tovar bipki = {"0003", "bipki",1, 105, 10};
-	//tovar dilijans = { "0004", "dilijans",1, 500, 5 };
+	
 
 	tovar assort[] = { 
 		{"0000", "пакет", 1, 32, 0},
 		{"0001", "пакет с пакетом", 1, 64, 5},
-		{"0000", "пакет с пакетом с пакетом", 1, 128, 10},
+		{"0002", "пакет с пакетом с пакетом", 1, 128, 10},
 		{"0003", "бипки", 1, 105, 10},
 		{"0004", "дилижанс", 1, 500, 5 },
 		{"0005", "шушунчик", 1, 17000, 15},
@@ -106,7 +110,7 @@ int main() {
 	};
 	unsigned asssize = 14;
 
-	printf("Добро пожаловать в магазин -5+3iёрочка!\nУ нас целочисленные цены и комплексные товары!\nПросканируёте код или напишите команду end\n\nАссортимент:\n");
+	printf("Добро пожаловать в магазин -5+3iёрочка!\nУ нас целочисленные цены и комплексные товары!\nПросканируёте код или напишите команду end для завершения покупки\n\nАссортимент:\n");
 	for (unsigned i = 0;i < asssize;i++) {
 		printtovar(assort[i], 0);
 	}
@@ -154,7 +158,13 @@ int main() {
 				printcheck(&check, &csize);
 			}
 			else {
-				printf("Вы ничего не купили!\n");
+				printf("Вы ничего не купили и уже уходите? Покажите карманы! Ага! Два атома азота у нас своровали!!!!\n");
+				int t1 = 1200, t2 = 1100;
+				for (int i = 0; i < 10; i++) {
+					Beep(t1, 400);
+					Beep(t2, 400);
+				}
+				
 			}
 			
 			
