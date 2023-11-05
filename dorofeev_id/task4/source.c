@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-#include <Windows.h>
+
 //Ёмкость чека - количество товаров в чеке
 
 // Структура для хранения информации о товаре
