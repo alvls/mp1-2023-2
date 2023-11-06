@@ -5,6 +5,8 @@
 #include <string.h>
 #include "product_database.h"
 
+#define MAX_PRODUCTS_IN_DATABASE 10000
+
 Product* load_products_from_file(const char* const filename, unsigned int* products_amount);
 
 ProductDatabase* product_database_load(void) {
@@ -80,7 +82,8 @@ Product* load_products_from_file(const char* const filename, unsigned int* produ
 		return NULL;
 	}
 
-	if (fscanf(db_file, "%u\n", products_amount) != 1 || *products_amount < 1) {
+	if (fscanf(db_file, "%u\n", products_amount) != 1
+		|| *products_amount < 1 || *products_amount > MAX_PRODUCTS_IN_DATABASE) {
 		fclose(db_file);
 		return NULL;
 	}
