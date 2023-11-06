@@ -34,11 +34,13 @@ int main() { // name - cost for 1 item (rub) - amount - total cost
 	// receipt formation
 	int quantity[N] = { 0 };
 	char bar[] = "aaaa";
+	int empty = 1;
 	while (bar != "end" && bar != "End") {
 		int fine = 0;
 		while (!fine) {
 			printf("Enter the barcode of the product: ");
 			fine = 1;
+			char ch;
 			for (int i = 0; i < 4; i++) {
 				bar[i] = getchar();
 				if (bar[i] == '\n') {
@@ -47,8 +49,8 @@ int main() { // name - cost for 1 item (rub) - amount - total cost
 					break;
 				}
 			}
-			char ch;
-			if (fine && (ch = getchar()) != '\n' && ch != EOF) {
+			if (!fine) continue;
+			if ((ch = getchar()) != '\n' && ch != EOF) {
 				printf("The length of the barcode must be equal to 4!\n");
 				fine = 0;
 				while ((ch = getchar()) != '\n' && ch != EOF);
@@ -83,6 +85,7 @@ int main() { // name - cost for 1 item (rub) - amount - total cost
 			printf("Product's barcode: %s, name of the product: %s, cost per unit: %i, discount: %g%%\n", barcode_to_index[ind], names[ind], cost[ind], discounts[ind] * 100);
 			printf("-------------------------------------------------------------------------------------------\n");
 			quantity[ind]++;
+			empty = 0;
 		}
 		else {
 			printf("There's no product matching this barcode.\n");
@@ -95,7 +98,12 @@ int main() { // name - cost for 1 item (rub) - amount - total cost
 			check = 0;
 			while (c = getchar() != '\n' && c != EOF) { check++; }
 		}
-		if (cont == 'n' || cont == 'N') break;
+		if (cont == 'n' || cont == 'N') {
+			if (empty) {
+				printf("The check cannot be empty! Enter at least 1 valid barcode.\n");
+			}
+			else break;
+		}
 	}
 
 	// receipt output
