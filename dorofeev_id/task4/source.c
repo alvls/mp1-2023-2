@@ -101,6 +101,20 @@ void print_chek(chek* p)
     printf("\n\n");
 }
 
+int print_final_price(chek* p) // (просто переписал кусок функции вывода чека)
+{
+    int total_price = 0;
+    int total_discount = 0;
+    int final_price = 0;
+    for (int i = 0; i < p->size; i++)
+    {
+        total_price += p->items[i].price * p->kolvo[i];
+        total_discount += p->items[i].price * p->kolvo[i] * p->items[i].discount / 100;
+        final_price = total_price - total_discount;
+    }
+    return final_price;
+}
+
 // Функция для поиска товаров в базе данных
 product* find_product(char* barcode, product* moloko, product* tvorog, product* cir, product* hleb, product* sloyka, product* baranki, product* kartofel, product* arbuz, product* dinya, product* bag_b, product* bag_s)
 {
@@ -199,9 +213,9 @@ int main()
     product* baranki = create_product("1003", "Баранки с маком", 70, 5);
 
     // фрукты/овощи
-    product* kartofel = create_product("2001", "Картофель Отечественный", 30, 3);
-    product* arbuz = create_product("2002", "Арбуз Отечественный", 25, 3);
-    product* dinya = create_product("2003", "Дыня Торпеда", 40, 3);
+    product* kartofel = create_product("2001", "Картофель Отечественный", 30, 5);
+    product* arbuz = create_product("2002", "Арбуз Отечественный", 25, 5);
+    product* dinya = create_product("2003", "Дыня Торпеда", 40, 5);
 
     //прочие товары
     product* bag_b = create_product("3001", "Пакет 65*40см", 10, 0);
@@ -222,7 +236,8 @@ int main()
         printf("2 - вывести описание товара\n");
         printf("3 - добавить товар в чек\n");
         printf("4 - сформировать чек за покупку\n");
-        printf("5 - завершить работу с программой\n");
+        printf("5 - Вывести итоговую сумму к оплате\n");
+        printf("6 - завершить работу с программой\n");
 
         
         scanf("%d", &action);
@@ -263,6 +278,10 @@ int main()
             break;
 
         case 5:
+            printf("Итого к оплате: %d\n", print_final_price(p));
+            break;
+
+        case 6:
             free_chek(p);
             return 0;
 
