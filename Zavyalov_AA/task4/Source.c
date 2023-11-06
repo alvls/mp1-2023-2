@@ -2,6 +2,7 @@
 #include <memory.h>
 #include <time.h>
 #include <stdlib.h>
+#include <math.h>
 
 #define N 7
 
@@ -103,9 +104,9 @@ int main() { // name - cost for 1 item (rub) - amount - total cost
 	for (int i = 0; i < N; i++) {
 		if (quantity[i] != 0) {
 			int teksum = quantity[i] * cost[i];
-			printf("%s  -  %i rub/item  -  quantity: %i  -  total cost: %g (discount of %g rubles)\n", names[i], cost[i], quantity[i], teksum * (1 - discounts[i]), teksum * discounts[i]);
+			printf("%s  -  %i rub/item  -  quantity: %i  -  total cost: %g (discount of %g rubles)\n", names[i], cost[i], quantity[i], ceil(teksum * (1 - discounts[i])), floor(teksum * discounts[i]));
 			ans += teksum;
-			totaldisc += teksum * discounts[i];
+			totaldisc += floor(teksum * discounts[i]);
 		}
 	}
 	printf("-------------------------------------------------------------------------------------------------------------\n");
