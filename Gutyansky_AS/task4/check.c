@@ -6,7 +6,7 @@
 
 #define CHECK_INITIAL_CAPACITY 4
 
-Check* check_create() {
+Check* check_create(void) {
 	Check* check;
 	CheckRecord* records;
 
@@ -28,7 +28,7 @@ int check_valid(const Check* check) {
 }
 
 int check_try_add_product(Check* check, const Product* product) {
-	int i;
+	size_t i;
 	Barcode product_code;
 	CheckRecord* record;
 	CheckRecord new_record;
@@ -61,7 +61,7 @@ int check_try_add_product(Check* check, const Product* product) {
 }
 
 void check_print(const Check* check) {
-	int i;
+	size_t i;
 	unsigned int total_price;
 	unsigned int total_discount;
 	unsigned int total_sum;
@@ -95,7 +95,7 @@ void check_print_sum(const Check* check) {
 unsigned int check_total_price(const Check* check) {
 	unsigned int s;
 	CheckRecord record;
-	int i;
+	size_t i;
 
 	s = 0;
 	for (i = 0; i < check->length; i++) {
@@ -112,7 +112,7 @@ unsigned int check_total_discount(const Check* check) {
 	unsigned int discount_rubles;
 	double discount;
 	CheckRecord record;
-	int i;
+	size_t i;
 
 	s = 0;
 	total = 0;

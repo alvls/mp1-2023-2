@@ -53,9 +53,9 @@ void clear_screen(void) {
 	COORD pos = buf.dwCursorPosition;
 	ReadConsoleOutputAttribute(console, &attr, 1, pos, &count);
 
-	int col = attr;
-	int width = buf.dwSize.X;
-	int height = buf.dwSize.Y;
+	WORD col = attr;
+	SHORT width = buf.dwSize.X;
+	SHORT height = buf.dwSize.Y;
 
 	COORD z_pos = {
 		.X = 0, .Y = 0
@@ -66,7 +66,7 @@ void clear_screen(void) {
 	FillConsoleOutputCharacter(console, ' ', width * height, z_pos, &count);
 }
 
-void set_cursor_at(int x, int y) {
+void set_cursor_at(short x, short y) {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (!console) {
 		return;
@@ -94,8 +94,8 @@ void text_color(int color) {
 	COORD pos = buf.dwCursorPosition;
 	ReadConsoleOutputAttribute(console, &attr, 1, pos, &count);
 
-	int bg_col = attr / 16;
-	int col = color % 16;
+	WORD bg_col = attr / 16;
+	WORD col = color % 16;
 	col = col + bg_col * 16;
 
 	SetConsoleTextAttribute(console, col);
@@ -107,7 +107,7 @@ void text_color(int color) {
 	set_cursor_at(pos.X, pos.Y);
 }
 
-void text_background(int color) {
+void text_background(short color) {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (!console) {
 		return;
@@ -121,8 +121,8 @@ void text_background(int color) {
 	COORD pos = buf.dwCursorPosition;
 	ReadConsoleOutputAttribute(console, &attr, 1, pos, &count);
 
-	int text_col = attr % 16;
-	int col = color % 16;
+	WORD text_col = attr % 16;
+	WORD col = color % 16;
 	col = color * 16 + text_col;
 
 	SetConsoleTextAttribute(console, col);
@@ -134,7 +134,7 @@ void text_background(int color) {
 	set_cursor_at(pos.X, pos.Y);
 }
 
-void text_attr(int color) {
+void text_attr(short color) {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (!console) {
 		return;
@@ -150,7 +150,7 @@ void text_attr(int color) {
 	set_cursor_at(pos.X, pos.Y);
 }
 
-void set_window_wh(int width, int height) {
+void set_window_wh(short width, short height) {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (!console) {
 		return;
@@ -207,7 +207,7 @@ void set_cursor_visible(bool isVisible) {
 	SetConsoleCursorInfo(console, &buf);
 }
 
-void print_at(const char* format, int x, int y, ...) {
+void print_at(const char* format, short x, short y, ...) {
 	set_cursor_at(x, y);
 
 	va_list args;
@@ -216,7 +216,7 @@ void print_at(const char* format, int x, int y, ...) {
 	va_end(args);
 }
 
-bool try_read_int(int* result, int minValue, int maxValue, int screen_x, int screen_y) {
+bool try_read_int(int* result, int minValue, int maxValue) {
 	int read_arguments;
 
 	read_arguments = scanf_s("%d", result);

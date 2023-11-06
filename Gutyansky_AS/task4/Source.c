@@ -2,10 +2,8 @@
 
 #include <stdio.h>
 #include <locale.h>
-
 #include "console_utils.h"
-#include "barcode.h"
-#include "product.h"
+#include "product_database.h"
 #include "check.h"
 
 typedef enum ApplicationState {
@@ -26,8 +24,6 @@ ApplicationState check_info_menu(Check* check);
 ApplicationState total_price_menu(Check* check);
 
 void main(void) {
-	int error = 0;
-
 	setlocale(LC_ALL, "rus");
 	set_window_wh(120, 40);
 
@@ -43,8 +39,8 @@ void main(void) {
 	if (!check_valid(check)) {
 		text_color(RED);
 		printf("Ошибка: не хватает памяти для создания чека!\n");
-		system("pause");
 		product_database_free(database);
+		system("pause");
 		return;
 	}
 
@@ -179,7 +175,7 @@ ApplicationState product_info_menu(ProductDatabase* database, Check* check) {
 		}
 	}
 
-
+	return MAIN_MENU;
 }
 
 ApplicationState add_product_menu(ProductDatabase* database, Check* check) {
@@ -256,9 +252,8 @@ Barcode read_barcode(void) {
 					is_barcode_valid = 0;
 					break;
 				}
-
-				barcode.values[i] = buffer[i];
 			}
+			barcode = create_barcode(buffer[0], buffer[1], buffer[2], buffer[3]);
 		}
 	} while (!is_barcode_valid);
 

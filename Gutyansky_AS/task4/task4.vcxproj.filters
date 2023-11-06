@@ -23,6 +23,9 @@
     <ClInclude Include="check.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="product_database.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="console_utils.c">
@@ -38,6 +41,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="check.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="product_database.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

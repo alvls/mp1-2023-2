@@ -12,7 +12,7 @@ typedef struct {
 	size_t memory_capacity;
 } Check;
 
-Check* check_create();
+Check* check_create(void);
 void check_free(Check* check);
 int check_valid(const Check* check);
 int check_try_add_product(Check* check, const Product* product);
