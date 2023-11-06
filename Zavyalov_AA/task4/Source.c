@@ -10,7 +10,7 @@ int check(char k) {
 	return (0 <= k - '0' && k - '0' <= 9);
 }
 
-int main() { // name - cost for 1 item (rub) - amount - total cost
+int main() {
 	srand(time(NULL));
 
 	char* names[N];
