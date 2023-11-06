@@ -35,7 +35,7 @@ int main() {
 	int quantity[N] = { 0 };
 	char bar[] = "aaaa";
 	int empty = 1;
-	while (bar != "end" && bar != "End") {
+	while (1) {
 		int fine = 0;
 		while (!fine) {
 			printf("Enter the barcode of the product: ");
