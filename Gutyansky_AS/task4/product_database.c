@@ -103,13 +103,12 @@ Product* load_products_from_file(const char* const filename, unsigned int* produ
 			break;
 		}
 
-		product_name_buffer[read_name_length] = '\0';
 		temp_name = (char*)malloc(read_name_length * sizeof(char));
 		if (!temp_name) {
 			valid = 0;
 			break;
 		}
-		strcpy(temp_name, product_name_buffer);
+		strncpy(temp_name, product_name_buffer, read_name_length);
 		products[i].barcode = create_barcode(barcode_buffer[0], barcode_buffer[1], barcode_buffer[2], barcode_buffer[3]);
 		products[i].name = temp_name;
 		products[i].price = product_price;
