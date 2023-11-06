@@ -75,7 +75,7 @@ Product* load_products_from_file(const char* const filename, unsigned int* produ
 	unsigned int product_price;
 	unsigned int product_discount;
 	int valid;
-	unsigned i;
+	unsigned int i;
 
 	db_file = fopen(filename, "r");
 	if (!db_file) {
@@ -98,11 +98,12 @@ Product* load_products_from_file(const char* const filename, unsigned int* produ
 	for (i = 0; i < *products_amount; i++) {
 		read_res = fscanf(db_file, "%4[^;]%n;%127[^;]%n;%u;%u\n", barcode_buffer, &read_barcode_length,
 			product_name_buffer, &read_name_length, &product_price, &product_discount);
+		// string data + '\0'
+		read_name_length -= read_barcode_length;
 		if (read_res != 4 || read_barcode_length != 4 || read_name_length == 0) {
 			valid = 0;
 			break;
 		}
-
 		temp_name = (char*)malloc(read_name_length * sizeof(char));
 		if (!temp_name) {
 			valid = 0;
