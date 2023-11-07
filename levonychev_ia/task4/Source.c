@@ -153,76 +153,78 @@ void main()
 			printf("%s\t\t\t%s\n", uaz_452.barcode, uaz_452.name);
 			printf("%s\t\t\t%s\n", uaz_469.barcode, uaz_469.name);
 		}
-		if (strcmp(user_code, gaz_24_01.barcode) == 0)
-		{	
+		else if (strcmp(user_code, gaz_24_01.barcode) == 0)
+		{
 			total += gaz_24_01.total;
 			sum += gaz_24_01.price;
 			gaz_24_01.quantity++;
 			printf("Name: %s\nPrice: $%d\nQuantity: %d\n", gaz_24_01.name, gaz_24_01.price, gaz_24_01.quantity);
 		}
-		if (strcmp(user_code, gaz_24_02.barcode) == 0)
-		{	
+		else if (strcmp(user_code, gaz_24_02.barcode) == 0)
+		{
 			total += gaz_24_02.total;
 			sum += gaz_24_02.price;
 			gaz_24_02.quantity++;
 			printf("Name: %s\nPrice: $%d\nQuantity: %d\n", gaz_24_02.name, gaz_24_02.price, gaz_24_02.quantity);
 		}
-		if (strcmp(user_code, vaz_2101.barcode) == 0)
-		{	
+		else if (strcmp(user_code, vaz_2101.barcode) == 0)
+		{
 			total += vaz_2101.total;
 			sum += vaz_2101.price;
 			vaz_2101.quantity++;
 			printf("Name: %s\nPrice: $%d\nQuantity: %d\n", vaz_2101.name, vaz_2101.price, vaz_2101.quantity);
 		}
-		if (strcmp(user_code, vaz_2102.barcode) == 0)
-		{	
+		else if (strcmp(user_code, vaz_2102.barcode) == 0)
+		{
 			total += vaz_2102.total;
 			sum += vaz_2102.price;
 			vaz_2102.quantity++;
 			printf("Name: %s\nPrice: $%d\nQuantity: %d\n", vaz_2102.name, vaz_2102.price, vaz_2102.quantity);
 		}
-		if (strcmp(user_code, kamaz_6560.barcode) == 0)
-		{	
+		else if (strcmp(user_code, kamaz_6560.barcode) == 0)
+		{
 			total += kamaz_6560.total;
 			sum += kamaz_6560.price;
 			kamaz_6560.quantity++;
 			printf("Name: %s\nPrice: $%d\nQuantity: %d\n", kamaz_6560.name, kamaz_6560.price, kamaz_6560.quantity);
 		}
-		if (strcmp(user_code, paz_3205.barcode) == 0)
-		{	
+		else if (strcmp(user_code, paz_3205.barcode) == 0)
+		{
 			total += paz_3205.total;
 			sum += paz_3205.price;
 			paz_3205.quantity++;
 			printf("Name: %s\nPrice: $%d\nQuantity: %d\n", paz_3205.name, paz_3205.price, paz_3205.quantity);
 		}
-		if (strcmp(user_code, zil_131.barcode) == 0)
-		{	
+		else if (strcmp(user_code, zil_131.barcode) == 0)
+		{
 			total += zil_131.total;
 			sum += zil_131.price;
 			zil_131.quantity++;
 			printf("Name: %s\nPrice: $%d\nQuantity: %d\n", zil_131.name, zil_131.price, zil_131.quantity);
 		}
-		if (strcmp(user_code, zil_130.barcode) == 0)
-		{	
+		else if (strcmp(user_code, zil_130.barcode) == 0)
+		{
 			total += zil_130.total;
 			sum += zil_130.price;
 			zil_130.quantity++;
 			printf("Name: %s\nPrice: $%d\nQuantity: %d\n", zil_130.name, zil_130.price, zil_130.quantity);
 		}
-		if (strcmp(user_code, uaz_452.barcode) == 0)
-		{	
+		else if (strcmp(user_code, uaz_452.barcode) == 0)
+		{
 			total += uaz_452.total;
 			sum += uaz_452.price;
 			uaz_452.quantity++;
 			printf("Name: %s\nPrice: $%d\nQuantity: %d\n", uaz_452.name, uaz_452.price, uaz_452.quantity);
 		}
-		if (strcmp(user_code, uaz_469.barcode) == 0)
-		{	
+		else if (strcmp(user_code, uaz_469.barcode) == 0)
+		{
 			total += uaz_469.total;
 			sum += uaz_469.price;
 			uaz_469.quantity++;
 			printf("Name: %s\nPrice: $%d\nQuantity: %d\n", uaz_469.name, uaz_469.price, uaz_469.quantity);
 		}
+		else
+			printf("No such barcode.\n");
 		printf("\n");
 	} while (strcmp(user_code, stop) != 0 );
 
@@ -233,7 +235,8 @@ void main()
 		return;
 	}
 	total_discount = 100 * ( 1 - total / sum);
-	printf("\n\n\n\n\t\t\t-----LEVONYCHEV CO.-----\n\n");
+	system("cls");
+	printf("\t\t\t-----LEVONYCHEV CO.-----\n\n");
 	printf("------------------------------------------------------------------------------");
 	printf("\nPrice\t\tDiscounted Price\t\tQuantity\t\tResult\n");
 	if (gaz_24_01.quantity > 0)
