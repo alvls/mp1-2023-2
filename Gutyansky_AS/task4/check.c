@@ -70,12 +70,12 @@ void check_print(const Check* check) {
 
 	text_background(DARKGRAY);
 	text_color(WHITE);
-	printf("%-40s %-10s %-15s %-20s\n", "Название", "Кол-во", "Цена/шт(руб.)", "Общая стоимость(руб.)");
+	printf("%-60s %-10s %-15s %-20s\n", "Название", "Кол-во", "Цена/шт(руб.)", "Общая стоимость(руб.)");
 	text_background(BLACK);
 	for (i = 0; i < check->length; i++) {
 		record = check->records[i];
 		product = record.product;
-		printf("%-40s %-10u %-15u %-20u\n", product.name, record.amount, product.price, product.price * record.amount);
+		printf("%-60s %-10u %-15u %-20u\n", product.name, record.amount, product.price, product.price * record.amount);
 	}
 
 	total_price = check_total_price(check);
