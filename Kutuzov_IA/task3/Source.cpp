@@ -244,7 +244,7 @@ int Check(int a, int n)
 }
 
 
-// Generates random digit froam a given seed (time is already taken into account)
+// Generates random digit from a given seed (time is already taken into account)
 int GenerateRandomDigit(int seed)
 {
     srand(seed * time(0));
@@ -282,7 +282,7 @@ void ConvertNumberToDataArray(int Number, int ArrayOut[N_MAX])
 }
 
 
-// Calculates the number of "cow" and "bulls" based on the guess and the correct number of size n, returns if the numbers are equal
+// Calculates the number of "cows" and "bulls" based on the guess and the correct number of size n, returns if the numbers are equal
 int GetResponse(int n, int Guess, int Number, int* cows, int* bulls)
 {
     // Declaring Data arrays
