@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <locale.h>
 #include <time.h>
 
 // Defining Data structure
@@ -74,8 +73,6 @@ struct Code GetRandomCode(int Seed, struct LibraryData LibData);
 
 int main()
 {
-	setlocale(LC_ALL, "rus");
-
 	int* Bill;
 	struct LibraryData LibData;
 
