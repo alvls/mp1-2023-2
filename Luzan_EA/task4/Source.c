@@ -69,8 +69,8 @@ int main() {
 		//info about product
 		printf_s("\n");
 		printf_s("%s\n", product_names[pos]);
-		printf_s("barcode - %s, cost - %i rub, discount -  %g%%\n", barcodes[pos], product_costs[pos], product_disc[pos] * 100);
-		printf_s("summary cost - %g rub\n", product_costs[pos] * (1 - product_disc[pos]));
+		printf_s(" cost - %i rub, discount -  %g%%\n", product_costs[pos], product_disc[pos] * 100);
+		printf_s(" cost with disc. - %g rub\n", product_costs[pos] * (1 - product_disc[pos]));
 		printf_s("\n");
 
 		product_num[pos]++; // number of this product in cheque
@@ -78,24 +78,30 @@ int main() {
 
 
 	// cheque
-	printf_s("Your cheque:");
-	printf_s("\n");
+	printf_s("\n\n\nYour cheque:\n\n");
+	printf_s("Name  -  Price  -  discount  -  total cost\n");
 	for (int i = 0; i < N; i++) {
 		if (product_num[i] == 0) { continue; }
-		printf_s("   %s\n", product_names[i]);
-		printf_s("     cost - % i rub, nums - % i \n", product_costs[i], product_num[i]);
-		printf_s("     summary cost - %g rub\n", product_num[i] * product_costs[i] * (1 - product_disc[i]));
-		printf_s("\n");
+		printf_s("%s  -  %i rub/item  -  %i pcs  -   %g rub\n", product_names[i], product_costs[i], product_num[i], product_num[i] * product_costs[i] * (1 - product_disc[i]));
+		//printf_s("     cost - %i rub, pcs - %i \n", product_costs[i], product_num[i]);
+		//printf_s("     cost with disc. - %g rub\n", product_num[i] * product_costs[i] * (1 - product_disc[i]));
+		//printf_s("\n");
 
 		sum += product_num[i] * product_costs[i];
 		disc_sum = disc_sum + (float)product_num[i] * (float)product_costs[i] * product_disc[i];
 	}
 	end_sum = sum - (int)disc_sum; // rounding down, without kopecks
 
-	printf_s("Sum for all: %i rub\n", sum);
+	printf_s("\n\n");
+	printf_s("Total cost of products: %i rub\n", sum);
 	printf_s("Discount: %i rub\n", (int)disc_sum);
-	printf_s("To payment: %i rub\n", (int)end_sum);
+	printf_s("For payment: %i rub\n\n", (int)end_sum);
 
 	system("pause");
 	return 0;
 }
+/*
+0500
+0400
+0000
+*/
