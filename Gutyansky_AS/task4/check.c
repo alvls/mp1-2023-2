@@ -1,4 +1,6 @@
-﻿#include <malloc.h>
+﻿#define _CRT_SECURE_NO_WARNINGS
+
+#include <malloc.h>
 #include <stdio.h>
 #include <math.h>
 #include "console_utils.h"
@@ -83,6 +85,37 @@ void check_print(const Check* check) {
 	total_sum = check_total_sum(check);
 
 	printf("\nОбщая стоимость: %uруб\nСкидка: %uруб\nИтог: %uруб\n", total_price, total_discount, total_sum);
+}
+
+int check_save(const Check* check, const char* filename) {
+	FILE* save_file;
+	size_t i;
+	unsigned int total_price;
+	unsigned int total_discount;
+	unsigned int total_sum;
+	CheckRecord record;
+	Product product;
+
+	save_file = fopen(filename, "w");
+	if (!save_file) {
+		return 0;
+	}
+
+	fprintf(save_file, "%-60s %-10s %-15s %-20s\n", "Название", "Кол-во", "Цена/шт(руб.)", "Общая стоимость(руб.)");
+	for (i = 0; i < check->length; i++) {
+		record = check->records[i];
+		product = record.product;
+		fprintf(save_file, "%-60s %-10u %-15u %-20u\n", product.name, record.amount, product.price, product.price * record.amount);
+	}
+
+	total_price = check_total_price(check);
+	total_discount = check_total_discount(check);
+	total_sum = check_total_sum(check);
+
+	fprintf(save_file, "\nОбщая стоимость: %uруб\nСкидка: %uруб\nИтог: %uруб\n", total_price, total_discount, total_sum);
+
+	fclose(save_file);
+	return 1;
 }
 
 void check_print_sum(const Check* check) {

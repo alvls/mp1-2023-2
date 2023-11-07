@@ -11,16 +11,20 @@ typedef enum ApplicationState {
 	PRODUCT_INFO,
 	ADD_PRODUCT,
 	CHECK_INFO,
+	SAVE_CHECK,
 	TOTAL_PRICE,
 	EXIT
 } ApplicationState;
 
 void user_loop(ProductDatabase* database, Check* check);
 Barcode read_barcode(void);
-ApplicationState main_menu(void);
+ApplicationState main_menu(Check* check);
+ApplicationState main_menu_check(void);
+ApplicationState main_menu_no_check(void);
 ApplicationState product_info_menu(ProductDatabase* database, Check* check);
 ApplicationState add_product_menu(ProductDatabase* database, Check* check);
 ApplicationState check_info_menu(Check* check);
+ApplicationState save_check_menu(Check* check);
 ApplicationState total_price_menu(Check* check);
 
 void main(void) {
@@ -56,7 +60,7 @@ void user_loop(ProductDatabase* database, Check* check) {
 	while (app_state != EXIT) {
 		switch (app_state) {
 		case MAIN_MENU:
-			app_state = main_menu();
+			app_state = main_menu(check);
 			break;
 		case PRODUCT_INFO:
 			app_state = product_info_menu(database, check);
@@ -67,6 +71,9 @@ void user_loop(ProductDatabase* database, Check* check) {
 		case CHECK_INFO:
 			app_state = check_info_menu(check);
 			break;
+		case SAVE_CHECK:
+			app_state = save_check_menu(check);
+			break;
 		case TOTAL_PRICE:
 			app_state = total_price_menu(check);
 			break;
@@ -74,7 +81,16 @@ void user_loop(ProductDatabase* database, Check* check) {
 	}
 }
 
-ApplicationState main_menu(void) {
+ApplicationState main_menu(Check* check) {
+	if (check->length > 0) {
+		return main_menu_check();
+	}
+	else {
+		return main_menu_no_check();
+	}
+}
+
+ApplicationState main_menu_check(void) {
 	int choice;
 
 	set_cursor_visible(0);
@@ -97,12 +113,14 @@ ApplicationState main_menu(void) {
 		set_cursor_at(0, 5);
 		printf("3. Посмотреть чек");
 		set_cursor_at(0, 6);
-		printf("4. Узнать итоговую стоимость");
+		printf("4. Сохранить чек");
 		set_cursor_at(0, 7);
-		printf("5. Выйти");
+		printf("5. Узнать итоговую стоимость");
 		set_cursor_at(0, 8);
+		printf("6. Выйти");
+		set_cursor_at(0, 9);
 		printf(">>> ");
-	} while (!try_read_int(&choice, 1, 5));
+	} while (!try_read_int(&choice, 1, 6));
 
 	set_cursor_visible(1);
 
@@ -115,8 +133,51 @@ ApplicationState main_menu(void) {
 	case 3:
 		return CHECK_INFO;
 	case 4:
-		return TOTAL_PRICE;
+		return SAVE_CHECK;
 	case 5:
+		return TOTAL_PRICE;
+	case 6:
+		return EXIT;
+	default:
+		return MAIN_MENU;
+	}
+}
+
+ApplicationState main_menu_no_check(void) {
+	int choice;
+
+	set_cursor_visible(0);
+
+	do {
+		clear_screen();
+
+		set_cursor_at(0, 0);
+		text_background(BLUE);
+		text_color(WHITE);
+		printf("E-КАССА");
+
+		set_cursor_at(0, 2);
+		text_background(BLACK);
+		printf("Выберите действие:");
+		set_cursor_at(0, 3);
+		printf("1. Узнать информацию о товаре");
+		set_cursor_at(0, 4);
+		printf("2. Добавить товар в чек");
+		set_cursor_at(0, 5);
+		printf("3. Выйти");
+		set_cursor_at(0, 6);
+		printf(">>> ");
+	} while (!try_read_int(&choice, 1, 3));
+
+	set_cursor_visible(1);
+
+	switch (choice)
+	{
+	case 1:
+		return PRODUCT_INFO;
+	case 2:
+		return ADD_PRODUCT;
+	case 3:
 		return EXIT;
 	default:
 		return MAIN_MENU;
@@ -218,6 +279,21 @@ ApplicationState check_info_menu(Check* check) {
 	clear_screen();
 	set_cursor_at(0, 0);
 	check_print(check);
+	system("pause");
+	return MAIN_MENU;
+}
+
+ApplicationState save_check_menu(Check* check) {
+	clear_screen();
+	set_cursor_at(0, 0);
+	if (!check_save(check, "check.txt")) {
+		text_color(RED);
+		printf("Ошибка: не удалось сохранить чек!\n");
+		text_color(WHITE);
+	}
+	else {
+		printf("Чек успешно сохранен в файл check.txt\n");
+	}
 	system("pause");
 	return MAIN_MENU;
 }
