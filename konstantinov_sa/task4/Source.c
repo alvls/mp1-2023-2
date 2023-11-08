@@ -28,14 +28,10 @@ void append(tovar** check, unsigned* size, tovar t) {
 		newcheck = (tovar*)realloc(*check, (*size + 1) * sizeof(tovar));
 		if (newcheck != NULL)
 			*check = newcheck;
-		//printf("realloc\n");
 	}
 	else {
 		newcheck = (tovar*)malloc(sizeof(tovar));
 	}
-	//printf("appended ");
-	//printtovar(t);
-	//printf(" to %d\n", *size);
 	newcheck[*size] = t;
 	
 	*check = newcheck;
@@ -48,14 +44,12 @@ void clear(tovar** check, unsigned* size) {
 }
 
 long int codefind(char code[4], tovar arr[], unsigned size) {
-	//char* tcode = terminated(code);
 	for (int i = 0; i < size; i++) {
-		if (memcmp(code, arr[i].code, 4*sizeof(char)) == 0) { //strcmp(terminated(arr[i].code), tcode)
+		if (memcmp(code, arr[i].code, 4*sizeof(char)) == 0) {
 			return i;
 			break;
 		}
 	}
-	//free(tcode);
 	return -1;
 }
 
@@ -84,9 +78,6 @@ void printcheck(tovar** check, unsigned* csize) {
 
 int main() {
 	setlocale(LC_ALL, "");
-	srand(time(NULL));
-	
-
 	tovar assort[] = { 
 		{"0000", "пакет", 1, 32, 0},
 		{"0001", "пакет с пакетом", 1, 64, 5},
@@ -105,34 +96,25 @@ int main() {
 		{"3005", "шушунчик", 1, 17000, 15},
 		{"3006", "нюанс", 1, 750, 20},
 		{"9999", "нуль-терминатор", 1, 9999, 30},
-		
 	};
 	unsigned asssize = 17;
-
 	printf("Добро пожаловать в магазин -5+3iёрочка!\nУ нас целочисленные цены и комплексные товары!\nПросканируйте (напишите) код, тогда будет выведено описание и товар будет добавлен в чек\nНапишите команду end для завершения покупки, тогда будет сформирован чек и посчитана итоговая сумма\n\nАссортимент:\n");
 	for (unsigned i = 0;i < asssize;i++) {
 		printtovar(assort[i], 0);
 	}
-
 	tovar* check = &(assort[0]);
 	unsigned csize = 0;
-	/*append(&check, &csize, assort[0]);
-	append(&check, &csize, assort[1]);
-	printtovar(check[1]);*/
 
 	while (1) {
 		char input[4];
 		char endc = '\n';
 		scanf("%4s%c", input, &endc);
-		//printf(">%s\n", input);
-		//printf(" %i<", (int)input[3]);
 		if (endc != '\n')
 			printf("Символы начиная с символа %c проигнорированы\n", endc);
-		//printf("Присутствие кода %i\n", isvalidcode(input));
+
 		if (isvalidcode(input)) {
 			Beep(1900, 150);
 			tovar foundt;
-
 			long inchecki = codefind(input, check, csize);
 			if (inchecki != -1) { //сначала проверим на повтор товара в чеке
 				check[inchecki].qty++;
@@ -150,7 +132,6 @@ int main() {
 					printf("Товар с кодом %s не найден\n", input);
 				}
 			}
-
 		}
 		else if (strcmp(input, "end")==0) {
 			if (csize) {
@@ -165,16 +146,11 @@ int main() {
 					Beep(t2, 400);
 				}
 				
-			}
-			
-			
+			}		
 		}
 		else {
 			printf("Не распознано\n");
 		}
 
 	}
-	
-	
-	system("pause");
 }
