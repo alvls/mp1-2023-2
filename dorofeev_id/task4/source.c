@@ -181,7 +181,7 @@ product* find_product(char* barcode, product* moloko, product* tvorog, product* 
             printf("Товар не найден\n");
             printf("Введите Штрих-код товара\n");
             p = NULL;
-            scanf("%s", &barcode);
+            scanf("%s", barcode);
         }
     }
     return p;
