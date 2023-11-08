@@ -1,4 +1,3 @@
-
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <locale.h>
@@ -6,27 +5,27 @@
 #include <time.h>
 
 struct Apple_Store { //  структура - магазин
-    int barcode; // штрихкод
+    char barcode[4]; // штрихкод
     char name[50]; // наименование товара
     int unit_cost;   // стоимость за единицу указывается в рублях
     int discount; // скидка в процентах
 };
 
-struct Apple_Store iPhone11 = {2563, "iPhone 11 128GB", 59000, 15}; // 1-ый товар
-struct Apple_Store iPhone12 = {3199, "iPhone 12 64GB", 70000, 10}; // 2-ой товар
-struct Apple_Store iPhone13 = {4796, "iPhone 13 256GB", 102000, 10}; // 3-ий товар
-struct Apple_Store iPhone14_1 = {8571, "iPhone 14 128GB ", 87000, 10};  //4-ый товар
-struct Apple_Store iPhone14_2 = {8574, "iPhone 14 Pro Max 1TB ", 212000, 10}; // 5-ый товар
-struct Apple_Store iPhone15_1 = {9231, "iPhone 15 128GB", 130000, 5}; // 6-ой товар
-struct Apple_Store iPhone15_2 = {9238, "iPhone 15 Pro Max 512GB", 284000, 5}; // 7-ой товар
-struct Apple_Store iPad_Air_2022 = {6656, "iPad Air 2022 64GB", 70000, 20}; // 8-ой товар
-struct Apple_Store iPad_Pro_2022 = {7777, "iPad Pro 2022 128GB", 104000, 20}; // 9-ый товар
-struct Apple_Store MacBook_Air_15inch = {8898, "MacBook Air 15-inch 2023 512GB", 190000, 25}; // 10-ый товар
-struct Apple_Store MacBook_Air_13inch = {7434, "MacBook Air 13-inch 2022 2TB", 336000, 25}; // 11-ый товар
-struct Apple_Store MacBook_Pro_16inch = {9999, "MacBook Pro 16-inch 2023 8TB", 976000, 20}; // 12-ый товар
-struct Apple_Store AirPods_Pro = {6538, "AirPods Pro 2nd generation 2023 USB-C", 33000, 35}; // 13-ый товар
-struct Apple_Store AirPods_Max = {8667, "AirPods Max USB-C", 75000, 30}; // 14-ый товар
-struct Apple_Store Watch_Ultra_2 = {9787, "Watch Ultra 2 GPS", 120000, 25}; // 15-ый товар
+struct Apple_Store iPhone11 = {"2563", "iPhone 11 128GB", 59000, 15}; // 1-ый товар
+struct Apple_Store iPhone12 = {"3199", "iPhone 12 64GB", 70000, 10}; // 2-ой товар
+struct Apple_Store iPhone13 = {"4796", "iPhone 13 256GB", 102000, 10}; // 3-ий товар
+struct Apple_Store iPhone14_1 = {"8571", "iPhone 14 128GB ", 87000, 10};  //4-ый товар
+struct Apple_Store iPhone14_2 = {"8574", "iPhone 14 Pro Max 1TB ", 212000, 10}; // 5-ый товар
+struct Apple_Store iPhone15_1 = {"9231", "iPhone 15 128GB", 130000, 5}; // 6-ой товар
+struct Apple_Store iPhone15_2 = {"9238", "iPhone 15 Pro Max 512GB", 284000, 5}; // 7-ой товар
+struct Apple_Store iPad_Air_2022 = {"6656", "iPad Air 2022 64GB", 70000, 20}; // 8-ой товар
+struct Apple_Store iPad_Pro_2022 = {"7777", "iPad Pro 2022 128GB", 104000, 20}; // 9-ый товар
+struct Apple_Store MacBook_Air_15inch = {"8898", "MacBook Air 15-inch 2023 512GB", 190000, 25}; // 10-ый товар
+struct Apple_Store MacBook_Air_13inch = {"7434", "MacBook Air 13-inch 2022 2TB", 336000, 25}; // 11-ый товар
+struct Apple_Store MacBook_Pro_16inch = {"9999", "MacBook Pro 16-inch 2023 8TB", 976000, 20}; // 12-ый товар
+struct Apple_Store AirPods_Pro = {"6538", "AirPods Pro 2nd generation 2023 USB-C", 33000, 35}; // 13-ый товар
+struct Apple_Store AirPods_Max = {"8667", "AirPods Max USB-C", 75000, 30}; // 14-ый товар
+struct Apple_Store Watch_Ultra_2 = {"9787", "Watch Ultra 2 GPS", 120000, 25}; // 15-ый товар
 
 // функция, выдающая по штрихкоду описание товара
 void description(int b) {
@@ -223,29 +222,38 @@ int creating_a_check_with_discount(int i, int count) {
 
 void main() {
     setlocale(LC_ALL, "rus");
-    int b; // штрихкод, вводимый пользователем
+    int b; // штрихкод, вводимый пользователем в виде целого числа
+    char strihcode[4] = {'0000'}; // штрихкод, вводимый пользователем в виде массива символов
     int count[15] = {0}; // количество единиц каждого наименования товара в чеке
     int final_sum = 0; // общая стоимость
     int total_discount = 0; // суммарная скидка
     int final_sum_with_discount = 0; // итоговая стоимость с учетом скидок
     int check_size = 0; // размер чека (в единицах товара)
+    int flag_stop;
     
     printf("Добро пожаловать в магазин Apple-техники 'Apple Store'! У нас есть на выбор 15 наименований товаров, для которых мы укажем штрих-коды: \n");
     printf("2563 3199 4796 6538 6656 7434 7777 8571 8574 8667 8898 9231 9238 9787 9999 \n");
     printf("Начинайте шоппинг! Вводите заинтересовавшие вас штрихкоды, а мы будем добавлять эти товары вам в чек! \n");
     printf("Наличие скидки на каждое наименование определяется случайным образом. \n");
-    printf("Или введите 0, если хотите посмотреть чек и перейти к оплате: \n");
-    while (b != 0) { // 0 - вывод чека
-        int tmp = scanf("%d", &b);
-        // если данные не удалось присвоить,
-        if (tmp < 1) { // то очищаем буфер
-            while (getchar() != '\n')
-                ;
+    printf("Или введите stop, если хотите посмотреть чек и перейти к оплате: \n");
+    if ((strihcode[0] == 's') && (strihcode[1] == 't') && (strihcode[2] == 'o') && (strihcode[3] == 'p'))
+        flag_stop = 1;
+    while (flag_stop != 1) { // stop - вывод чека
+        for (int i = 0; i < 4; i++)
+              scanf("%c", &strihcode[i]);
+        if ((strihcode[0] == 's') && (strihcode[1] == 't') && (strihcode[2] == 'o') && (strihcode[3] == 'p'))
+            flag_stop = 1;
+        if (flag_stop != 1) {
+            b = atoi(strihcode);
+            description(b); // выводим описание наименования товара с введённым штрихкодом
+            int number = adding_to_check(b); // присваиваем порядковый номер наименования товара в ассортименте
+            if (number > 0) // если number = 0, значит пользователь ввел неправильный штрихкод
+                count[number - 1]++; // считаем количество единиц данного товара в чеке (сдвиг в индексе элементов массива на 1)
         }
-        description(b); // выводим описание наименования товара с введённым штрихкодом
-        int number = adding_to_check(b); // присваиваем порядковый номер наименования товара в ассортименте
-        if (number > 0) // если number = 0, значит пользователь ввел неправильный штрихкод
-            count[number - 1]++; // считаем количество единиц данного товара в чеке (сдвиг в индексе элементов массива на 1)
+        while (getchar() != '\n')
+            ;
+        for (int i = 0; i < 4; i++)
+            strihcode[i] = '0';
     }
     
     // подсчет общей суммы и итоговой суммы(со скидками)
@@ -266,7 +274,7 @@ void main() {
         printf("Чек должен содержать как минимум 1 позицию! \n");
     else {
         // вывод чека
-        printf("Чек: \n");
+        printf("Чек: \n"); 
         printf("-------------------------------------------------------------------------  \n");
         total_discount = final_sum - final_sum_with_discount;
         printf("Общая стоимость: %d рублей. \n", final_sum);
