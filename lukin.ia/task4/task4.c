@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <locale.h>
+#include <string.h>
 
 int cena_tovara(int a)
 {
@@ -32,7 +33,7 @@ int cena_tovara(int a)
 	}
 	return cena;
 }
-void tovar_name(int a)
+void tovar_name(int a)// a - идентификатор товара в массиве (каждый товар занимает определенную ячейку массива, с помощью него отслеживю количество отсканированных товаров + через него же написал функцию, выводящую имя товара по его идентификатору)
 {
 	if (a == 0)
 	{
@@ -63,7 +64,11 @@ float skidka_cyfra()
 {
 	float skidka;
 	int a;
-	a = 1 + rand() % 10;
+	a = rand() % 15;
+	if (a == 0 || a == 11 || a == 12 || a == 13 || a == 14)//чтобы не разориться
+	{
+		skidka = 1;
+	}
 	if (a == 1)
 	{
 		skidka = 0.95;
@@ -119,6 +124,13 @@ int main()
 	int arr[6] = { 0 };
 	srand(time(NULL));
 	setlocale(LC_ALL, "rus");
+	char mol[] = "1234";
+	char bread[] = "5678";
+	char kolb[] = "1357";
+	char butter[] = "2468";
+	char chicken[] = "1122";
+	char chok[] = "2233";
+	char kode[] = "0000";
 	printf("Добро пожаловать в продуктовый магазин!\n");
 	printf("Вашему вниманию мы предлагаем наш ассортимент!\n");
 	printf("Справка: четыре цифры справа от товара - штрихкод. Введите его в обслуживающий терминал.\n");
@@ -129,34 +141,38 @@ int main()
 	printf("5.Курица(1.5кг): 350 руб. (1122)\n");
 	printf("6.Плитка шоколада(95г): 80 руб. (2233)\n");
 	printf("Также на каждый товар возможна скидка от 5 до 50 процентов\n");
+	printf("*мелкими-мелкими буквами* скидки может и не быть :(\n");
 	do
 	{
-		kod = 0;
 		printf("*Сканируйте штрихкод*\n");
-		scanf("%i", &kod);
-		if (kod == 1234)
+		scanf("%s", kode);
+		if (strcmp(kode, mol) == 0)
 		{
 			arr[0]++;
 		}
-		else if (kod == 5678)
+		else if (strcmp(kode, bread) == 0)
 		{
 			arr[1]++;
 		}
-		else if (kod == 1357)
+		else if (strcmp(kode, kolb) == 0)
 		{
 			arr[2]++;
 		}
-		else if (kod == 2468)
+		else if (strcmp(kode, butter) == 0)
 		{
 			arr[3]++;
 		}
-		else if (kod == 1122)
+		else if (strcmp(kode, chicken) == 0)
 		{
 			arr[4]++;
 		}
-		else if (kod == 2233)
+		else if (strcmp(kode, chok) == 0)
 		{
 			arr[5]++;
+		}
+		else
+		{
+			printf("Штрихкод неверен, попробуйте еще раз!");
 		}
 		printf("Хотите продолжить сканирование?\n1 - да, 0 - нет.\n");
 		scanf("%i", &vybor);
@@ -178,13 +194,14 @@ int main()
 			cena_ed = arr[i] * cena_tovara(i) * skidka;
 			tovar_name(i);
 			printf(" в количестве %i ", arr[i]);
-			printf(" по цене (с учетом скидки): %.0f рублей", cena_ed);
+			printf("по цене %i за единицу товара, а с учетом скидки: %.0f рублей", cena_tovara(i), cena_ed);
 			printf(", ваша скидка %i процентов\n", skidka2(cena_tovara(i), cena_ed, arr[i]));
 			itogo = itogo + cena_ed;
 			real_cena = real_cena + arr[i] * cena_tovara(i);
 		}
 		i++;
 	} while (i < 6);
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	printf("Суммарная скидка: %i\n", real_cena - itogo);
 	printf("Итого (с учетом скидки): %i\n", itogo);
 	printf("Спасибо за покупки!\nПриходите еще!\n");
