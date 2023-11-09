@@ -1,0 +1,14 @@
+Название                                                     Кол-во     Цена/шт(руб.)   Общая стоимость(руб.)
+Смеситель Slezak-RAV Zambezi ZA007.5/6                       1          6057            6057                
+Смеситель Blanco DARAS                                       1          3188            3188                
+Смеситель Elghansa New Wave Omega 4907594                    1          4125            4125                
+Смеситель Gro Welle Mango MNG771                             1          2354            2354                
+Смеситель BelBagno Versa VER-LVM-CRM                         3          3796            11388               
+Смеситель Lemark Thermo LM7734C                              1          11410           11410               
+Смеситель Lemark Yeti LM7832C                                1          11484           11484               
+Смеситель Kaiser Verona 29044                                1          4180            4180                
+Смеситель Edelform Indigo IN1814                             1          4180            4180                
+
+Общая стоимость: 58366руб
+Скидка: 11407руб
+Итог: 46959руб

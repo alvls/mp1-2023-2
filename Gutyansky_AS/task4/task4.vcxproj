@@ -79,7 +79,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
@@ -112,12 +112,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="barcode.h" />
+    <ClInclude Include="check.h" />
     <ClInclude Include="console_utils.h" />
     <ClInclude Include="product.h" />
+    <ClInclude Include="product_database.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="barcode.c" />
+    <ClCompile Include="check.c" />
     <ClCompile Include="console_utils.c" />
     <ClCompile Include="product.c" />
+    <ClCompile Include="product_database.c" />
     <ClCompile Include="Source.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

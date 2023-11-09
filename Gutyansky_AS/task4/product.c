@@ -1,11 +1,11 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include "product.h"
+#include "console_utils.h"
 
-void print_product_info(const Product* product)
-{
-}
-
-Product* get_product_by_barcode(Barcode barcode)
-{
-	return NULL;
+void product_print_info(const Product* product) {
+	text_background(DARKGRAY);
+	text_color(WHITE);
+	printf("%-60s %-15s %-10s\n", "Название", "Цена/шт(руб.)", "Скидка");
+	text_background(BLACK);
+	printf("%-60s %-15u %u%%\n", product->name, product->price, product->discount);
 }
