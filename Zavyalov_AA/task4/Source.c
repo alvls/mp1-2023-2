@@ -10,7 +10,7 @@ int check(char k) {
 	return (0 <= k - '0' && k - '0' <= 9);
 }
 
-int main() {
+int main() { 
 	srand(time(NULL));
 
 	char* names[N];
