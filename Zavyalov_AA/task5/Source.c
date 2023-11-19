@@ -4,7 +4,7 @@
 #include <stdlib.h> 
 #include <string.h>
 #include <windows.h>
-#include <memory.h>
+#include <locale.h>
 #include "sortings.h"
 
 struct FileInfo {
@@ -85,6 +85,7 @@ void getFiles(char* dirPath, struct FileInfo* files) {
 }
 
 int main() { // Doesn't work with files named in non-english
+	setlocale(LC_ALL, "rus");
 	char dirPath[256];
 	int size = -1;
 	printf("Example of correct directory path: D:\\Documents\\project\n");
@@ -101,14 +102,13 @@ int main() { // Doesn't work with files named in non-english
 
 	struct FileInfo* files = malloc(size * sizeof(struct FileInfo));
 	getFiles(dirPath, files);
-	sort(files, size, 3, 1); // files, size, type, ascend
+	sort(files, size, 4, 0); // files, size, type, ascend
 	for (int i = 0; i < size; i++) {
 		printf("File name: %s, file size: %llu\n", files[i].name, files[i].size);
 	}
 
-
 	printf("%d\n", size);
-	//if(files != NULL) free(files);
+	if(files != NULL) free(files);
 	system("pause");
 	return 0;
 }
