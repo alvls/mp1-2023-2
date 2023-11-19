@@ -1,117 +1,123 @@
 #define _CRT_SECURE_NO_WARNINGS
 
+#include <io.h>
 #include <stdio.h>
 #include <stdlib.h> 
-#include <string.h>
+#include <fcntl.h>
 #include <windows.h>
 #include <locale.h>
+#include <wchar.h>
 #include "sortings.h"
 
 struct FileInfo {
-	char name[256];
+	wchar_t name[256];
 	unsigned long long size;
 };
 
-int fileQuantity(char* dirPath) {
+int fileQuantity(wchar_t* dirPath) {
 	int size = 0;
-	WIN32_FIND_DATAA findFileData;
-	HANDLE hfind = FindFirstFileA(dirPath, &findFileData);
+	WIN32_FIND_DATAW findFileData;
+	HANDLE hfind = FindFirstFileW(dirPath, &findFileData);
 	if (hfind == INVALID_HANDLE_VALUE) {
-		printf("An error occurred while trying to open the directory. Please, try entering different directory.\n");
+		wprintf(L"An error occurred while trying to open the directory. Please, try entering different directory.\n");
 		return -1;
 	}
-	while (FindNextFileA(hfind, &findFileData) != 0) 
-		if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0 && findFileData.nFileSizeLow != 0)
+	while (FindNextFileW(hfind, &findFileData) != 0)
+		if (wcscmp(findFileData.cFileName, L".") != 0 && wcscmp(findFileData.cFileName, L"..") != 0 && !(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			size++;
 	FindClose(hfind);
 	return size;
 }
 
-int checkPath(char* dirPath) {
-	if (strlen(dirPath) == 0 || dirPath == '\n') {// An empty path is entered
-		printf("The path cannot be empty!\n");
+int checkPath(wchar_t* dirPath) {
+	if (wcslen(dirPath) == 0 || dirPath == L'\n') {// An empty path is entered
+		wprintf(L"The path cannot be empty!\n");
 		return 0;
 	}
-	if (strlen(dirPath) == 2 && 'A' <= dirPath[0] <= 'z' && dirPath[1] == ':') { // Disk name is entered
+	if (wcslen(dirPath) == 2 && L'A' <= dirPath[0] <= L'z' && dirPath[1] == L':') { // Disk name is entered
 		return 1;
 	}
-	if (((dirPath[0] < 'A' || dirPath[0] > 'Z') && (dirPath[0] < 'a' || dirPath[0] > 'z')) || (dirPath[1] != ':') || (dirPath[2] != '\\')) {
-		printf("Please enter the path including disk name.\n");
+	if (((dirPath[0] < L'A' || dirPath[0] > L'Z') && (dirPath[0] < L'a' || dirPath[0] > L'z')) || (dirPath[1] != L':') || (dirPath[2] != L'\\')) {
+		wprintf(L"Please enter the path including disk name.\n");
 		return 0;
 	}
-	if (strstr(dirPath, "\\\\") != NULL) {
-		printf("Please consider replacing all \"\\\\\" with \"\\\".\n");
+	if (wcsstr(dirPath, "\\\\") != NULL) {
+		wprintf(L"Please consider replacing all \"\\\\\" with \"\\\".\n");
 		return 0;
 	}
-	char specs[3] = "/?*";
+	wchar_t specs[4] = L"/?*";
 	for (int i = 0; i < 3; i++) {
-		if (strchr(dirPath, specs[i]) != NULL) {
-			printf("Please check the path for special characters. (The path cannot include %c)\n", specs[i]);
+		if (wcschr(dirPath, specs[i]) != NULL) {
+			wprintf(L"Please check the path for special characters. (The path cannot include %c)\n", specs[i]);
 			return 0;
 		} 
 	}
 	return 1;
 }
 
-void formPrev(char* dirPath, char* prev) { // Formation of prev
+void formPrev(wchar_t* dirPath, wchar_t* prev) { // Formation of prev
 	for (int i = 0; i < 256; i++) {
 		prev[i] = dirPath[i];
 	}
 }
 
-void getPath(char* dirPath) {
-	char prev[256];
+void getPath(wchar_t* dirPath) {
+	wchar_t prev[256];
 	do {
 		formPrev(dirPath, prev);
-		printf("Enter the directory path in \"diskName:\\folder1\\folder2...\" format: ");
-		scanf("%255[^\n]", dirPath);
-		getchar();
-		if (strcmp(dirPath, prev) == 0) dirPath[0] = '\0';
+		wprintf(L"Enter the directory path in \"diskName:\\folder1\\folder2...\" format: ");
+		wscanf(L"%255[^\n]", dirPath, (unsigned)_countof(dirPath));
+		getwchar();
+		if (wcscmp(dirPath, prev) == 0) dirPath[0] = L'\0';
 	} while (!checkPath(dirPath));
 }
 
-void getFiles(char* dirPath, struct FileInfo* files) {
-	WIN32_FIND_DATAA findFileData;
-	HANDLE hfind = FindFirstFileA(dirPath, &findFileData);
+void getFiles(wchar_t* dirPath, struct FileInfo* files) {
+	WIN32_FIND_DATAW findFileData;
+	HANDLE hfind = FindFirstFileW(dirPath, &findFileData);
+	DWORD fileAttributes = GetFileAttributesW(dirPath);
 	int i = 0;
 	do {
-		if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0 && (findFileData.nFileSizeHigh * (MAXDWORD + 1) + findFileData.nFileSizeLow) != 0) {
-			strcpy(files[i].name, findFileData.cFileName);
+		if (wcscmp(findFileData.cFileName, L".") != 0 && wcscmp(findFileData.cFileName, L"..") != 0 && !(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+			wcscpy(files[i].name, findFileData.cFileName);
 			files[i].size = (findFileData.nFileSizeHigh * (MAXDWORD + 1) + findFileData.nFileSizeLow);
 			i++;
 		}
-	} while (FindNextFileA(hfind, &findFileData) != 0);
+	} while (FindNextFileW(hfind, &findFileData) != 0);
 	FindClose(hfind);
 }
 
 int main() { // Doesn't work with files named in non-english
-	setlocale(LC_ALL, "rus");
-	char dirPath[256];
+
+	SetConsoleCP(65001);
+	_setmode(_fileno(stdout), _O_U16TEXT);
+	_setmode(_fileno(stdin), _O_U16TEXT);
+	wchar_t dirPath[256]; // D:\Aseprite v1.2.22 х64 stable\data\icons
 	int size = -1;
-	printf("Example of correct directory path: D:\\Documents\\project\n");
+	wprintf(L"Example of correct directory path: D:\\Documents\\project\n");
 
 	while (size == -1 || size == 0) { // Getting the directory path
 		getPath(dirPath);
-		printf("%s\n", dirPath);
-		strcat(dirPath, "\\*");
+		wcscat(dirPath, L"\\*.*");
+		wprintf(L"%ls\n", dirPath);
 		size = fileQuantity(dirPath);
 		if (size == 0) {
-			printf("The directory is empty. Please, try entering different directory.\n");
+			wprintf(L"The directory is empty. Please, try entering different directory.\n");
 		}
 	}
 
 	struct FileInfo* files = malloc(size * sizeof(struct FileInfo));
 	getFiles(dirPath, files);
-	sort(files, size, 4, 0); // files, size, type, ascend
+	sort(files, size, 6, 0); // COMPLETE 5 SORT
 	for (int i = 0; i < size; i++) {
-		printf("File name: %s, file size: %llu\n", files[i].name, files[i].size);
+		wprintf(L"File name: %ls, file size: %llu\n", files[i].name, files[i].size);
 	}
 
-	printf("%d\n", size);
+	wprintf(L"%d\n", size);
 	if(files != NULL) free(files);
 	system("pause");
 	return 0;
 }
 
-// нужно ли сортировать папки? (про
+// нужно ли сортировать папки? 
 // норм, что не работает с файлами, у которых название на русском?

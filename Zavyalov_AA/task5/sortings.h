@@ -6,3 +6,5 @@ void selection_sort(struct FileInfo* files, int size, int ascend);
 void insertion_sort(struct FileInfo* files, int size, int ascend);
 void mergeSort(struct FileInfo* files, int ascend, int lb, int ub);
 void merge(struct FileInfo* files, int ascend, int lb, int split, int ub);
+void quickSort(struct FileInfo* files, int n, int ascend);
+void shellSort(struct FileInfo* files, int n, int ascend);
