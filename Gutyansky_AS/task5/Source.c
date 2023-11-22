@@ -23,6 +23,7 @@ void bubble_sort(FileData* files, int length);
 void select_sort(FileData* files, int length);
 void insert_sort(FileData* files, int length);
 void quick_sort(FileData* files, int length);
+void shell_sort(FileData* files, int length);
 int try_read_int(int* result, int minValue, int maxValue);
 
 int main(void)
@@ -46,7 +47,8 @@ int main(void)
         printf("2 - выбором\n");
         printf("3 - вставкой\n");
         printf("4 - Хоара (быстрая сортировка)\n");
-    } while (!try_read_int(&sort_method, 1, 4));
+        printf("5 - Шелла\n");
+    } while (!try_read_int(&sort_method, 1, 5));
 
     begin = clock();
     switch (sort_method) {
@@ -61,6 +63,9 @@ int main(void)
         break;
     case 4:
         quick_sort(files, count);
+        break;
+    case 5:
+        shell_sort(files, count);
         break;
     }
     end = clock();
@@ -221,6 +226,25 @@ void quick_sort(FileData* files, int length) {
 
     if (j > 0) quick_sort(files, i);
     if (length > i) quick_sort(files + i, length - i);
+}
+
+void shell_sort(FileData* files, int length) {
+    int s, i, j;
+    FileData current_element;
+
+    for (s = length / 2; s > 0; s /= 2) {
+        for (i = s; i < length; ++i) {
+            current_element = files[i];
+
+            j = i - 1;
+            while (j >= 0 && files[j].size > current_element.size) {
+                files[j + 1] = files[j];
+                --j;
+            }
+
+            files[j + 1] = current_element;
+        }
+    }
 }
 
 int try_read_int(int* result, int minValue, int maxValue) {
