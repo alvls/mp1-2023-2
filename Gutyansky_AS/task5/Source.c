@@ -19,7 +19,11 @@ size_t get_files_count_in_directory(const char* path);
 FileData* get_all_files_from_directory(const char* path, size_t* length);
 void free_files(FileData* files, size_t length);
 void swap(FileData* files, int i, int j);
-void bubble_sort(FileData* files, size_t length);
+void bubble_sort(FileData* files, int length);
+void select_sort(FileData* files, int length);
+void insert_sort(FileData* files, int length);
+void quick_sort(FileData* files, int length);
+int try_read_int(int* result, int minValue, int maxValue);
 
 int main(void)
 {
@@ -35,8 +39,30 @@ int main(void)
 
     files = get_all_files_from_directory(path, &count);
 
+    int sort_method = 0;
+    do {
+        printf("Выберите метод сортировки:\n");
+        printf("1 - пузырьком\n");
+        printf("2 - выбором\n");
+        printf("3 - вставкой\n");
+        printf("4 - Хоара (быстрая сортировка)\n");
+    } while (!try_read_int(&sort_method, 1, 4));
+
     begin = clock();
-    bubble_sort(files, count);
+    switch (sort_method) {
+    case 1:
+        bubble_sort(files, count);
+        break;
+    case 2:
+        select_sort(files, count);
+        break;
+    case 3:
+        insert_sort(files, count);
+        break;
+    case 4:
+        quick_sort(files, count);
+        break;
+    }
     end = clock();
     elapsed_time = (double)(end - begin) / CLOCKS_PER_SEC;
 
@@ -121,8 +147,7 @@ void swap(FileData* files, int i, int j) {
     files[j] = temp;
 }
 
-void bubble_sort(FileData* files, size_t length)
-{
+void bubble_sort(FileData* files, int length) {
     int i, j, swaps;
     for (i = 0; i < length - 1; i++) {
         swaps = 0;
@@ -137,4 +162,75 @@ void bubble_sort(FileData* files, size_t length)
             break;
         }
     }
+}
+
+void select_sort(FileData* files, int length) {
+    int i, j, min_index;
+    _fsize_t min_size;
+
+    for (i = 0; i < length; i++) {
+        min_index = i;
+        min_size = files[i].size;
+
+        for (j = i + 1; j < length; j++) {
+            if (files[j].size < min_size) {
+                min_index = j;
+                min_size = files[j].size;
+            }
+        }
+
+        swap(files, i, min_index);
+    }
+}
+
+void insert_sort(FileData* files, int length) {
+    int i, j;
+    FileData current_element;
+
+    for (i = 1; i < length; i++) {
+        current_element = files[i];
+        
+        j = i - 1;
+        while (j >= 0 && files[j].size > current_element.size) {
+            files[j + 1] = files[j];
+            --j;
+        }
+
+        files[j + 1] = current_element;
+    }
+}
+
+void quick_sort(FileData* files, int length) {
+    int i, j;
+    _fsize_t center_size;
+
+    i = 0;
+    j = length - 1;
+    center_size = files[length / 2].size;
+
+    do {
+        while (files[i].size < center_size) i++;
+        while (files[j].size > center_size) j--;
+
+        if (i <= j) {
+            swap(files, i, j);
+            i++;
+            j--;
+        }
+    } while (i <= j);
+
+    if (j > 0) quick_sort(files, i);
+    if (length > i) quick_sort(files + i, length - i);
+}
+
+int try_read_int(int* result, int minValue, int maxValue) {
+    int read_arguments;
+
+    read_arguments = scanf_s("%d", result);
+    while (getchar() != '\n');
+    if (read_arguments == 1 && *result >= minValue && *result <= maxValue) {
+        return 1;
+    }
+
+    return 0;
 }
