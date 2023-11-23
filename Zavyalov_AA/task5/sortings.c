@@ -31,11 +31,11 @@ void bubbleSort(struct FileInfo* files, int size, int ascend) {
 }
 
 void selectionSort(struct FileInfo* files, int size, int ascend) {
-	if (ascend) 
+	if (ascend)
 		for (int i = 0; i < size - 1; i++) {
 			long long min = files[i].size;
 			int ind = i;
-			for (int j = i + 1; j < size;  j++) {
+			for (int j = i + 1; j < size; j++) {
 				if (min > files[j].size) {
 					min = files[j].size;
 					ind = j;
@@ -45,7 +45,7 @@ void selectionSort(struct FileInfo* files, int size, int ascend) {
 			files[ind] = files[i];
 			files[i] = tmp;
 		}
-	else 
+	else
 		for (int i = 0; i < size - 1; i++) {
 			long long max = files[i].size;
 			int ind = i;
@@ -99,7 +99,7 @@ void merge(struct FileInfo* files, int ascend, int lb, int split, int ub) {
 	int pos2 = split + 1;
 	int pos3 = 0;
 	struct FileInfo* T = malloc((ub - lb + 1) * sizeof(struct FileInfo));
-	if (ascend) 
+	if (ascend)
 		while (pos1 <= split && pos2 <= ub) {
 			if (files[pos1].size < files[pos2].size)
 				T[pos3++] = files[pos1++];
@@ -125,44 +125,45 @@ void merge(struct FileInfo* files, int ascend, int lb, int split, int ub) {
 	free(T);
 }
 
-void quickSort(struct FileInfo* files, int n, int ascend) {
-	int i = 0, j = n - 1;
-	struct FileInfo temp;
-	unsigned long long p = files[n >> 1].size;
-
-	do {
-		while (files[i].size < p) i++;
-		while (files[j].size > p) j--;
-
-		if (i <= j) {
-			temp = files[i], files[i] = files[j], files[j] = temp;
-			i++; j--;
+int partition(struct FileInfo* files, int low, int high, int ascend) {
+	unsigned long long pivot = files[(low + high) / 2].size;
+	int i = low, j = high;
+	if (ascend)
+		while (i <= j) {
+			while (files[i].size < pivot)
+				i++;
+			while (files[j].size > pivot)
+				j--;
+			if (i <= j) {
+				struct FileInfo temp = files[i];
+				files[i] = files[j], files[j] = temp;
+				i++;
+				j--;
+			}
 		}
-	} while (i <= j);
-
-	if (j > 0) quickSort(files, j, ascend);
-	if (n > i) quickSort(files + i, n - i, ascend);
+	else
+		while (i <= j) {
+			while (files[i].size > pivot)
+				i++;
+			while (files[j].size < pivot)
+				j--;
+			if (i <= j) {
+				struct FileInfo temp = files[i];
+				files[i] = files[j], files[j] = temp;
+				i++;
+				j--;
+			}
+		}
+	return i - 1;
 }
 
-/*int increment(long inc[], long size) {
-	int p1, p2, p3, s;
-
-	p1 = p2 = p3 = 1;
-	s = -1;
-	do {
-		if (++s % 2) {
-			inc[s] = 8 * p1 - 6 * p2 + 1;
-		}
-		else {
-			inc[s] = 9 * p1 - 9 * p3 + 1;
-			p2 *= 2;
-			p3 *= 2;
-		}
-		p1 *= 2;
-	} while (3 * inc[s] < size);
-
-	return s > 0 ? --s : 0;
-} */
+void quickSort(struct FileInfo* files, int lo, int hi, int ascend) {
+	if (lo < hi) {
+		int p = partition(files, lo, hi, ascend);
+		quickSort(files, lo, p, ascend);
+		quickSort(files, p + 1, hi, ascend);
+	}
+}
 
 void shellSort(struct FileInfo* files, int size, int ascend) {
 	int inc = size / 2;
@@ -200,6 +201,56 @@ void shellSort(struct FileInfo* files, int size, int ascend) {
 		}
 }
 
+void countingSort(struct FileInfo* files, int size, int ascend) {
+	unsigned long long max = 0;
+	for (int i = 0; i < size; i++) {
+		unsigned long long cur = files[i].size;
+		if (cur > max) {
+			max = cur;
+		}
+	}
+	short* c = (short*)malloc((max + 1) * sizeof(short));
+	struct FileInfo* b = (struct FileInfo*)malloc(size * sizeof(struct FileInfo));
+	memset(c, 0, sizeof(short) * (max + 1));
+	for (int i = 0; i < size; i++) {
+		c[files[i].size]++;
+		if (files[i].size == max) {
+			int smh = 1;
+		}
+	}
+	unsigned long long j;
+	if (ascend) {
+		
+		for (j = 1; j <= max; j++) {
+			c[j] += c[j - 1];
+			if (j == max - 1) {
+				wprintf(L"sdf\n");
+			}
+		}
+		wprintf(L"%d\n", j);
+		for (int i = size - 1; i >= 0; i--) {
+			c[files[i].size]--;
+			b[c[files[i].size]] = files[i];
+		}
+	}
+	else {
+		j = max;
+		while (j != 0) {
+			c[j - 1] += c[j];
+			j--;
+		}
+		for (int i = 0; i <= size - 1; i++) {
+			c[files[i].size]--;
+			b[c[files[i].size]] = files[i];
+		}
+	}
+
+	for (int i = 0; i < size; i++)
+		files[i] = b[i];	
+	free(c);
+	free(b);
+}
+
 void sort(struct FileInfo* files, int size, int type, int ascend) {
 	switch (type) {
 	case 1:
@@ -220,11 +271,15 @@ void sort(struct FileInfo* files, int size, int type, int ascend) {
 		break;
 	case 5: // TODO
 		wprintf(L"Quick sort:\n");
-		quickSort(files, size - 1, ascend);
+		quickSort(files, 0, size - 1, ascend);
 		break;
 	case 6:
 		wprintf(L"Shell sort:\n");
 		shellSort(files, size, ascend);
+		break;
+	case 7:
+		countingSort(files, size, ascend);
+		wprintf(L"Counting sort:\n");
 		break;
 	}
 }

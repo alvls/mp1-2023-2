@@ -6,7 +6,7 @@
 #include <fcntl.h>
 #include <windows.h>
 #include <locale.h>
-#include <wchar.h>
+#include <wchar.h> // using wchars so that program works correctly with paths named in non-english
 #include "sortings.h"
 
 struct FileInfo {
@@ -87,12 +87,22 @@ void getFiles(wchar_t* dirPath, struct FileInfo* files) {
 	FindClose(hfind);
 }
 
-int main() { // Doesn't work with files named in non-english
+int maxlen(struct FileInfo* files, int size) {
+	int max = 9; // =  wcslen(L"File name");
+	for (int i = 0; i < size; i++) {
+		if (wcslen(files[i].name) > max) {
+			max = wcslen(files[i].name);
+		}
+	}
+	return max;
+}
+
+int main() {
 
 	SetConsoleCP(65001);
 	_setmode(_fileno(stdout), _O_U16TEXT);
 	_setmode(_fileno(stdin), _O_U16TEXT);
-	wchar_t dirPath[256]; // D:\Aseprite v1.2.22 х64 stable\data\icons
+	wchar_t dirPath[256];
 	int size = -1;
 	wprintf(L"Example of correct directory path: D:\\Documents\\project\n");
 
@@ -101,23 +111,48 @@ int main() { // Doesn't work with files named in non-english
 		wcscat(dirPath, L"\\*.*");
 		wprintf(L"%ls\n", dirPath);
 		size = fileQuantity(dirPath);
-		if (size == 0) {
+		if (size == 0) 
 			wprintf(L"The directory is empty. Please, try entering different directory.\n");
-		}
+		
 	}
 
-	struct FileInfo* files = malloc(size * sizeof(struct FileInfo));
+	struct FileInfo* files = (struct FileInfo*)malloc(size * sizeof(struct FileInfo));
 	getFiles(dirPath, files);
-	sort(files, size, 6, 0); // COMPLETE 5 SORT
-	for (int i = 0; i < size; i++) {
-		wprintf(L"File name: %ls, file size: %llu\n", files[i].name, files[i].size);
-	}
+	struct FileInfo* tempfiles = (struct FileInfo*)malloc(size * sizeof(struct FileInfo));
+
+
+		for (int i = 0; i < size; i++)
+			tempfiles[i] = files[i];
+
+		sort(tempfiles, size, 5, 0);
+
+		int mxln = maxlen(files, size);
+		for (int i = 0; i < (mxln - 9) / 2; i++) 
+			wprintf(L" ");
+		
+		wprintf(L"File name");
+		for (int i = 0; i < (mxln - 9) / 2; i++) 
+			wprintf(L" ");
+		
+		if ((mxln - 9) % 2)
+			wprintf(L" ");
+		wprintf(L" | File size\n");
+		for (int i = 0; i < size; i++) {
+			// wprintf(L"File name: %ls, file size: %llu\n", tempfiles[i].name, tempfiles[i].size);
+			wprintf(L"%ls", tempfiles[i].name);
+			int curlen = wcslen(tempfiles[i].name);
+			for (int i = curlen; i < mxln; i++) {
+				wprintf(L" ");
+			}
+			wprintf(L" | ");
+			wprintf(L"%d\n", tempfiles[i].size);
+		}
+
+
 
 	wprintf(L"%d\n", size);
 	if(files != NULL) free(files);
+	if (tempfiles != NULL) free(tempfiles);
 	system("pause");
 	return 0;
 }
-
-// нужно ли сортировать папки? 
-// норм, что не работает с файлами, у которых название на русском?
