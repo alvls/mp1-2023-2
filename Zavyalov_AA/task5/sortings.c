@@ -223,11 +223,7 @@ void countingSort(struct FileInfo* files, int size, int ascend) {
 		
 		for (j = 1; j <= max; j++) {
 			c[j] += c[j - 1];
-			if (j == max - 1) {
-				wprintf(L"sdf\n");
-			}
 		}
-		wprintf(L"%d\n", j);
 		for (int i = size - 1; i >= 0; i--) {
 			c[files[i].size]--;
 			b[c[files[i].size]] = files[i];
@@ -269,7 +265,7 @@ void sort(struct FileInfo* files, int size, int type, int ascend) {
 		wprintf(L"Merge sort:\n");
 		mergeSort(files, ascend, 0, size - 1);
 		break;
-	case 5: // TODO
+	case 5:
 		wprintf(L"Quick sort:\n");
 		quickSort(files, 0, size - 1, ascend);
 		break;

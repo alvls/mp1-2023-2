@@ -178,7 +178,6 @@ int main() {
 			}
 		}
 
-		//clock_t startTime = clock();
 		LARGE_INTEGER start, end, frequency;
 		double timeElapsed;
 		QueryPerformanceFrequency(&frequency);
