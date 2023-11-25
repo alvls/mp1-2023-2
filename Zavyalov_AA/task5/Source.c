@@ -7,6 +7,7 @@
 #include <windows.h>
 #include <locale.h>
 #include <wchar.h> // using wchars so that program works correctly with paths named in non-english
+#include <time.h>
 #include "sortings.h"
 
 struct FileInfo {
@@ -102,14 +103,13 @@ int main() {
 	SetConsoleCP(65001);
 	_setmode(_fileno(stdout), _O_U16TEXT);
 	_setmode(_fileno(stdin), _O_U16TEXT);
-	wchar_t dirPath[256];
+	wchar_t dirPath[256] = L"";
 	int size = -1;
 	wprintf(L"Example of correct directory path: D:\\Documents\\project\n");
 
 	while (size == -1 || size == 0) { // Getting the directory path
 		getPath(dirPath);
 		wcscat(dirPath, L"\\*.*");
-		wprintf(L"%ls\n", dirPath);
 		size = fileQuantity(dirPath);
 		if (size == 0) 
 			wprintf(L"The directory is empty. Please, try entering different directory.\n");
@@ -120,39 +120,94 @@ int main() {
 	getFiles(dirPath, files);
 	struct FileInfo* tempfiles = (struct FileInfo*)malloc(size * sizeof(struct FileInfo));
 
-
+	int first = 1;
+	while (1) {
 		for (int i = 0; i < size; i++)
 			tempfiles[i] = files[i];
 
-		sort(tempfiles, size, 5, 0);
+		wprintf(L"Select the sorting method by entering a number from 1 to 7, where:\n1 stands for Bubble sort\n2 stands for Selection sort\n3 stands for Insertion sort\n4 stands for Merge sort\n5 stands for Quick(Hoar) sort\n6 stands for Shell sort\n7 stands for Counting sort.");
+		if (!first)	wprintf(L"\nIf you have finished using this program enter \"n\"");
+		wprintf(L"\nEnter the number: ");
+		wchar_t c = L'\n', nline, asc = L'\n';
 
+		while (1) {
+			while ((c = getwchar()) == L'\n') {
+				wprintf(L"Enter the number: ");
+			}
+			if (nline = getwchar() != L'\n') {
+				wprintf(L"Please, enter only one digit: ");
+				while ((nline = getwchar()) != L'\n');
+			}
+			else {
+				if (L'1' <= c && c <= L'7') {
+					break;
+				}
+				else {
+					if (c == L'n' && !first) {
+						if (files != NULL) free(files);
+						if (tempfiles != NULL) free(tempfiles);
+						return 0;
+					}
+					wprintf(L"Please, enter only the number from 1 to 7: ");
+				}
+			}
+			c = L'\n';
+		}
+		nline = L'a';
+		wprintf(L"Would you like the files to be sorted in descending or ascending order?\nEnter 1 if you want them to be in ascending order, otherwise enter 0: ");
+		while (1) {
+			while ((asc = getwchar()) == L'\n') {
+				wprintf(L"Enter the number from 0 to 1: ");
+			}
+			if (nline = getwchar() != L'\n') {
+				wprintf(L"Please, enter only one digit: ");
+				while ((nline = getwchar()) != L'\n');
+			}
+			else {
+				if (asc == L'0' || asc == L'1') {
+					break;
+				}
+				if (asc == L'n' && !first) {
+					if (files != NULL) free(files);
+					if (tempfiles != NULL) free(tempfiles);
+					return 0;
+				}
+				else {
+					wprintf(L"Please, enter only the number from 0 to 1: ");
+				}
+			}
+		}
+
+		//clock_t startTime = clock();
+		LARGE_INTEGER start, end, frequency;
+		double timeElapsed;
+		QueryPerformanceFrequency(&frequency);
+		QueryPerformanceCounter(&start);
+		sort(tempfiles, size, c - '0', asc - '0');
+		QueryPerformanceCounter(&end);
+		timeElapsed = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
+		
 		int mxln = maxlen(files, size);
-		for (int i = 0; i < (mxln - 9) / 2; i++) 
+		for (int i = 0; i < (mxln - 9) / 2; i++)
 			wprintf(L" ");
-		
+
 		wprintf(L"File name");
-		for (int i = 0; i < (mxln - 9) / 2; i++) 
+		for (int i = 0; i < (mxln - 9) / 2; i++)
 			wprintf(L" ");
-		
+
 		if ((mxln - 9) % 2)
 			wprintf(L" ");
 		wprintf(L" | File size\n");
 		for (int i = 0; i < size; i++) {
-			// wprintf(L"File name: %ls, file size: %llu\n", tempfiles[i].name, tempfiles[i].size);
 			wprintf(L"%ls", tempfiles[i].name);
 			int curlen = wcslen(tempfiles[i].name);
 			for (int i = curlen; i < mxln; i++) {
 				wprintf(L" ");
 			}
 			wprintf(L" | ");
-			wprintf(L"%d\n", tempfiles[i].size);
+			wprintf(L"%llu\n", tempfiles[i].size);
 		}
-
-
-
-	wprintf(L"%d\n", size);
-	if(files != NULL) free(files);
-	if (tempfiles != NULL) free(tempfiles);
-	system("pause");
-	return 0;
+		wprintf(L"Sorting time: %g seconds\n\n", timeElapsed);
+		first = 0;
+	}
 }
