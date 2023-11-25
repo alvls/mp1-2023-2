@@ -7,83 +7,154 @@
 #include <time.h>
 #include <Windows.h>
 
-#define strdup _strdup
+#include "file_data.h"
+#include "sorting_algorithms.h"
 
-typedef struct {
-    char* name;
-    time_t time_write;
-    _fsize_t size;
-} FileData;
+#define STR_(X) #X
+#define STR(X) STR_(X)
+
+#define strdup _strdup
+#define MAX_PATH_LENGTH 511
 
 size_t get_files_count_in_directory(const char* path);
 FileData* get_all_files_from_directory(const char* path, size_t* length);
+void read_path(char path[MAX_PATH_LENGTH + 1]);
+void sort_menu(char path[MAX_PATH_LENGTH + 1]);
+void main_menu(char path[MAX_PATH_LENGTH + 1]);
 void free_files(FileData* files, size_t length);
-void swap(FileData* files, int i, int j);
-void bubble_sort(FileData* files, int length);
-void select_sort(FileData* files, int length);
-void insert_sort(FileData* files, int length);
-void quick_sort(FileData* files, int length);
-void shell_sort(FileData* files, int length);
+void reverse(FileData* files, int length);
 int try_read_int(int* result, int minValue, int maxValue);
 
-int main(void)
-{
-    const char* path = "D:\\Downloads\\*.*";
+int main(void) {
+    char path[MAX_PATH_LENGTH + 1];
+
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
+    read_path(path);
+    main_menu(path);
+}
+
+void read_path(char path[MAX_PATH_LENGTH + 1]) {
+    int path_read_status;
+
+    do {
+        printf("Введите путь до директории и фильтр (С:\\Path\\To\\Folder\\*.* чтобы выбрать все файлы): ");
+        path_read_status = scanf("%" STR(MAX_PATH_LENGTH) "[^\n]", path);
+        while (getchar() != '\n');
+    } while (path_read_status != 1);
+
+    printf("Найдено %llu файлов\n", get_files_count_in_directory(path));
+}
+
+void main_menu(char path[MAX_PATH_LENGTH + 1]) {
+    int user_choice;
+
+    while (1) {
+        do {
+            printf("Меню:\n");
+            printf("1 - %s\n", path);
+            printf("2 - Сортировать\n");
+            printf("3 - Выход\n");
+            printf(">>> ");
+        } while (!try_read_int(&user_choice, 1, 3));
+
+        switch(user_choice) {
+        case 1:
+            read_path(path);
+            break;
+        case 2:
+            sort_menu(path);
+            break;
+        case 3:
+            return;
+        }
+    }
+}
+
+void sort_menu(char path[MAX_PATH_LENGTH + 1]) {
+    int sort_success;
+    int sort_method;
+    int reverse_sort;
     size_t count;
     FileData* files;
     time_t begin, end;
     double elapsed_time;
     char time_buffer[30];
 
-    SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);
-
-    files = get_all_files_from_directory(path, &count);
-
-    int sort_method = 0;
     do {
         printf("Выберите метод сортировки:\n");
         printf("1 - пузырьком\n");
         printf("2 - выбором\n");
         printf("3 - вставкой\n");
-        printf("4 - Хоара (быстрая сортировка)\n");
+        printf("4 - Хоара\n");
         printf("5 - Шелла\n");
-    } while (!try_read_int(&sort_method, 1, 5));
+        printf("6 - Слиянием\n");
+        printf("7 - Подсчетом\n");
+        printf(">>> ");
+    } while (!try_read_int(&sort_method, 1, 7));
+
+    do {
+        printf("Сортировать:\n");
+        printf("1 - по возрастанию\n");
+        printf("2 - по убыванию\n");
+        printf(">>> ");
+    } while (!try_read_int(&reverse_sort, 1, 2));
+
+    files = get_all_files_from_directory(path, &count);
 
     begin = clock();
     switch (sort_method) {
     case 1:
-        bubble_sort(files, count);
+        sort_success = bubble_sort(files, count);
         break;
     case 2:
-        select_sort(files, count);
+        sort_success = select_sort(files, count);
         break;
     case 3:
-        insert_sort(files, count);
+        sort_success = insert_sort(files, count);
         break;
     case 4:
-        quick_sort(files, count);
+        sort_success = quick_sort(files, count);
         break;
     case 5:
-        shell_sort(files, count);
+        sort_success = shell_sort(files, count);
+        break;
+    case 6:
+        sort_success = merge_sort(files, 0, count);
+        break;
+    case 7:
+        sort_success = count_sort(files, count);
         break;
     }
+
+    if (reverse_sort == 2) {
+        reverse(files, count);
+    }
+
     end = clock();
     elapsed_time = (double)(end - begin) / CLOCKS_PER_SEC;
 
-    printf("Listing of files\n\n");
-    printf("FILE         DATE %24c   SIZE\n", ' ');
-    printf("----         ---- %24c   ----\n", ' ');
-    for (int i = 0; i < count; i++) {
-        ctime_s(time_buffer, _countof(time_buffer), &(files[i].time_write));
-        printf("%-12.12s %.24s  %10lu\n", files[i].name, time_buffer, files[i].size);
+    if (!sort_success) {
+        printf("Не удалось отсортировать файлы!\n");
+    }
+    else {
+        printf("Файлы\n\n");
+        printf("Файл         Дата %24c   Размер\n", ' ');
+        printf("----         ---- %24c   ----\n", ' ');
+        for (int i = 0; i < count; i++) {
+            ctime_s(time_buffer, _countof(time_buffer), &(files[i].time_write));
+            printf("%-12.12s %.24s  %10lu байт\n", files[i].name, time_buffer, files[i].size);
+        }
+
+        if (count == 0) {
+            printf("Файлы не найдены! Попробуйте выбрать другую директорию.\n");
+        }
+
+        printf("Время сортировки: %lfsec\n", elapsed_time);
     }
 
-    printf("Elapsed time: %lfsec\n", elapsed_time);
-
     free_files(files, count);
-
-    system("pause");
 }
 
 size_t get_files_count_in_directory(const char* path) {
@@ -115,7 +186,7 @@ FileData* get_all_files_from_directory(const char* path, size_t* length) {
     *length = get_files_count_in_directory(path);
 
     index = 0;
-    if (*length == 0 || (hFile = _findfirst("D:\\Downloads\\*.*", &c_file)) == -1L) {
+    if (*length == 0 || (hFile = _findfirst(path, &c_file)) == -1L) {
         return NULL;
     }
     
@@ -140,110 +211,19 @@ FileData* get_all_files_from_directory(const char* path, size_t* length) {
 }
 
 void free_files(FileData* files, size_t length) {
-    for (size_t i = 0; i < length; i++) {
+    size_t i;
+
+    for (i = 0; i < length; i++) {
         free(files[i].name);
     }
     free(files);
 }
 
-void swap(FileData* files, int i, int j) {
-    FileData temp = files[i];
-    files[i] = files[j];
-    files[j] = temp;
-}
+void reverse(FileData* files, int length) {
+    int i;
 
-void bubble_sort(FileData* files, int length) {
-    int i, j, swaps;
-    for (i = 0; i < length - 1; i++) {
-        swaps = 0;
-        for (j = 0; j < length - i - 1; j++) {
-            if (files[j].size > files[j + 1].size) {
-                swap(files, j, j + 1);
-                swaps++;
-            }
-        }
-
-        if (swaps == 0) {
-            break;
-        }
-    }
-}
-
-void select_sort(FileData* files, int length) {
-    int i, j, min_index;
-    _fsize_t min_size;
-
-    for (i = 0; i < length; i++) {
-        min_index = i;
-        min_size = files[i].size;
-
-        for (j = i + 1; j < length; j++) {
-            if (files[j].size < min_size) {
-                min_index = j;
-                min_size = files[j].size;
-            }
-        }
-
-        swap(files, i, min_index);
-    }
-}
-
-void insert_sort(FileData* files, int length) {
-    int i, j;
-    FileData current_element;
-
-    for (i = 1; i < length; i++) {
-        current_element = files[i];
-        
-        j = i - 1;
-        while (j >= 0 && files[j].size > current_element.size) {
-            files[j + 1] = files[j];
-            --j;
-        }
-
-        files[j + 1] = current_element;
-    }
-}
-
-void quick_sort(FileData* files, int length) {
-    int i, j;
-    _fsize_t center_size;
-
-    i = 0;
-    j = length - 1;
-    center_size = files[length / 2].size;
-
-    do {
-        while (files[i].size < center_size) i++;
-        while (files[j].size > center_size) j--;
-
-        if (i <= j) {
-            swap(files, i, j);
-            i++;
-            j--;
-        }
-    } while (i <= j);
-
-    if (j > 0) quick_sort(files, i);
-    if (length > i) quick_sort(files + i, length - i);
-}
-
-void shell_sort(FileData* files, int length) {
-    int s, i, j;
-    FileData current_element;
-
-    for (s = length / 2; s > 0; s /= 2) {
-        for (i = s; i < length; ++i) {
-            current_element = files[i];
-
-            j = i - 1;
-            while (j >= 0 && files[j].size > current_element.size) {
-                files[j + 1] = files[j];
-                --j;
-            }
-
-            files[j + 1] = current_element;
-        }
+    for (i = 0; i < length / 2; i++) {
+        swap(files, i, length - i - 1);
     }
 }
 

@@ -14,5 +14,16 @@
     <ClCompile Include="Source.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sorting_algorithms.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sorting_algorithms.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="file_data.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
