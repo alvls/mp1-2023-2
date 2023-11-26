@@ -1,4 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
+#define ASCENDING 1
+#define DESCENDING 2
 #include "sorts.h"
 
 
@@ -29,16 +31,16 @@ void bubble_size(file* files, int amount, int order)
 {
 	for (int i = 0; i < amount - 1; i++)
 	{
-		for (int j = 0; j < amount - i; j++)
+		for (int j = 0; j < amount - i - 1; j++)
 		{
-			if (order == 1) //ascending
+			if (order == ASCENDING) //ascending
 			{
 				if (files[j].size > files[j + 1].size)
 				{
 					swap(&files[j], &files[j + 1]);
 				}
 			}
-			else if (order == 2) //descending
+			else if (order == DESCENDING) //descending
 			{
 				if (files[j].size < files[j + 1].size)
 				{
@@ -56,14 +58,14 @@ void selection_size(file* files, int amount, int order)
 		int min_index = i;
 		for (int j = i + 1; j < amount; j++)
 		{
-			if (order == 1)
+			if (order == ASCENDING)
 			{
 				if (files[j].size < files[min_index].size)
 				{
 					min_index = j;
 				}
 			}
-			else if (order == 2)
+			else if (order == DESCENDING)
 			{
 				if (files[j].size > files[min_index].size)
 				{
@@ -84,7 +86,7 @@ void insertion_size(file* files, int amount, int order)
 	{
 		file key = files[i];
 		int j = i - 1;
-		if (order == 1)
+		if (order == ASCENDING)
 		{
 			while (j >= 0 && files[j].size > key.size)
 			{
@@ -92,7 +94,7 @@ void insertion_size(file* files, int amount, int order)
 				j--;
 			}
 		}
-		else if (order == 2)
+		else if (order == DESCENDING)
 		{
 			while (j >= 0 && files[j].size < key.size)
 			{
@@ -122,7 +124,7 @@ void merge_size(file* files, int left, int middle, int right, int order)
 	int i = 0;
 	int j = 0;
 	int k = left;
-	if (order == 1)
+	if (order == ASCENDING)
 	{
 		while (i < n1 && j < n2)
 		{
@@ -139,7 +141,7 @@ void merge_size(file* files, int left, int middle, int right, int order)
 			k++;
 		}
 	}
-	else if (order == 2)
+	else if (order == DESCENDING)
 	{
 		while (i < n1 && j < n2)
 		{
@@ -185,9 +187,19 @@ void merge_sort(file* files, int left, int right, int order)
 	}
 }
 
-// для Хоара qsort можно наверно...
+void hoar_size(file* files, int size, int order)
+{
+	if (order == ASCENDING)
+	{
+		qsort(files, size, sizeof(file), comp_ascending_size);
+	}
+	if (order == DESCENDING)
+	{
+		qsort(files, size, sizeof(file), comp_descending_size);
+	}
+}
 
-void shell(file* files, int size, int order)
+void shell_size(file* files, int size, int order)
 {
 	int gap = size / 2;
 	while (gap > 0)
@@ -196,7 +208,7 @@ void shell(file* files, int size, int order)
 		{
 			file temp = files[i];
 			int j = i;
-			if (order == 1)
+			if (order == ASCENDING)
 			{
 				while (j >= gap && files[j - gap].size > temp.size)
 				{
@@ -204,7 +216,7 @@ void shell(file* files, int size, int order)
 					j -= gap;
 				}
 			}
-			else if (order == 2)
+			else if (order == DESCENDING)
 			{
 				while (j >= gap && files[j - gap].size < temp.size)
 				{
@@ -219,7 +231,7 @@ void shell(file* files, int size, int order)
 }
 
 
-void counting(file* files, int size, int order)
+void counting_size(file* files, int size, int order)
 {
 	long max = files[0].size;
 	long min = files[0].size;
@@ -249,14 +261,14 @@ void counting(file* files, int size, int order)
 		count[i] += count[i - 1];
 	}
 	file* output = (file*)malloc(size * sizeof(file));
-	if (order == 1) {
+	if (order == ASCENDING) {
 		for (int i = size - 1; i >= 0; i--)
 		{
 			output[count[files[i].size - min] - 1] = files[i];
 			count[files[i].size - min]--;
 		}
 	}
-	else if (order == 2)
+	else if (order == DESCENDING)
 	{
 		for (int i = 0; i < size; i++)
 		{
