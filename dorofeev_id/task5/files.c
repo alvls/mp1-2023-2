@@ -1,9 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "files.h"
-#include <stdio.h>  
-#include <stdlib.h>  
-#include <io.h>  
-#include <time.h>  
 
 file* get_files(char* path, int* file_count)
 {
@@ -50,12 +46,13 @@ file* get_files(char* path, int* file_count)
 }
 
 
-void print_files(file* files, int file_count)
+void print_files(file* files, int file_count) 
 {
+    system("cls");
     printf("Listing of .c files\n\n");
     printf("FILE                                                                           DATE OF CREATION %8c   SIZE(bytes)\n", ' ');
     printf("----                                                                           ---------------- %8c   -----------\n", ' ');
-    for (int i = 0; i < file_count; ++i)
+    for (int i = 0; i < file_count; ++i) 
     {
         printf("%-78.78s %.24s    %ld\n", files[i].name, files[i].time_created, files[i].size);
     }
