@@ -9,5 +9,5 @@ void selection_size(file* files, int amount, int order);
 void insertion_size(file* files, int amount, int order);
 void merge_size(file* files, int left, int middle, int right, int order);
 void merge_sort(file* files, int left, int right, int order);
-void shell(file* files, int size, int order);
-void counting(file* files, int size, int order);
+void shell_size(file* files, int size, int order);
+void counting_size(file* files, int size, int order);
