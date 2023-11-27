@@ -4,6 +4,25 @@
 #include <string.h>
 #include "sorts.h"
 #include <locale.h>
+#include <windows.h>
+
+void measure_time(void (*sort_func)(file*, int, int), file* files, int amount, int order, const char* sort_name)
+{
+    LARGE_INTEGER start_time, end_time, frequency;
+    double elapsed_time;
+
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&start_time);
+
+    // Sort function call
+    sort_func(files, amount, order);
+
+    QueryPerformanceCounter(&end_time);
+
+    elapsed_time = ((double)(end_time.QuadPart - start_time.QuadPart)) / frequency.QuadPart;
+
+    printf("Time taken by %s: %f seconds\n", sort_name, elapsed_time);
+}
 
 
 
@@ -11,7 +30,7 @@ int main()
 {
     setlocale(LC_ALL, "rus");
 
-    char path[256] = "D:/Desktop/ONB$/*.*";
+    char path[256] = "c:/*.*";
     int file_count;
     file* lol = get_files(path, &file_count);
 
@@ -115,13 +134,13 @@ int main()
                 case 1:
                     if (by == 1)
                     {
-                        bubble_size(lol, file_count, order);
+                        measure_time(bubble_size, lol, file_count, order, "Bubble Sort by size");
                         fl = 0;
                         break;
                     }
                     else
                     {
-                        bubble_name(lol, file_count, order);
+                        measure_time(bubble_name, lol, file_count, order, "Bubble Sort by name");
                         fl = 0;
                         break;
                     }
@@ -129,13 +148,13 @@ int main()
                 case 2:
                     if (by == 1)
                     {
-                        selection_size(lol, file_count, order);
+                        measure_time(selection_size, lol, file_count, order, "Selection Sort by size");
                         fl = 0;
                         break;
                     }
                     else
                     {
-                        selection_name(lol, file_count, order);
+                        measure_time(selection_name, lol, file_count, order, "Selection Sort by name");
                         fl = 0;
                         break;
                     }
@@ -143,13 +162,13 @@ int main()
                 case 3:
                     if (by == 1)
                     {
-                        insertion_size(lol, file_count, order);
+                        measure_time(insertion_size, lol, file_count, order, "Insertion Sort by size");
                         fl = 0;
                         break;
                     }
                     else
                     {
-                        insertion_name(lol, file_count, order);
+                        measure_time(insertion_name, lol, file_count, order, "Insertion Sort by name");
                         fl = 0;
                         break;
                     }
@@ -158,12 +177,14 @@ int main()
                     if (by == 1)
                     {
                         merge_sort_size(lol, 0, file_count - 1, order);
+                        measure_time(merge_sort_size, lol, file_count, order, "Merge Sort by size");
                         fl = 0;
                         break;
                     }
                     else
                     {
                         merge_sort_name(lol, 0, file_count - 1, order);
+                        measure_time(merge_sort_name, lol, file_count, order, "Merge Sort by name");
                         fl = 0;
                         break;
                     }
@@ -171,13 +192,13 @@ int main()
                 case 5:
                     if (by == 1)
                     {
-                        shell_size(lol, file_count, order);
+                        measure_time(shell_size, lol, file_count, order, "Shell Sort by size");
                         fl = 0;
                         break;
                     }
                     else
                     {
-                        shell_name(lol, file_count, order);
+                        measure_time(shell_name, lol, file_count, order, "Counting Sort by name");
                         fl = 0;
                         break;
                     }
@@ -185,7 +206,7 @@ int main()
                 case 6:
                     if (by == 1)
                     {
-                        counting_size(lol, file_count, order);
+                        measure_time(counting_size, lol, file_count, order, "Counting Sort by size");
                         fl = 0;
                         break;
                     }
@@ -198,13 +219,13 @@ int main()
                 case 7:
                     if (by == 1)
                     {
-                        hoar_size(lol, file_count, order);
+                        measure_time(hoar_size, lol, file_count, order, "Hoar Sort by size");
                         fl = 0;
                         break;
                     }
                     else
                     {
-                        hoar_name(lol, file_count, order);
+                        measure_time(hoar_name, lol, file_count, order, "Hoar Sort by name");
                         fl = 0;
                         break;
                     }
