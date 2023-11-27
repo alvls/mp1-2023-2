@@ -11,7 +11,7 @@ int main()
 {
     setlocale(LC_ALL, "rus");
 
-    char path[256] = "D:/Desktop/ONB$/*.*";
+    char path[256] = "c:/*.*";
     int file_count;
     file* lol = get_files(path, &file_count);
 
@@ -33,7 +33,7 @@ int main()
         printf("1 - output the list of files\n");
         printf("2 - sort files\n");
         printf("3 - clear the console\n");
-        printf("4 - change directory\n");
+        printf("4 - change directory (the default path is c:/*.*)\n");
         printf("5 - terminate the program\n");
 
 
