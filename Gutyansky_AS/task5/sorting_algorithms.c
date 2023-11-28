@@ -1,6 +1,6 @@
 #include "sorting_algorithms.h"
 
-#include <memory.h>
+#include <stdlib.h>
 
 void swap(FileData* files, int i, int j) {
     FileData temp;
@@ -116,52 +116,64 @@ int shell_sort(FileData* files, int length) {
     return 1;
 }
 
-int merge(FileData* files, int lower_bound, int split_index, int upper_bound) {
+int merge(FileData* files, int lower_bound, int split_index, int upper_bound, FileData* buffer) {
     int left_index, right_index, merge_index;
-    FileData* temp;
 
     left_index = lower_bound;
     right_index = split_index;
     merge_index = 0;
 
-    temp = (FileData*)malloc(sizeof(FileData) * (upper_bound - lower_bound));
-    if (temp == NULL) {
-        return 0;
-    }
-
     while (left_index < split_index && right_index < upper_bound) {
         if (files[left_index].size < files[right_index].size)
-            temp[merge_index++] = files[left_index++];
+            buffer[merge_index++] = files[left_index++];
         else
-            temp[merge_index++] = files[right_index++];
+            buffer[merge_index++] = files[right_index++];
     }
 
     while (right_index < upper_bound)
-        temp[merge_index++] = files[right_index++];
+        buffer[merge_index++] = files[right_index++];
     while (left_index < split_index)
-        temp[merge_index++] = files[left_index++];
+        buffer[merge_index++] = files[left_index++];
 
     for (merge_index = 0; merge_index < upper_bound - lower_bound; merge_index++)
-        files[lower_bound + merge_index] = temp[merge_index];
-
-    free(temp);
+        files[lower_bound + merge_index] = buffer[merge_index];
 
     return 1;
 }
 
-int merge_sort(FileData* files, int lower_bound, int upper_bound) {
+int merge_sort(FileData* files, int lower_bound, int upper_bound, FileData* buffer) {
     int success;
     int split;
+    int buffer_created;
+
+    buffer_created = 0;
+    if (buffer == NULL) {
+        buffer = malloc(sizeof(FileData) * (upper_bound - lower_bound));
+        if (buffer == NULL) {
+            return 0;
+        }
+        buffer_created = 1;
+    }
 
     if (upper_bound - lower_bound > 1) {
         split = (lower_bound + upper_bound) / 2;
 
-        merge_sort(files, lower_bound, split);
-        merge_sort(files, split, upper_bound);
-        success = merge(files, lower_bound, split, upper_bound);
+        merge_sort(files, lower_bound, split, buffer);
+        merge_sort(files, split, upper_bound, buffer);
+        success = merge(files, lower_bound, split, upper_bound, buffer);
         if (!success) {
+            if (buffer_created) {
+                free(buffer);
+                buffer = NULL;
+            }
+
             return 0;
         }
+    }
+
+    if (buffer_created) {
+        free(buffer);
+        buffer = NULL;
     }
 
     return 1;

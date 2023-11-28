@@ -5,6 +5,7 @@
 #include <io.h>  
 #include <string.h>
 #include <time.h>
+#include <omp.h>
 #include <Windows.h>
 
 #include "file_data.h"
@@ -78,8 +79,7 @@ void sort_menu(char path[MAX_PATH_LENGTH + 1]) {
     int reverse_sort;
     size_t count;
     FileData* files;
-    time_t begin, end;
-    double elapsed_time;
+    double begin, end, elapsed_time;
     char time_buffer[30];
 
     do {
@@ -103,7 +103,7 @@ void sort_menu(char path[MAX_PATH_LENGTH + 1]) {
 
     files = get_all_files_from_directory(path, &count);
 
-    begin = clock();
+    begin = omp_get_wtime();
     switch (sort_method) {
     case 1:
         sort_success = bubble_sort(files, count);
@@ -121,7 +121,7 @@ void sort_menu(char path[MAX_PATH_LENGTH + 1]) {
         sort_success = shell_sort(files, count);
         break;
     case 6:
-        sort_success = merge_sort(files, 0, count);
+        sort_success = merge_sort(files, 0, count, NULL);
         break;
     case 7:
         sort_success = count_sort(files, count);
@@ -132,8 +132,8 @@ void sort_menu(char path[MAX_PATH_LENGTH + 1]) {
         reverse(files, count);
     }
 
-    end = clock();
-    elapsed_time = (double)(end - begin) / CLOCKS_PER_SEC;
+    end = omp_get_wtime();
+    elapsed_time = end - begin;
 
     if (!sort_success) {
         printf("Не удалось отсортировать файлы!\n");
