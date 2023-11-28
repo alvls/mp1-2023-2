@@ -74,6 +74,8 @@ int quick_sort(FileData* files, int length) {
     int i, j;
     _fsize_t center_size;
 
+    if (length == 0) return 1;
+
     i = 0;
     j = length - 1;
     center_size = files[length / 2].size;
@@ -118,6 +120,8 @@ int increment(int inc[], int length) {
 int shell_sort(FileData* files, int length) {
     FileData temp;
     int inc, s, i, j, seq[40];
+
+    if (length == 0) return 1;
 
     s = increment(seq, length);
     while (s >= 0) {
@@ -164,16 +168,16 @@ int merge_sort(FileData* files, int lower_bound, int upper_bound, FileData* buff
     int split;
     int buffer_created;
 
-    buffer_created = 0;
-    if (buffer == NULL) {
-        buffer = malloc(sizeof(FileData) * (upper_bound - lower_bound));
-        if (buffer == NULL) {
-            return 0;
-        }
-        buffer_created = 1;
-    }
-
     if (upper_bound - lower_bound > 1) {
+        buffer_created = 0;
+        if (buffer == NULL) {
+            buffer = malloc(sizeof(FileData) * (upper_bound - lower_bound));
+            if (buffer == NULL) {
+                return 0;
+            }
+            buffer_created = 1;
+        }
+
         split = (lower_bound + upper_bound) / 2;
 
         merge_sort(files, lower_bound, split, buffer);
@@ -187,11 +191,11 @@ int merge_sort(FileData* files, int lower_bound, int upper_bound, FileData* buff
 
             return 0;
         }
-    }
 
-    if (buffer_created) {
-        free(buffer);
-        buffer = NULL;
+        if (buffer_created) {
+            free(buffer);
+            buffer = NULL;
+        }
     }
 
     return 1;
@@ -203,6 +207,8 @@ int count_sort(FileData* files, int length) {
     _fsize_t max_size = 0;
     int* counts;
     FileData* temp;
+
+    if (length == 0) return 1;
 
     for (i = 0; i < length; i++) {
         if (files[i].size > max_size) {
@@ -238,7 +244,6 @@ int count_sort(FileData* files, int length) {
     for (i = 0; i < length; i++) {
         files[i] = temp[i];
     }
-
 
     free(counts);
     free(temp);
