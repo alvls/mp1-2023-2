@@ -4,26 +4,21 @@
 #include <string.h>
 #include "sorts.h"
 #include <locale.h>
-#include <windows.h>
+#include <omp.h>
 
-void measure_time(void (*sort_func)(file*, int, int), file* files, int amount, int order, const char* sort_name)
-{
-    LARGE_INTEGER start_time, end_time, frequency;
-    double elapsed_time;
 
-    QueryPerformanceFrequency(&frequency);
-    QueryPerformanceCounter(&start_time);
+void measure_time(void (*sort_func)(file*, int, int), file* files, int amount, int order, const char* sort_name) {
+    double start_time, end_time;
+
+    start_time = omp_get_wtime();
 
     // Sort function call
     sort_func(files, amount, order);
 
-    QueryPerformanceCounter(&end_time);
+    end_time = omp_get_wtime();
 
-    elapsed_time = ((double)(end_time.QuadPart - start_time.QuadPart)) / frequency.QuadPart;
-
-    printf("Time taken by %s: %f seconds\n", sort_name, elapsed_time);
+    printf("Time taken by %s: %f seconds\n", sort_name, end_time - start_time);
 }
-
 
 
 int main()
