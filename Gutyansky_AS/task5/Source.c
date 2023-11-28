@@ -22,18 +22,119 @@ FileData* get_all_files_from_directory(const char* path, size_t* length);
 void read_path(char path[MAX_PATH_LENGTH + 1]);
 void sort_menu(char path[MAX_PATH_LENGTH + 1]);
 void main_menu(char path[MAX_PATH_LENGTH + 1]);
+void benchmark(char path[MAX_PATH_LENGTH + 1]);
 void free_files(FileData* files, size_t length);
 void reverse(FileData* files, int length);
 int try_read_int(int* result, int minValue, int maxValue);
 
-int main(void) {
+int main(int argc, char* argv[]) {
+    int arg_len;
     char path[MAX_PATH_LENGTH + 1];
+
+    if (argc == 2) {
+        arg_len = strlen(argv[1]);
+        if (argv > MAX_PATH_LENGTH) {
+            arg_len = MAX_PATH_LENGTH;
+        }
+        strncpy(path, argv[1], arg_len);
+        path[MAX_PATH_LENGTH] = '\0';
+
+        benchmark(path);
+
+        return 0;
+    }
 
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
     read_path(path);
     main_menu(path);
+
+    return 0;
+}
+
+void benchmark(char path[MAX_PATH_LENGTH + 1]) {
+    int sort_success;
+    size_t count;
+    FileData* files;
+    double begin, end, elapsed_time;
+
+    // Bubble sort
+    files = get_all_files_from_directory(path, &count);
+    begin = omp_get_wtime();
+    sort_success = bubble_sort(files, count);
+    end = omp_get_wtime();
+    free_files(files, count);
+    elapsed_time = end - begin;
+    if (!sort_success) elapsed_time = -1;
+    printf("Пузырьковая: %lf\n", elapsed_time);
+    /// ----------
+
+    // Select sort
+    files = get_all_files_from_directory(path, &count);
+    begin = omp_get_wtime();
+    sort_success = select_sort(files, count);
+    end = omp_get_wtime();
+    free_files(files, count);
+    elapsed_time = end - begin;
+    if (!sort_success) elapsed_time = -1;
+    printf("Выбором: %lf\n", elapsed_time);
+    /// ----------
+
+    // Insert sort
+    files = get_all_files_from_directory(path, &count);
+    begin = omp_get_wtime();
+    sort_success = insert_sort(files, count);
+    end = omp_get_wtime();
+    free_files(files, count);
+    elapsed_time = end - begin;
+    if (!sort_success) elapsed_time = -1;
+    printf("Вставкой: %lf\n", elapsed_time);
+    /// ----------
+
+    // Quick sort
+    files = get_all_files_from_directory(path, &count);
+    begin = omp_get_wtime();
+    sort_success = quick_sort(files, count);
+    end = omp_get_wtime();
+    free_files(files, count);
+    elapsed_time = end - begin;
+    if (!sort_success) elapsed_time = -1;
+    printf("Хоара: %lf\n", elapsed_time);
+    /// ----------
+
+    // Shell sort
+    files = get_all_files_from_directory(path, &count);
+    begin = omp_get_wtime();
+    sort_success = shell_sort(files, count);
+    end = omp_get_wtime();
+    free_files(files, count);
+    elapsed_time = end - begin;
+    if (!sort_success) elapsed_time = -1;
+    printf("Шелла: %lf\n", elapsed_time);
+    /// ----------
+
+    // Merge sort
+    files = get_all_files_from_directory(path, &count);
+    begin = omp_get_wtime();
+    sort_success = merge_sort(files, 0, count, NULL);
+    end = omp_get_wtime();
+    free_files(files, count);
+    elapsed_time = end - begin;
+    if (!sort_success) elapsed_time = -1;
+    printf("Слиянием: %lf\n", elapsed_time);
+    /// ----------
+
+    // Bubble sort
+    files = get_all_files_from_directory(path, &count);
+    begin = omp_get_wtime();
+    sort_success = count_sort(files, count);
+    end = omp_get_wtime();
+    free_files(files, count);
+    elapsed_time = end - begin;
+    if (!sort_success) elapsed_time = -1;
+    printf("Подсчётом: %lf\n", elapsed_time);
+    /// ----------
 }
 
 void read_path(char path[MAX_PATH_LENGTH + 1]) {

@@ -95,21 +95,39 @@ int quick_sort(FileData* files, int length) {
     return 1;
 }
 
+int increment(int inc[], int length) {
+    int p1, p2, p3, s;
+
+    p1 = p2 = p3 = 1;
+    s = -1;
+    do {
+        if (++s % 2) {
+            inc[s] = 8 * p1 - 6 * p2 + 1;
+        }
+        else {
+            inc[s] = 9 * p1 - 9 * p3 + 1;
+            p2 *= 2;
+            p3 *= 2;
+        }
+        p1 *= 2;
+    } while (3 * inc[s] < length);
+
+    return s > 0 ? --s : 0;
+}
+
 int shell_sort(FileData* files, int length) {
-    int s, i, j;
-    FileData current_element;
+    FileData temp;
+    int inc, s, i, j, seq[40];
 
-    for (s = length / 2; s > 0; s /= 2) {
-        for (i = s; i < length; ++i) {
-            current_element = files[i];
+    s = increment(seq, length);
+    while (s >= 0) {
+        inc = seq[s--];
 
-            j = i - 1;
-            while (j >= 0 && files[j].size > current_element.size) {
-                files[j + 1] = files[j];
-                --j;
-            }
-
-            files[j + 1] = current_element;
+        for (i = inc; i < length; i++) {
+            temp = files[i];
+            for (j = i - inc; (j >= 0) && (files[j].size > temp.size); j -= inc)
+                files[j + inc] = files[j];
+            files[j + inc] = temp;
         }
     }
 

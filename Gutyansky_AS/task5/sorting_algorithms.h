@@ -8,6 +8,5 @@ int select_sort(FileData* files, int length);
 int insert_sort(FileData* files, int length);
 int quick_sort(FileData* files, int length);
 int shell_sort(FileData* files, int length);
-int merge(FileData* files, int lower_bound, int split_index, int upper_bound, FileData* buffer);
 int merge_sort(FileData* files, int lower_bound, int upper_bound, FileData* buffer);
 int count_sort(FileData* files, int length);
