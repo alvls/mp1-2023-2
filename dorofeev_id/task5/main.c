@@ -6,13 +6,11 @@
 #include <locale.h>
 #include <omp.h>
 
-
 void measure_time(void (*sort_func)(file*, int, int), file* files, int amount, int order, const char* sort_name) {
     double start_time, end_time;
 
     start_time = omp_get_wtime();
 
-    // Sort function call
     sort_func(files, amount, order);
 
     end_time = omp_get_wtime();
@@ -21,11 +19,13 @@ void measure_time(void (*sort_func)(file*, int, int), file* files, int amount, i
 }
 
 
+
+
 int main()
 {
     setlocale(LC_ALL, "rus");
 
-    char path[256] = "c:/*.*";
+    wchar_t path[256] = L"c:/*.*";
     int file_count;
     file* lol = get_files(path, &file_count);
 
@@ -47,7 +47,7 @@ int main()
         printf("1 - output the list of files\n");
         printf("2 - sort files\n");
         printf("3 - clear the console\n");
-        printf("4 - change directory (the default path is c:/*.*)\n");
+        printf("4 - change directory\n");
         printf("5 - terminate the program\n");
 
 
@@ -239,7 +239,7 @@ int main()
 
         case 4:
             printf("Enter the path; Use / as the folder separator, be sure to add *.* at the end(Example: C:/Temp/*.*)\n");
-            scanf("%s", path);
+            wscanf(L"%ls", path);
             lol = get_files(path, &file_count);
             break;
 
