@@ -14,8 +14,8 @@ void bubleSort(int a[], int size) {
 	for (int i = 0; i < size - 1; i++) {
 		for (j = size - 1; j > i; j--) {
 			if (a[j - 1] > a[j]) {
-				x = a[j-1];
-				a[j-1] = a[j];
+				x = a[j - 1];
+				a[j - 1] = a[j];
 				a[j] = x;
 			}
 		}
@@ -26,15 +26,15 @@ void selectSort(int a[], int size) {
 	int i, j, k;
 	int x;
 	for (i = 0; i < size; i++) {
-		k = i; 
+		k = i;
 		x = a[i];
 		for (j = i + 1; j < size; j++) {
 			if (a[j] < x) {
-				k = j; 
+				k = j;
 				x = a[j];
 			}
 		}
-		a[k] = a[i]; 
+		a[k] = a[i];
 		a[i] = x;
 	}
 }
@@ -163,7 +163,7 @@ void countingSort(int* array, int n) {
 		if (array[i] > maxValue) maxValue = array[i];
 		if (array[i] < minValue) minValue = array[i];
 	}
-	int k = maxValue - minValue + 1; 
+	int k = maxValue - minValue + 1;
 	int* counts = (int*)malloc(k * sizeof(int));
 	memset(counts, 0, k * sizeof(int));
 	for (i = 0; i < n; ++i) {
@@ -189,18 +189,17 @@ void reverse(int a[], int size) {
 	}
 }
 
-
 void print_to_screen(int a[], int size, char path[]) {
 	struct _finddata_t c_file;
 	intptr_t hFile;
-
+	char timeBuffer[26];
 	if ((hFile = _findfirst(path, &c_file)) == -1L)
-		printf("В данном дериктории нет файлов\n");
-	else
-	{
+		printf("В данном директории нет файлов\n");
+	else {
 		do {
 			if (a[0] == c_file.size && strcmp(c_file.name, ".") != 0 && strcmp(c_file.name, "..") != 0) {
-				printf("%-20.20s  - %10ld байт\n", c_file.name, c_file.size);
+				ctime_s(timeBuffer, sizeof(timeBuffer), &c_file.time_create);
+				printf("%-20.20s  - %10ld байт;  Время создания: %s", c_file.name, c_file.size, timeBuffer);
 			}
 		} while (_findnext(hFile, &c_file) == 0);
 		_findclose(hFile);
@@ -209,11 +208,11 @@ void print_to_screen(int a[], int size, char path[]) {
 		if (a[i] != a[i - 1]) {
 			if ((hFile = _findfirst(path, &c_file)) == -1L)
 				printf("В данном директории нет файлов\n");
-			else
-			{
+			else {
 				do {
 					if (a[i] == c_file.size && strcmp(c_file.name, ".") != 0 && strcmp(c_file.name, "..") != 0) {
-						printf("%-20.20s  - %10ld байт\n", c_file.name, c_file.size);
+						ctime_s(timeBuffer, sizeof(timeBuffer), &c_file.time_create);
+						printf("%-20.20s  - %10ld байт;  Время создания: %s", c_file.name, c_file.size, timeBuffer);
 					}
 				} while (_findnext(hFile, &c_file) == 0);
 				_findclose(hFile);
@@ -245,9 +244,22 @@ void main() {
 	int asc_des = 0;
 	int size = 0;
 	int count = 0;
-	printf("Введите адрес директории, в которой хотите отсортировать содержимое\n");
-	printf("Вид ввода(как пример): c:\\temp\\*.* \n");
-	gets(path);
+	int flag = 1;
+	int filesExist=0;
+	while (flag == 1)
+	{
+		printf("Введите адрес директории, в которой хотите отсортировать содержимое\n");
+		printf("Вид ввода(как пример): c:\\temp\\*.* \n");
+		gets(path);
+		filesExist = check_files_exist(path);
+		if (filesExist == 1)
+			flag = 0;
+		else
+		{
+			printf("Путь до директории введен неверно, попробуйте ввести другой путь\n");
+			printf("\n");
+		}
+	}
 	if ((hFile = _findfirst(path, &c_file)) == -1L)
 		printf("В данном дериктории нет файлов\n");
 	else
@@ -258,18 +270,18 @@ void main() {
 		_findclose(hFile);
 	}
 
-	size = size - 2;  // учитываем что есть файлы "." и ".."
-	int* a = (int*)malloc(size*sizeof(struct _finddata_t));
+	size = size - 2;
+	int* a = (int*)malloc(size * sizeof(struct _finddata_t));
 	int max = -100000;
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; i++)
+	{
 		if (a[i] > max)
 			max = a[i];
 	}
-	int filesExist = check_files_exist(path);
 	int wa = 1;
 	while (wa) {
 		count = 0;
-		if ((hFile = _findfirst(path, &c_file)) != -1L) 
+		if ((hFile = _findfirst(path, &c_file)) != -1L)
 		{
 			count = 0;
 			do {
@@ -290,17 +302,29 @@ void main() {
 			printf("Введите 5, чтобы использовать сортировку Хоара \n");
 			printf("Введите 6, чтобы использовать сортировку Шелла \n");
 			printf("Введите 7, чтобы использовать сортировку подсчетом \n");
-			printf("Если же вы хотите закончить введите 0\n");
-			scanf_s("%i", &num);
+			printf("Если же вы хотите закончить введите 0!\n");
+			scanf_s("%d", &num);
+			if (num != 0 && num != 1 && num != 2 && num != 3 && num != 4 && num != 5 && num != 6 && num != 7)
+			{
+				printf("Вы ввели недопустимое число, повторите ввод еще раз\n");
+				printf("\n");
+				continue;
+			}
 
 			if (num != 0)
 			{
 				printf("Введите 0, если хотите использовать сортировку по возрастанию\n");
 				printf("Введите 1, если хотите использовать сортировку по убыванию\n");
-				scanf_s("%i", &asc_des);
+				scanf_s("%d", &asc_des);
+				if (asc_des != 0 && asc_des != 1)
+				{
+					printf("Вы ввели недопустимое число, повторите ввод еще раз\n");
+					printf("\n");
+					continue;
+				}
 			}
 		}
-		else 
+		else
 		{
 			num = 0;
 		}
