@@ -241,11 +241,11 @@ void sort_menu(char path[MAX_PATH_LENGTH + 1]) {
     }
     else {
         printf("Файлы\n\n");
-        printf("Файл         Дата %24c   Размер\n", ' ');
-        printf("----         ---- %24c   ----\n", ' ');
+        printf("Файл %20c   Дата %22c   Размер\n", ' ', ' ');
+        printf("---- %20c   ---- %22c   ----\n", ' ', ' ');
         for (int i = 0; i < count; i++) {
             ctime_s(time_buffer, _countof(time_buffer), &(files[i].time_write));
-            printf("%-12.12s %.24s  %10lu байт\n", files[i].name, time_buffer, files[i].size);
+            printf("%-25.25s   %-24.24s   %10lu байт\n", files[i].name, time_buffer, files[i].size);
         }
 
         if (count == 0) {
