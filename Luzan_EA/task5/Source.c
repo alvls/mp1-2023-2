@@ -3,18 +3,18 @@
 #include "sortings.h"
 #include <string.h>
 #include <windows.h>
-#include <omp.h> 
+#include <omp.h> //for time
 #include <memory.h> //
 #include <locale.h>
 #include <limits.h>
 
 
-int makeArray(struct Files* list, char* path) { ///почему указатель
+int makeArray(struct Files* list, char* path) { 
 
-    WIN32_FIND_DATAA file_info; //инфа о файлах
-    HANDLE file; ///дескриптор ака указатель на папку, при этом intptr_t == HANDLE, хз почему
+    WIN32_FIND_DATAA file_info;
+    HANDLE file; 
 
-    file = FindFirstFileA(path, &file_info); /// без A не работает
+    file = FindFirstFileA(path, &file_info); 
 
     int i = 0;
     do {
@@ -22,9 +22,8 @@ int makeArray(struct Files* list, char* path) { ///почему указатель
             strcpy(list[i].name, file_info.cFileName);
             list[i].size = file_info.nFileSizeHigh * (MAXDWORD + 1) + file_info.nFileSizeLow;
             i++;
-            //printf("%lli\n", list[i-1].size);
         }
-    } while (FindNextFileA(file, &file_info) != 0); /// без A не работает
+    } while (FindNextFileA(file, &file_info) != 0); 
 
 
     return 0;
@@ -33,9 +32,9 @@ int makeArray(struct Files* list, char* path) { ///почему указатель
 char* getPath() {
     printf("Enter directory path: ");
     char* path = (char*)malloc(MAX_PATH * sizeof(char));
-    //определена в windows.h, == 260
+    //from windows.h == 260
     scanf("%s", path);
-    strcat(path, "\\*"); ///маска файла, функция из string.h   
+    strcat(path, "\\*"); //from string.h
     return path;
 }
 
@@ -59,23 +58,37 @@ int countFiles(char* path) {
 }
 
 void printFiles(struct Files* arr, int len) {
-    printf("FILE                            SIZE\n", ' ');
-    printf("----                            ----\n", ' ');
+    printf("FILE  %24c  SIZE\n", ' ');
+    printf("----  %24c  ----\n", ' ');
     for (int i = 0; i < len; i++) {
         printf("%-20.20s      %10llu\n", arr[i].name, arr[i].size);
     }
     printf("--------------------------------------------------------------\n");
 }
 
-int Sort(struct Files* arr, int len) { // обработка ввода и свитч с сортировками
+void printFilesRev(struct Files* arr, int len) {
+    printf("FILE  %24c  SIZE\n", ' ');
+    printf("----  %24c  ----\n", ' ');
+    for (int i = len - 1; i >= 0; i--) {
+        printf("%-20.20s      %10llu\n", arr[i].name, arr[i].size);
+    }
+    printf("--------------------------------------------------------------\n");
+}
+
+int Sort(struct Files* arr, int len) { 
     int sortType = 100;
 
-    printf("Enter a vsjnvsjlzkulkzbk: ");
+    printf("Enter the sorting method: \n");
+    printf("1 - BubbleSort, 2 - SelectSort, 3 - insertSort\n");
+    printf("4 - mergeSort, 5 - quickSort, 6 - shellSort\n");
+    printf("7 - CountingSort !(be careful, if have very big files)\n");
+    printf("Your choice: ");
     scanf("%i", &sortType);
     scanf("%*[^\n]"); // убираем лишние символы до \n, не включительно
-    getchar(); //очищаем \n
+                      // delete all symbols till \n, not including \n
+    getchar(); // delete \n
 
-    while ((sortType > 9) || (sortType < 1)) {
+    while ((sortType > 7) || (sortType < 1)) {
         printf("There is no sort method with such name. Please, try again");
         scanf("%i", &sortType);
         scanf("%*[^\n]");
@@ -120,16 +133,30 @@ int Sort(struct Files* arr, int len) { // обработка ввода и свитч с сортировками
         countingSort(arr, len);
         end = omp_get_wtime();
         break;
-    default:   return -1; //фактически, никогда не будет выполнен, тк все проверка реализована выше
+    default:   return -1; // никогда не будет выполнен, т.к. проверка реализована выше
+                          // will never be executed, because there is a check higher
     }
 
-    printFiles(arr, len);
+    char revSortTrue = 'i';
+    printf("Do you want the reverse sort? (the biggest file is the highest in the list) \n[y/n]: ");
+    do { 
+        scanf("%c", &revSortTrue);
+        scanf("%*[^\n]"); 
+        getchar(); 
+
+        if (revSortTrue == 'n') { printFiles(arr, len); }
+        else {
+            if (revSortTrue == 'y') { printFilesRev(arr, len); }
+            else { printf("Incorrect input. Enter 'y' or 'n': "); revSortTrue = 'i'; }
+        }
+    } while (revSortTrue == 'i');
+
     printf_s("Work took %f sec. time.\n\n\n", end - start);
 
     return 0;
 }
 
-struct Files* cpyArr(struct Files* arr, int len) { //чтобпотом можно было заново всё сделать
+struct Files* cpyArr(struct Files* arr, int len) { // saving Arr
     struct Files* arrCpy = (struct Files*)malloc(sizeof(struct Files) * len);
     for (int i = 0; i < len; i++) {
         arrCpy[i].size = arr[i].size;
@@ -146,6 +173,7 @@ void main() {
     int count = 0;
     struct Files* list = (struct Files*)malloc(sizeof(struct Files) * 1);
     //при первом запуске будет исполнено if
+    // if will be executed first time, free(list) on 195
 
     while (1) {
         if (inp == 'd') {
@@ -185,8 +213,4 @@ void main() {
 
         if (inp == 'e') { printf("Goodbye"); break; }
     }
-
-
-
 }
-
