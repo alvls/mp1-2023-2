@@ -7,6 +7,9 @@
 #include <omp.h>
 //#include<string.h>
 
+//#define MAX_SIZE 100000
+#define _CRT_SECURE_NO_WARNINGS
+
 typedef struct {
     long size;
     char* name;
@@ -24,7 +27,7 @@ int cmp(file a, file b, enum Stype type, int rev) {
     switch (type) {
 
 
-    case size:
+    default:
         if (rev)
             ans = a.size > b.size;
         else
@@ -33,11 +36,12 @@ int cmp(file a, file b, enum Stype type, int rev) {
 
     case name:
         if (rev)
-            ans = strcmp(a.name, b.name);
+            ans = strcmp(a.name, b.name)>0;
         else
-            ans = -strcmp(a.name, b.name);
+            ans = strcmp(a.name, b.name)<0;
         break;
     }
+    return ans;
 }
 
 
@@ -47,14 +51,14 @@ void bubbleSort(file a[], long size, enum Stype type, int rev) {
 
     for (i = 0; i < size; i++) {            // i - номер прохода
         for (j = size - 1; j > i; j--) {     // внутренний цикл прохода
-            if (a[j - 1].size > a[j].size) {
+            if (cmp(a[j - 1], a[j], type, !rev)) {
                 x = a[j - 1]; a[j - 1] = a[j]; a[j] = x;
             }
         }
     }
 }
 
-void selectSort(file a[], long size) {
+void selectSort(file a[], long size, enum Stype type, int rev) {
     long i, j, k;
     file x;
 
@@ -62,7 +66,7 @@ void selectSort(file a[], long size) {
         k = i; x = a[i];
 
         for (j = i + 1; j < size; j++)	// цикл выбора наименьшего элемента
-            if (a[j].size < x.size) {
+            if (cmp(a[j],x, type, rev)) {
                 k = j; x = a[j];	        // k - индекс наименьшего элемента
             }
 
@@ -70,7 +74,7 @@ void selectSort(file a[], long size) {
     }
 }
 
-void merge(file a[], long lb, long split, long ub) {
+void merge(file a[], long lb, long split, long ub, enum Stype type, int rev) {
     // Текущая позиция чтения из первой последовательности a[lb]...a[split]
     long pos1 = lb;
 
@@ -84,7 +88,7 @@ void merge(file a[], long lb, long split, long ub) {
 
     // Идет слияние, пока есть хоть один элемент в каждой последовательности
     while (pos1 <= split && pos2 <= ub) {
-        if (a[pos1].size < a[pos2].size)
+        if (cmp(a[pos1],a[pos2], type, rev))
             temp[pos3++] = a[pos1++];
         else
             temp[pos3++] = a[pos2++];
@@ -104,20 +108,20 @@ void merge(file a[], long lb, long split, long ub) {
     free(temp);
 }
 
-void mergeSort(file a[], long lb, long ub) {
+void mergeSort(file a[], long lb, long ub, enum Stype type, int rev) {
     long split;
 
     if (lb < ub) {
         split = (lb + ub) / 2;
 
-        mergeSort(a, lb, split);
-        mergeSort(a, split + 1, ub);
-        merge(a, lb, split, ub);
+        mergeSort(a, lb, split, type, rev);
+        mergeSort(a, split + 1, ub, type, rev);
+        merge(a, lb, split, ub, type, rev);
     }
 }
 
-void callMergeSort(file a[], long size) {
-    mergeSort(a, 0, size-1);
+void callMergeSort(file a[], long size, enum Stype type, int rev) {
+    mergeSort(a, 0, size-1, type, rev);
 }
 
 void swap(file* a, file* b) {
@@ -126,13 +130,13 @@ void swap(file* a, file* b) {
     *b = temp;
 }
 
-long partition(file arr[], long low, long high) {
-    long pivot = arr[high].size;
+long partition(file arr[], long low, long high, enum Stype type, int rev) {
+    //long pivot = arr[high].size;
     long i = (low - 1);
 
     for (long j = low; j <= high - 1; j++) {
         // сравниваем по полю size
-        if (arr[j].size < pivot) {
+        if (cmp(arr[j], arr[high], type, rev)) {
             i++;
             swap(&arr[i], &arr[j]);
         }
@@ -141,20 +145,20 @@ long partition(file arr[], long low, long high) {
     return (i + 1);
 }
 
-void quickSortR(file arr[], long low, long high) {
+void quickSortR(file arr[], long low, long high, enum Stype type, int rev) {
     if (low < high) {
-        long pi = partition(arr, low, high);
+        long pi = partition(arr, low, high, type, rev);
 
-        quickSortR(arr, low, pi - 1);
-        quickSortR(arr, pi + 1, high);
+        quickSortR(arr, low, pi - 1, type, rev);
+        quickSortR(arr, pi + 1, high, type, rev);
     }
 }
 
-void callquickSortR(file a[], long size) {
-    quickSortR(a, 0, size-1);
+void callquickSortR(file a[], long size, enum Stype type, int rev) {
+    quickSortR(a, 0, size-1, type, rev);
 }
 
-void insertSort(file a[], long size) {
+void insertSort(file a[], long size, enum Stype type, int rev) {
     file x;
     long i, j;
 
@@ -162,13 +166,116 @@ void insertSort(file a[], long size) {
         x = a[i];
 
         // поиск места элемента в готовой последовательности 
-        for (j = i - 1; j >= 0 && a[j].size > x.size; j--)
+        for (j = i - 1; j >= 0 && cmp(a[j], x, type, rev); j--)
             a[j + 1] = a[j];  	// сдвигаем элемент направо, пока не дошли
 
         // место найдено, вставить элемент
         a[j + 1] = x;
     }
 }
+
+void shellSort(file arr[], long size, enum Stype type, int rev) {
+    for (int gap = size / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < size; i++) {
+            file temp = arr[i];
+            int j;
+            for (j = i; j >= gap && cmp(arr[j - gap], temp, type, !rev); j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
+}
+
+void countingSort(file a[], long size, enum Stype type, int rev) {
+    const long MAX_SIZE = 1000000; // Максимальный размер файла
+
+    // Создаем массив для подсчета частот
+    //long* count = (long*)calloc(((size_t)MAX_SIZE + 1), sizeof(long));
+    //if (count == 0) {
+    //    printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    //}
+    //long count[1000001] = { 0 };
+
+    long* count = (long*)malloc((MAX_SIZE + 1) * sizeof(long));
+    if (count == NULL) {
+        printf("Не удалось выделить память для массива count");
+        return;
+    }
+    memset(count, 0, (MAX_SIZE + 1) * sizeof(long));
+
+    // Подсчитываем частоты размеров файлов
+    for (long i = 0; i < size; i++) {
+        //a[i].size %= MAX_SIZE+1;//a[i].size % (MAX_SIZE+1)
+        count[a[i].size % (MAX_SIZE + 1)]++;
+        //printf(">>> %-25.25s %25u\n", a[i].name, a[i].size);
+        
+    }
+
+    // Вычисляем префиксные суммы
+    for (long i = 1; i <= MAX_SIZE; i++) {
+        count[i] += count[i - 1];
+    }
+
+    // Создаем временный массив для сортировки
+    file* temp = (file*)malloc((size+1) * sizeof(file));
+    if (temp == NULL) {
+        printf("Не удалось выделить память для массива temp");
+        return;
+    }
+
+    // Сортируем массив по размеру файла
+    for (long i = size - 1; i >= 0; i--) {
+        
+        temp[count[(a[i].size % (MAX_SIZE + 1))%(MAX_SIZE+1)] - 1] = a[i];
+            count[a[i].size % (MAX_SIZE + 1)]--;
+            //printf("? %-25.25s %25u\n", a[i].name, a[i].size);
+        
+    }
+
+
+    // Копируем отсортированный массив обратно в исходный
+    if (!rev) {
+        for (long i = 0; i < size; i++) {
+            a[i] = temp[i];
+            //printf(">%-25.25s %25u\n", a[i].name, a[i].size);
+        }
+    }
+    else {
+        for (long i = 0; i < size; i++) {
+            a[i] = temp[size - i-1];
+        }
+    }
+    free(count);
+    free(temp);
+}
+
+//void countingSort(file a[], long size, enum Stype type, int rev) {
+//    int count[MAX_SIZE] = { 0 };
+//    file* output = (file*)malloc(size * sizeof(file));
+//
+//    // Count the occurrence of each file size
+//    for (int i = 0; i < size; i++) {
+//        a[i].size %= MAX_SIZE + 1;
+//        count[a[i].size]++;
+//    }
+//
+//    // Calculate the cumulative count
+//    for (int i = 1; i < MAX_SIZE; i++) {
+//        count[i] += count[i - 1];
+//    }
+//
+//    // Build the sorted output array
+//    for (int i = size - 1; i >= 0; i--) {
+//        output[count[a[i].size] - 1] = a[i];
+//        count[a[i].size]--;
+//    }
+//
+//    // Copy the sorted output array back to the original array
+//    for (int i = 0; i < size; i++) {
+//        a[i] = output[i];
+//    }
+//}
 
 
 
@@ -209,19 +316,20 @@ void isSortValid(file a[], long size) {
 
 }
 
+
 int main() {
 	setlocale(LC_ALL, "");
-    /*char* a[] = {"ворон","белочка","агуша","генератор","вариант"};
-    long size = 5;
-    printsarr(a, size);
-    bubbleSort(a, size);
-    printsarr(a, size);*/
+    
     file *files = (file*)malloc(10*sizeof(file));
     long fcap = 10;
 
     struct _finddata_t c_file;
     intptr_t hFile;
     char path[200] = "E:\\TVR4\\3D\\Render\\*.*";
+    printf("Введите путь к папке:\n");
+    scanf("%s", path);
+    sprintf(path, "%s\\*.*", path);
+    //printf("%s", path);
     long count = 0;
 
     if ((hFile = _findfirst(path, &c_file)) == -1L)
@@ -255,12 +363,37 @@ int main() {
         printf("\ncount of files: %d\n", count);
     }
 
-    void (*sort) (file a[], long size);
+    void (*sort) (file a[], long size, enum Stype type, int rev);
+    int sortID = 0;
+    sort = countingSort;
+    enum Stype type = size;
+    int rev = 1;
 
-    sort = callquickSortR;
+    printf("Введите три аргумента через пробел:\nТип сортировки 1-7, обычная или реверсивная сортировка 0-1, сортировка по размеру или по имени 0-1\n Типы сортировок: \n1. пузырьком\n2. выбором\n3. вставками\n4. слиянием\n5. Хоара\n6. Шелла\n7. подсчетом\n");
+    scanf("%d %d %d", &sortID, &rev, &type);
+
+    switch (sortID) {
+    case 1:
+        sort = bubbleSort;
+    case 2:
+        sort = selectSort;
+    case 3:
+        sort = insertSort;
+    case 4:
+        sort = callMergeSort;
+    case 5:
+        sort = callquickSortR;
+    case 6:
+        sort = shellSort;
+    case 7:
+        sort = countingSort;
+    default:
+        sort = bubbleSort;
+
+    }
     ///////////////////////////////////////////////////////////////////
     double start = omp_get_wtime();
-    sort(files, count);//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    sort(files, count, type, rev);//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //mergeSort(files, 0, count);
 
     double end = omp_get_wtime();
@@ -281,7 +414,10 @@ int main() {
     //printf("Total time:%g\n", (double)(end - start) / CLOCKS_PER_SEC);
 
     isSortValid(files, count);
-    
+    /*for (long i = 0;i < count;i++) {
+        free(files[i].name);
+    }
+    free(files);*/
     system("pause");
 }
 
