@@ -142,6 +142,8 @@ int countingSort(struct Files* files, int len) {
     }
     
     unsigned long long  range = maxSize - minSize + 1;
+    // maybe even less
+    if (range > 100000) { printf("Too big files. Please change sorting method \n"); return -1; }
     unsigned long long* count =  (unsigned long long*)calloc(range, sizeof(unsigned long long));
 
     struct Files* tmp = (struct Files*)malloc(sizeof(struct Files) * len);
@@ -153,7 +155,6 @@ int countingSort(struct Files* files, int len) {
     for (int i = 1; i < range; i++) {
         count[i] += count[i-1];
     }
-    printf("%llu\n", range);
     int i = 0;
 
     for (int i =0; i < len; i++) {

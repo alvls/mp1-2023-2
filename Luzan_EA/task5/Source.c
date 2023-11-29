@@ -97,6 +97,7 @@ int Sort(struct Files* arr, int len) {
 
     double start = 0;
     double end = 0;
+    int sl = 0;
     switch (sortType) {
     case 1:
         start = omp_get_wtime();
@@ -130,13 +131,13 @@ int Sort(struct Files* arr, int len) {
         break;
     case 7:
         start = omp_get_wtime();
-        countingSort(arr, len);
+        sl = countingSort(arr, len);
         end = omp_get_wtime();
         break;
     default:   return -1; // никогда не будет выполнен, т.к. проверка реализована выше
                           // will never be executed, because there is a check higher
     }
-
+    if (sl == -1) { return 0; }
     char revSortTrue = 'i';
     printf("Do you want the reverse sort? (the biggest file is the highest in the list) \n[y/n]: ");
     do { 
