@@ -5,10 +5,6 @@
 #include <io.h>  
 #include <time.h>  
 #include <omp.h>
-//#include<string.h>
-
-//#define MAX_SIZE 100000
-#define _CRT_SECURE_NO_WARNINGS
 
 typedef struct {
     long size;
@@ -187,16 +183,10 @@ void shellSort(file arr[], long size, enum Stype type, int rev) {
     }
 }
 
-void countingSort(file a[], long size, enum Stype type, int rev) {
+void countingSort(file a[], long size, enum Stype type, int rev) { //CURSED
     const long MAX_SIZE = 1000000; // Максимальный размер файла
 
     // Создаем массив для подсчета частот
-    //long* count = (long*)calloc(((size_t)MAX_SIZE + 1), sizeof(long));
-    //if (count == 0) {
-    //    printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-    //}
-    //long count[1000001] = { 0 };
-
     long* count = (long*)malloc((MAX_SIZE + 1) * sizeof(long));
     if (count == NULL) {
         printf("Не удалось выделить память для массива count");
@@ -232,8 +222,6 @@ void countingSort(file a[], long size, enum Stype type, int rev) {
             //printf("? %-25.25s %25u\n", a[i].name, a[i].size);
         
     }
-
-
     // Копируем отсортированный массив обратно в исходный
     if (!rev) {
         for (long i = 0; i < size; i++) {
@@ -250,49 +238,14 @@ void countingSort(file a[], long size, enum Stype type, int rev) {
     free(temp);
 }
 
-//void countingSort(file a[], long size, enum Stype type, int rev) {
-//    int count[MAX_SIZE] = { 0 };
-//    file* output = (file*)malloc(size * sizeof(file));
-//
-//    // Count the occurrence of each file size
-//    for (int i = 0; i < size; i++) {
-//        a[i].size %= MAX_SIZE + 1;
-//        count[a[i].size]++;
-//    }
-//
-//    // Calculate the cumulative count
-//    for (int i = 1; i < MAX_SIZE; i++) {
-//        count[i] += count[i - 1];
-//    }
-//
-//    // Build the sorted output array
-//    for (int i = size - 1; i >= 0; i--) {
-//        output[count[a[i].size] - 1] = a[i];
-//        count[a[i].size]--;
-//    }
-//
-//    // Copy the sorted output array back to the original array
-//    for (int i = 0; i < size; i++) {
-//        a[i] = output[i];
-//    }
-//}
-
-
-
 void printfiles(file* f, int count) {
-    printf("FILES SORTED\n");
+    printf("\nИМЯ %40c РАЗМЕР\n",' ');
     for (int i = 0; i < count;i++) {
         //printf("%-12.12s %.24s  %10ld\n", c_file.name, buffer, c_file.size);
         //printf("%s %d\n", f[i].name, f[i].size);
         printf("%-25.25s %25u\n", f[i].name, f[i].size);
     }
 }
-
-//void printsarr(char** arr, int size) {
-//    for (int i = 0; i < size;i++) {
-//        printf("%s\n", arr[i]);
-//    }
-//}
 
 void extend(file** arr, long* cap) {
     file* narr = (file*)realloc(*arr, *cap*2*sizeof(file));
@@ -316,7 +269,6 @@ void isSortValid(file a[], long size) {
 
 }
 
-
 int main() {
 	setlocale(LC_ALL, "");
     
@@ -324,152 +276,88 @@ int main() {
     long fcap = 10;
 
     struct _finddata_t c_file;
-    intptr_t hFile;
+    intptr_t hFile = -1L;
     char path[200] = "E:\\TVR4\\3D\\Render\\*.*";
-    printf("Введите путь к папке:\n");
-    scanf("%s", path);
-    sprintf(path, "%s\\*.*", path);
-    //printf("%s", path);
+
+    
     long count = 0;
+    while (hFile == -1L) {
+        count = 0;
+        printf("Введите путь к папке:\n");
+        scanf("%s", path);
+        sprintf(path, "%s\\*.*", path);
 
-    if ((hFile = _findfirst(path, &c_file)) == -1L)
-        printf("No files in current directory!\n");
-    else
-    {
-        printf("Listing of .c files\n\n");
-        printf("FILE         DATE %24c   SIZE\n", ' ');
-        printf("----         ---- %24c   ----\n", ' ');
-        do {
-            char buffer[30];
-            ctime_s(buffer, _countof(buffer), &c_file.time_write); 
-            //printf("%-12.12s %.24s  %10ld\n", c_file.name, buffer, c_file.size);
-            if (count >= fcap)
-                extend(&files, &fcap);
+        if ((hFile = _findfirst(path, &c_file)) == -1L)
+            printf("Папка пуста или не существует!\n");
+        else
+        {
+            //printf("Listing of .c files\n\n");
+            //printf("FILE         DATE %24c   SIZE\n", ' ');
+            //printf("----         ---- %24c   ----\n", ' ');
+            do {
+                char buffer[30];
+                ctime_s(buffer, _countof(buffer), &c_file.time_write);
 
-            files[count].size = c_file.size;
-            files[count].name = (char*)malloc(strlen(c_file.name) * sizeof(char));
-            if (files[count].name) {
-                strcpy(files[count].name, c_file.name);
-            }
-            else {
-                printf("! MALLOC ERROR\n");
-            }
-                
-            
-            
-            count++;
-        } while (_findnext(hFile, &c_file) == 0);
-        _findclose(hFile);
-        printf("\ncount of files: %d\n", count);
+                if (count >= fcap)
+                    extend(&files, &fcap);
+
+                files[count].size = c_file.size;
+                files[count].name = (char*)malloc(strlen(c_file.name) * sizeof(char));
+                if (files[count].name) {
+                    strcpy(files[count].name, c_file.name);
+                }
+                else {
+                    printf("! MALLOC ERROR\n");
+                }
+
+
+
+                count++;
+            } while (_findnext(hFile, &c_file) == 0);
+            _findclose(hFile);
+            printf("\nФайлов: %d\n", count);
+        }
     }
-
     void (*sort) (file a[], long size, enum Stype type, int rev);
     int sortID = 0;
     sort = countingSort;
     enum Stype type = size;
     int rev = 1;
+    while (sortID != -1) {
+        printf("\nВведите три аргумента через пробел:\nТип сортировки 1-7, обычная или реверсивная сортировка 0-1, сортировка по размеру или имени (strcmp) 0-1\n Типы сортировок: \n1. пузырьком\n2. выбором\n3. вставками\n4. слиянием\n5. Хоара\n6. Шелла\n7. подсчетом (только по размеру) (Файлы больше миллиона байт сортируются по остатку от деления размера на миллион)\nДля выхода выберите сортировку -1\n");
+        scanf("%d %d %d", &sortID, &rev, &type);
 
-    printf("Введите три аргумента через пробел:\nТип сортировки 1-7, обычная или реверсивная сортировка 0-1, сортировка по размеру или по имени 0-1\n Типы сортировок: \n1. пузырьком\n2. выбором\n3. вставками\n4. слиянием\n5. Хоара\n6. Шелла\n7. подсчетом\n");
-    scanf("%d %d %d", &sortID, &rev, &type);
+        switch (sortID) {
+        case 1:
+            sort = bubbleSort;
+        case 2:
+            sort = selectSort;
+        case 3:
+            sort = insertSort;
+        case 4:
+            sort = callMergeSort;
+        case 5:
+            sort = callquickSortR;
+        case 6:
+            sort = shellSort;
+        case 7:
+            sort = countingSort;
+        default:
+            sort = bubbleSort;
 
-    switch (sortID) {
-    case 1:
-        sort = bubbleSort;
-    case 2:
-        sort = selectSort;
-    case 3:
-        sort = insertSort;
-    case 4:
-        sort = callMergeSort;
-    case 5:
-        sort = callquickSortR;
-    case 6:
-        sort = shellSort;
-    case 7:
-        sort = countingSort;
-    default:
-        sort = bubbleSort;
+        }
 
+        double start = omp_get_wtime();
+        sort(files, count, type, rev);
+
+        double end = omp_get_wtime();
+        double wtick = omp_get_wtick();
+
+        printfiles(files, count);
+
+        printf("\nВремя выполнения = %lf\n", end - start);
     }
-    ///////////////////////////////////////////////////////////////////
-    double start = omp_get_wtime();
-    sort(files, count, type, rev);//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    //mergeSort(files, 0, count);
-
-    double end = omp_get_wtime();
-    double wtick = omp_get_wtick();
-
-    printfiles(files, count);
-
-    printf("Execution time = %lf\n", end - start);
-
-    //printf("wtick = %.16g\n", wtick);
-
-
-
-    //clock_t start, end;
-    //start = clock();
-
-    //end = clock();
-    //printf("Total time:%g\n", (double)(end - start) / CLOCKS_PER_SEC);
-
-    isSortValid(files, count);
-    /*for (long i = 0;i < count;i++) {
-        free(files[i].name);
-    }
-    free(files);*/
-    system("pause");
+    //isSortValid(files, count);
+ 
+    //system("pause");
 }
-
-//int main2(void)
-//{
-//    struct _finddata_t c_file;
-//    intptr_t hFile;
-//    char path[200];
-//    int count = 0;
-//
-//    // Find first file in directory c:\temp
-//    if ((hFile = _findfirst("c:\\temp\\*.*", &c_file)) == -1L)
-//        printf("No files in current directory!\n");
-//    else
-//    {
-//        printf("Listing of .c files\n\n");
-//        printf("FILE         DATE %24c   SIZE\n", ' ');
-//        printf("----         ---- %24c   ----\n", ' ');
-//        do {
-//            char buffer[30];
-//            ctime_s(buffer, _countof(buffer), &c_file.time_write);
-//            if (count <= 20)
-//                printf("%-12.12s %.24s  %10ld\n", c_file.name, buffer, c_file.size);
-//            count++;
-//        } while (_findnext(hFile, &c_file) == 0);
-//        _findclose(hFile);
-//        printf("\ncount of files: %d", count);
-//    }
-//    system("pause");
-//}
-
-//Разработать прототип файлового менеджера с функцией показа файлов в заданном каталоге, упорядоченных по возрастанию / убыванию размера.
-//
-//Входные данные :
-//Путь до директории, в которой необходимо отсортировать содержимое.
-//Метод сортировки.
-//Выходные данные :
-//Отсортированный список имен файлов с указанием размера.
-//Время сортировки.
-//Программа должна предоставлять пользователю возможность сменить метод сортировки и повторно формировать выходные данные.
-//
-//Программа должна реализовывать диалог с пользователем посредством интерфейса, который включает :
-//возможность ввода пути до заданного каталога;
-//возможность выбора метода сортировки;
-//возможность просмотра отсортированного списка файлов с указанием размера.
-//Cписок методов сортировки :
-//пузырьком
-//выбором
-//вставками
-//слиянием
-//Хоара
-//Шелла
-//подсчетом
-//https://metanit.com/c/tutorial/5.11.php
-//https://www.techiedelight.com/ru/find-execution-time-c-program/
