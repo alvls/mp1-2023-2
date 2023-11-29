@@ -6,7 +6,9 @@
 
 void swap(struct Files* files, int i, int j) {
     struct Files temp;
-    temp = files[i]; files[i] = files[j]; files[j] = temp;
+    temp = files[i]; 
+    files[i] = files[j]; 
+    files[j] = temp;
 }
 
 int bubbleSort(struct Files* files, int size) {
@@ -14,8 +16,7 @@ int bubbleSort(struct Files* files, int size) {
     for (i = 0; i < size - 1; i++) {
         countSwaps = 0;
         for (j = 0; j < size - i - 1; j++) {
-            if (files[j].size > files[j + 1].size)
-            {
+            if (files[j].size > files[j + 1].size){
                 swap(files, j, j + 1); countSwaps++;
             }
         }
@@ -28,16 +29,16 @@ void selectSort(struct Files* a, long size) {
     long i, j, k;
     unsigned long long x;
 
-    for (i = 0; i < size; i++) {   	// i - номер текущего шага
+    for (i = 0; i < size; i++) {   	
         k = i;
         x = a[i].size;
 
-        for (j = i + 1; j < size; j++)	// цикл выбора наименьшего элемента
+        for (j = i + 1; j < size; j++)
             if (a[j].size < x) {
-                k = j; x = a[j].size;	        // k - индекс наименьшего элемента
+                k = j; x = a[j].size;	       
             }
         swap(a, i, k);
-        a[i].size = x;   	// меняем местами наименьший с a[i]
+        a[i].size = x;   	
     }
 }
 
@@ -45,34 +46,24 @@ void insertSort(struct Files* a, long size) {
     unsigned long long x;
     long i, j;
 
-    for (i = 0; i < size; i++) {  // цикл проходов, i - номер прохода
+    for (i = 0; i < size; i++) {  
         x = a[i].size;
 
-        // поиск места элемента в готовой последовательности 
+        
         for (j = i - 1; j >= 0 && a[j].size > x; j--)
-            swap(a, j + 1, j); // сдвигаем элемент направо, пока не дошли
+            swap(a, j + 1, j); 
 
-        // место найдено, вставить элемент
+       
         a[j + 1].size = x;
     }
 }
 
 void merge(struct Files* a, long lb, long split, long ub) {
-    // Слияние упорядоченных частей массива в буфер temp
-    // с дальнейшим переносом содержимого temp в a[lb]...a[ub]
-
-      // текущая позиция чтения из первой последовательности a[lb]...a[split]
     long pos1 = lb;
-
-    // текущая позиция чтения из второй последовательности a[split+1]...a[ub]
     long pos2 = split + 1;
-
-    // текущая позиция записи в temp
     long pos3 = 0;
-
     struct Files* temp = (struct Files*)malloc(sizeof(struct Files) * (ub - lb + 1));
 
-    // идет слияние, пока есть хоть один элемент в каждой последовательности
     while (pos1 <= split && pos2 <= ub) {
         if (a[pos1].size < a[pos2].size) {
             temp[pos3++].size = a[pos1++].size;
@@ -81,15 +72,12 @@ void merge(struct Files* a, long lb, long split, long ub) {
         else
             temp[pos3++] = a[pos2++];
     }
-
-    // одна последовательность закончилась - 
-    // копировать остаток другой в конец буфера 
-    while (pos2 <= ub)   // пока вторая последовательность непуста 
+ 
+    while (pos2 <= ub)   
         temp[pos3++] = a[pos2++];
-    while (pos1 <= split)  // пока первая последовательность непуста
+    while (pos1 <= split)  
         temp[pos3++] = a[pos1++];
 
-    // скопировать буфер temp в a[lb]...a[ub]
     for (pos3 = 0; pos3 < ub - lb + 1; pos3++) {
         a[lb + pos3].size = temp[pos3].size;
         strcpy(a[lb + pos3].name, temp[pos3].name);
@@ -98,15 +86,15 @@ void merge(struct Files* a, long lb, long split, long ub) {
 }
 
 void mergeSort(struct Files* a, long lb, long ub) {
-    long split;                   // индекс, по которому делим массив
+    long split;                  
 
-    if (lb < ub) {                // если есть более 1 элемента
+    if (lb < ub) {                
 
         split = (lb + ub) / 2;
 
-        mergeSort(a, lb, split);       // сортировать левую половину 
-        mergeSort(a, split + 1, lb);// сортировать правую половину 
-        merge(a, lb, split, ub);    // слить результаты в общий массив
+        mergeSort(a, lb, split);      
+        mergeSort(a, split + 1, lb);
+        merge(a, lb, split, ub);   
     }
 }
 
@@ -114,7 +102,7 @@ int quickSort(struct Files* files, int size) {
     int i, j;
     unsigned long long int center_size;
 
-    if (size == 0) return 1;
+    if (size == 0) { return 1; }
 
     i = 0;
     j = size - 1;
@@ -161,10 +149,10 @@ void shellSort(struct Files* a, long size) {
     long inc, i, j, seq[40];
     int s;
 
-    // вычисление последовательности приращений
+    
     s = increment(seq, size);
     while (s >= 0) {
-        // сортировка вставками с инкрементами inc[] 
+        
         inc = seq[s--];
 
         for (i = inc; i < size; i++) {
