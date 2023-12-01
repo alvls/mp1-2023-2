@@ -10,6 +10,7 @@
 
 #define MAX_FILES_PER_PAGE 100
 #define DIRECTORY_SIZE 1000
+#define COUTNSORT_MAXFILESIZE 1000000
 
 
 // Possible commands
@@ -239,7 +240,7 @@ void OpenDirectory(struct _finddata_t* FoundFiles, int* FoundFilesCount, char* D
     {
         char TimeWrite[30];
         ctime_s(TimeWrite, _countof(TimeWrite), &FoundFiles[i].time_write);
-        printf("%-3i : %-30.30s : %-10i : %.24s\n", i + 1, FoundFiles[i].name, FoundFiles[i].size, TimeWrite);
+        printf("%-3i : %-30.30s : %-10lu : %.24s\n", i + 1, FoundFiles[i].name, FoundFiles[i].size, TimeWrite);
     }
 
     if (*FoundFilesCount > 0)
@@ -425,7 +426,7 @@ void OpenSettings(Settings* UserSettings)
                 break;
 
             case 4:
-                printf("\nChoose Sorting Algorithm: \n0 - Bubble Sort;\n1 - Select Sort;\n2 - Insert Sort;\n3 - Merge Sort;\n4 - Quick Sort;\n5 - Shell Sort;\n6 - Count Sort (Size only, Size <= 1_000_000, otherwise defaults to Quick Sort)\n\n");
+                printf("\nChoose Sorting Algorithm: \n0 - Bubble Sort;\n1 - Select Sort;\n2 - Insert Sort;\n3 - Merge Sort;\n4 - Quick Sort;\n5 - Shell Sort;\n6 - Count Sort (Size only, Size <= %i, otherwise defaults to Quick Sort)\n\n", COUTNSORT_MAXFILESIZE);
 
                 NewValue = 0;
                 do
@@ -675,11 +676,11 @@ void CountSort(struct _finddata_t* Files, int Size, Settings UserSettings)
     int Condition = UserSettings.CompareMode == 0;
     if (Condition)
     {
-        int Max = 1;
+        unsigned long Max = 1;
         for (int i = 0; i < Size; i++)
             Max = Files[i].size > Max ? Files[i].size : Max;
 
-        Condition = Max <= 1000000;
+        Condition = Max <= COUTNSORT_MAXFILESIZE;
         if (Condition)
         {
            int* Counts = (int*)malloc(sizeof(int) * (Max + 1));
@@ -709,6 +710,7 @@ void CountSort(struct _finddata_t* Files, int Size, Settings UserSettings)
 
     if (!Condition)
     {
+        printf("\nCount Sort Error: sorting mode isn't 'Size' or file sizes are greater than %i !\n", COUTNSORT_MAXFILESIZE);
         QuickSort(Files, Size - 1, UserSettings);
     }
 }
