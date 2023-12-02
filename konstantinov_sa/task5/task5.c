@@ -183,7 +183,7 @@ void shellSort(file arr[], long size, enum Stype type, int rev) {
     }
 }
 
-void countingSort(file a[], long size, enum Stype type, int rev) { //CURSED
+void countingSort(file a[], long size, enum Stype type, int rev) {
     const long MAX_SIZE = 1000000; // Максимальный размер файла
 
     // Создаем массив для подсчета частот
@@ -238,6 +238,7 @@ void countingSort(file a[], long size, enum Stype type, int rev) { //CURSED
     free(temp);
 }
 
+// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 void printfiles(file* f, int count) {
     printf("\nИМЯ %40c РАЗМЕР\n",' ');
     for (int i = 0; i < count;i++) {
@@ -277,9 +278,8 @@ int main() {
 
     struct _finddata_t c_file;
     intptr_t hFile = -1L;
-    char path[200] = "E:\\TVR4\\3D\\Render\\*.*";
+    char path[200] = "C:\\*.*";
 
-    
     long count = 0;
     while (hFile == -1L) {
         count = 0;
@@ -309,8 +309,6 @@ int main() {
                 else {
                     printf("! MALLOC ERROR\n");
                 }
-
-
 
                 count++;
             } while (_findnext(hFile, &c_file) == 0);
