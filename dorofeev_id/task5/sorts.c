@@ -4,28 +4,12 @@
 #include "sorts.h"
 
 
-int comp_ascending_size(const void* a, const void* b)
-{
-	file* f1 = (file*)a;
-	file* f2 = (file*)b;
-
-	return f1->size - f2->size;
+int name_cmp(const wchar_t* a, const wchar_t* b) {
+	return wcscmp(a, b);
 }
 
-int comp_descending_size(const void* a, const void* b)
-{
-	file* f1 = (file*)a;
-	file* f2 = (file*)b;
-
-	return f2->size - f1->size;
-}
-
-int name_cmp(file* a, file* b)
-{
-	if (strcmp(a->name, b->name) >= 0)
-		return 1;
-	else
-		return 0;
+int size_cmp(const long a, const long b, int order) {
+	return (order == 1) ? (a - b) : (b - a);
 }
 
 void swap(file* a, file* b)
@@ -195,16 +179,53 @@ void merge_sort_size(file* files, int left, int right, int order)
 	}
 }
 
+int partition_size(file* files, int low, int high, int order) 
+{
+	long pivot = files[high].size;
+	int i = low - 1;
+
+	for (int j = low; j <= high - 1; j++) 
+	{
+		if (size_cmp(files[j].size, pivot, order) < 0) 
+		{
+			i++;
+			swap(&files[i], &files[j]);
+		}
+	}
+
+	swap(&files[i + 1], &files[high]);
+	return i + 1;
+}
+
 void hoar_size(file* files, int size, int order)
 {
-	if (order == ASCENDING)
+	int* stack = (int*)malloc(size * sizeof(int));
+	int top = -1;
+
+	stack[++top] = 0;
+	stack[++top] = size - 1;
+
+	while (top >= 0) 
 	{
-		qsort(files, size, sizeof(file), comp_ascending_size);
+		int h = stack[top--];
+		int l = stack[top--];
+
+		int p = partition_size(files, l, h, order);
+
+		if (p - 1 > l) 
+		{
+			stack[++top] = l;
+			stack[++top] = p - 1;
+		}
+
+		if (p + 1 < h) 
+		{
+			stack[++top] = p + 1;
+			stack[++top] = h;
+		}
 	}
-	if (order == DESCENDING)
-	{
-		qsort(files, size, sizeof(file), comp_descending_size);
-	}
+
+	free(stack);
 }
 
 void shell_size(file* files, int size, int order)
@@ -290,23 +311,6 @@ void counting_size(file* files, int size, int order)
 	}
 	free(count);
 	free(output);
-}
-
-
-int comp_ascending_name(const void* a, const void* b)
-{
-	file* f1 = (file*)a;
-	file* f2 = (file*)b;
-
-	return name_cmp(&f1, &f2);
-}
-
-int comp_descending_name(const void* a, const void* b)
-{
-	file* f1 = (file*)a;
-	file* f2 = (file*)b;
-
-	return name_cmp(&f2, &f1);
 }
 
 
@@ -468,16 +472,54 @@ void merge_sort_name(file* files, int left, int right, int order)
 	}
 }
 
+int partition_name(file* files, int low, int high) 
+{
+	wchar_t pivot[256];
+	wcscpy(pivot, files[high].name);
+	int i = low - 1;
+
+	for (int j = low; j <= high - 1; j++) 
+	{
+		if (name_cmp(files[j].name, pivot) < 0) 
+		{
+			i++;
+			swap(&files[i], &files[j]);
+		}
+	}
+
+	swap(&files[i + 1], &files[high]);
+	return i + 1;
+}
+
 void hoar_name(file* files, int size, int order)
 {
-	if (order == ASCENDING)
+	int* stack = (int*)malloc(size * sizeof(int));
+	int top = -1;
+
+	stack[++top] = 0;
+	stack[++top] = size - 1;
+
+	while (top >= 0) 
 	{
-		qsort(files, size, sizeof(file), comp_ascending_name);
+		int h = stack[top--];
+		int l = stack[top--];
+
+		int p = partition_name(files, l, h);
+
+		if (p - 1 > l) 
+		{
+			stack[++top] = l;
+			stack[++top] = p - 1;
+		}
+
+		if (p + 1 < h) 
+		{
+			stack[++top] = p + 1;
+			stack[++top] = h;
+		}
 	}
-	if (order == DESCENDING)
-	{
-		qsort(files, size, sizeof(file), comp_descending_name);
-	}
+
+	free(stack);
 }
 
 void shell_name(file* files, int size, int order)

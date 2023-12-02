@@ -8,12 +8,23 @@
 
 void measure_time(void (*sort_func)(file*, int, int), file* files, int amount, int order, const char* sort_name) {
     double start_time, end_time;
+    if (strcmp(sort_name, "Merge Sort by size") == 0 || strcmp(sort_name, "Merge Sort by name") == 0)
+    {
+        start_time = omp_get_wtime();
 
-    start_time = omp_get_wtime();
+        sort_func(files, 0, amount - 1, order);
 
-    sort_func(files, amount, order);
+        end_time = omp_get_wtime();
+    }
+    else
+    {
+        start_time = omp_get_wtime();
 
-    end_time = omp_get_wtime();
+        sort_func(files, amount, order);
+
+        end_time = omp_get_wtime();
+    }
+    
 
     printf("Time taken by %s: %f seconds\n", sort_name, end_time - start_time);
 }
@@ -171,14 +182,12 @@ int main()
                 case 4:
                     if (by == 1)
                     {
-                        merge_sort_size(lol, 0, file_count - 1, order);
                         measure_time(merge_sort_size, lol, file_count, order, "Merge Sort by size");
                         fl = 0;
                         break;
                     }
                     else
                     {
-                        merge_sort_name(lol, 0, file_count - 1, order);
                         measure_time(merge_sort_name, lol, file_count, order, "Merge Sort by name");
                         fl = 0;
                         break;
