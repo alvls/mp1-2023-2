@@ -195,7 +195,6 @@ void main()
     setlocale(LC_ALL, "rus");
     struct _finddata_t c_file;
     struct _finddata_t* sort;
-    struct _finddata_t* list_of_files;
     intptr_t hFile;
     char path[200];
     int flag = 1, sort_type, sorting_method, another_sort_type;
@@ -224,14 +223,13 @@ void main()
             count++;
         } while (_findnext(hFile, &c_file) == 0);
         sort = (struct _finddata_t*)malloc(count * sizeof(struct _finddata_t));
-        list_of_files = (struct _finddata_t*)malloc(count * sizeof(struct _finddata_t));
         hFile = _findfirst(path, &c_file);
         int kol = 0;
         do
         {
             if (kol < count)
             {
-                list_of_files[kol] = c_file;
+                sort[kol] = c_file;
                 kol++;
             }
         } while (_findnext(hFile, &c_file) == 0);
@@ -252,9 +250,7 @@ void main()
                     printf("Вы ввели неправильный номер сортировки!\n");
                     flag = 1;
                 }
-            } while (flag); 
-            for (int i = 0; i < count; i++)
-                sort[i] = list_of_files[i];
+            } while (flag);
             switch (sort_type)
             {
             case 1:
@@ -348,7 +344,6 @@ void main()
             }
         }
         free(sort);
-        free(list_of_files);
         system("cls");
     }
     system("pause");
