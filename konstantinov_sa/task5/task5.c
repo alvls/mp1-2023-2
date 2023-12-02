@@ -324,9 +324,14 @@ int main() {
     enum Stype type = size;
     int rev = 1;
     while (sortID != -1) {
+        int validargs = 0;
         printf("\nВведите три аргумента через пробел:\nТип сортировки 1-7, обычная или реверсивная сортировка 0-1, сортировка по размеру или имени (strcmp) 0-1\n Типы сортировок: \n1. пузырьком\n2. выбором\n3. вставками\n4. слиянием\n5. Хоара\n6. Шелла\n7. подсчетом (только по размеру) (Файлы больше миллиона байт сортируются по остатку от деления размера на миллион)\nДля выхода выберите сортировку -1\n");
-        scanf("%d %d %d", &sortID, &rev, &type);
-
+        while (validargs != 3) {
+            validargs = scanf("%d %d %d", &sortID, &rev, &type);
+            char c = 0;
+            while ((c = getchar()) != '\n');
+        }
+        
         switch (sortID) {
         case 1:
             sort = bubbleSort;
