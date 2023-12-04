@@ -84,9 +84,9 @@ void selection(int size)
 				k = j;
 				vsp = c_file_2[j];
 			}
-			c_file_2[k] = c_file_2[i];
-			c_file_2[i] = vsp;
 		}
+		c_file_2[k] = c_file_2[i];
+		c_file_2[i] = vsp;
 	}
 }
 
