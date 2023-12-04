@@ -17,7 +17,7 @@ file* get_files(wchar_t* path, int* file_count)
     {
         do {
             wchar_t date_buffer[30];
-            if (count <= 100)
+            if (count <= 999999)
             {
                 // Dynamic memory allocation
                 files = (file*)realloc(files, (count + 1) * sizeof(file));
