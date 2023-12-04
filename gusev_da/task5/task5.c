@@ -325,7 +325,6 @@ void sort_menu(char path[MAX_PATH_LENGTH + 1])
     if (method_1 == 8)
         return;
     file = all_files(path, &count);
-    begin = clock();
     do
     {
         system("cls");
@@ -334,6 +333,7 @@ void sort_menu(char path[MAX_PATH_LENGTH + 1])
     } while (!scan_methods(&method_2, 1, 3));
     if (method_2 == 3)
         return;
+    begin = clock();
     switch (method_1)
     {
     case 1:
