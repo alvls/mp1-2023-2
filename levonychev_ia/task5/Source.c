@@ -28,7 +28,7 @@ int main()
     intptr_t hFile;
     char path[MAX_SIZE_DIRECTORY];
     double start, end;
-    size_t count;
+    int count;
     char choice;
     char descend_ascend;
     char flag;
@@ -123,7 +123,7 @@ int main()
             struct _finddata_t* c_file_buffer = malloc(sizeof(struct _finddata_t) * count);
             hFile = _findfirst(path, &c_file);
 
-            for (size_t i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 _findnext(hFile, &c_file);
                 c_file_buffer[i] = c_file;
@@ -246,7 +246,7 @@ int main()
 
 void bubble_sort(struct _finddata_t* a, size_t count)
 {
-    size_t i, j;
+    int i, j;
     struct _finddata_t temp;
     for (i = 0; i < count; i++)
     {
@@ -265,7 +265,7 @@ void bubble_sort(struct _finddata_t* a, size_t count)
 
 void select_sort(struct _finddata_t* a, size_t count)
 {
-    size_t i, j, k;
+    int i, j, k;
     struct _finddata_t temp;
 
     for (i = 0; i < count; i++)
@@ -288,7 +288,7 @@ void select_sort(struct _finddata_t* a, size_t count)
 
 void insert_sort(struct _finddata_t* a, size_t count)
 {
-    size_t i, j;
+    int i, j;
     struct _finddata_t temp;
     for (i = 0; i < count; i++)
     {
@@ -301,7 +301,7 @@ void insert_sort(struct _finddata_t* a, size_t count)
 }
 void merge_sort(struct _finddata_t* a, size_t left, size_t right)
 {
-    size_t middle;
+    int middle;
     if (left < right)
     { 
 
@@ -315,9 +315,9 @@ void merge_sort(struct _finddata_t* a, size_t left, size_t right)
 
 void merge(struct _finddata_t* a, size_t left, size_t middle, size_t right)
 {
-    size_t pos1 = left;
-    size_t pos2 = middle + 1;
-    size_t pos3 = 0;
+    int pos1 = left;
+    int pos2 = middle + 1;
+    int pos3 = 0;
     struct _finddata_t* temp = malloc(sizeof(struct _finddata_t) * (right - left + 1));
 
     while (pos1 <= middle && pos2 <= right)
@@ -340,7 +340,7 @@ void merge(struct _finddata_t* a, size_t left, size_t middle, size_t right)
 void quick_sort(struct _finddata_t* a, size_t count)
 {
 
-    size_t i = 0, j = count - 1;
+    int i = 0, j = count - 1;
     struct _finddata_t temp, p;
 
     p = a[count / 2];
@@ -366,8 +366,8 @@ void quick_sort(struct _finddata_t* a, size_t count)
 
 void shell_sort(struct _finddata_t* a, size_t count)
 {
-    size_t i, j;
-    size_t step;
+    int i, j;
+    int step;
     struct _finddata_t temp;
     for (step = count / 2; step > 0; step /= 2)
         for (i = step; i < count; i++)
@@ -387,7 +387,7 @@ void shell_sort(struct _finddata_t* a, size_t count)
 
 void count_sort(struct _finddata_t* a, size_t count)
 {
-    size_t i;
+    int i;
     _fsize_t k = max_size(a, count);
     _fsize_t* arr_count = malloc(sizeof(int) * (k + 1));
     memset(arr_count, 0, sizeof(int) * (k + 1));
