@@ -15,7 +15,7 @@ int main()
     struct _finddata_t c_file;
     intptr_t hFile;
 
-    struct file_info* files = malloc(1000 * sizeof(struct file_info));
+    struct file_info* files = malloc(5000 * sizeof(struct file_info));
 
     int i = 0; // количество файлов
     double start, end;
@@ -38,9 +38,6 @@ int main()
                 continue;
             strcpy_s(files[i].name, sizeof(files[i].name), c_file.name);
             files[i].size = c_file.size;
-            files[i].time_create = c_file.time_create;
-            files[i].time_access = c_file.time_access;
-            files[i].time_write = c_file.time_write;
             i++;
         } while (_findnext(hFile, &c_file) == 0);
         _findclose(hFile);
@@ -86,7 +83,7 @@ int main()
             }
             else
             {
-                struct file_info* copy = malloc(1000 * sizeof(struct file_info));
+                struct file_info* copy = malloc(5000 * sizeof(struct file_info));
                 for (int n = 0; n < i; n++)
                 {
                     copy[n] = files[n];

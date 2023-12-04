@@ -1,6 +1,6 @@
 #include "sort.h"
 
-void BubbleSort(struct file_info* files, int size)
+void BubbleSort(struct file_info* files, long size)
 {
     long i, j;
     struct file_info temp;
@@ -153,7 +153,7 @@ void ShellSort(struct file_info* files, long size)
     }
 }
 
-void CountingSort(struct file_info* files, int size)
+void CountingSort(struct file_info* files, long size)
 {
     int max_value = 0;
     for (int i = 0; i < size; i++)
