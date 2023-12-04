@@ -6,9 +6,9 @@ import random
 import uuid
 
 FILES_DIR = './test_dir'
-EXE_PATH = '../../x64/Debug/task5.exe'
+EXE_PATH = '../../x64/Release/task5.exe'
 BENCHMARK_PATHS = {
-    'Реальные данные (папка загрузки)': 'D:\\Downloads\\*.*',
+    'Реальные данные (папка с файлами проекта)': 'C:\\GitHub Repos\\LAPI_VR\\Library\\ScriptAssemblies\\*.*',
     'Windows': 'C:\\Windows\\*.*',
     'Пользователь': 'C:\\Users\\Алексей\\*.*',
 }
@@ -22,7 +22,7 @@ def benchmark_once(path):
     output = output.split('\n')[:-1]
     for r in output:
         sort_name, elapsed_time = r.split(':')
-        out[sort_name] = float(elapsed_time)
+        out[sort_name] = float(elapsed_time) * 1000
     
     return out
 

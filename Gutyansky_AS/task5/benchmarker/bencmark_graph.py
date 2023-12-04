@@ -1,4 +1,5 @@
 import json
+from scipy.signal import savgol_filter
 
 data = {}
 
@@ -9,14 +10,22 @@ import matplotlib.pyplot as plt
 
 x = []
 dlines = {}
+count = 1
 for i, n in enumerate(data):
+    if not n.isdigit():
+        continue
+    
     sorts = data[n]
     for sn in sorts:
         if sn not in dlines:
             dlines[sn] = list()
         
         dlines[sn].append(sorts[sn])
-    x.append(i + 1)
+    x.append(count)
+    count += 1
+
+for dline in dlines:
+    dlines[dline] = savgol_filter(dlines[dline], 100, 1)
 
 fig, ax = plt.subplots(nrows=2, ncols=4, sharex = True)
 
