@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define ASCENDING 1
 #define DESCENDING 2
+#define MAX_FILE_SIZE 3000000000
 #include "sorts.h"
 
 
@@ -260,55 +261,78 @@ void shell_size(file* files, int size, int order)
 }
 
 
-void counting_size(file* files, int size, int order)
-{
+void counting_size(file* files, int size, int order) {
+	if (size <= 0) {
+		// Обработка случая, когда массив пуст или имеет неположительный размер
+		return;
+	}
+
 	long max = files[0].size;
 	long min = files[0].size;
-	for (int i = 1; i < size; i++)
-	{
-		if (files[i].size > max)
-		{
+
+	// Находим максимальный и минимальный размер файлов
+	for (int i = 1; i < size; i++) {
+		if (files[i].size > max) {
 			max = files[i].size;
 		}
-		if (files[i].size < min)
-		{
+		if (files[i].size < min) {
 			min = files[i].size;
 		}
 	}
-	long range = max - min + 1;
-	int* count = (int*)malloc(range * sizeof(int));
-	for (int i = 0; i < range; i++)
-	{
+
+	// Ограничиваем максимальный размер файла до MAX_FILE_SIZE
+	max = (max > MAX_FILE_SIZE) ? MAX_FILE_SIZE : max;
+
+	// Вычисляем новый диапазон размеров файлов
+	unsigned long long range = max - min + 1;
+
+	// Выделяем память для массива count
+	unsigned long long* count = (unsigned long long*)malloc(range * sizeof(unsigned long long));
+
+	if (count == NULL) {
+		// Обработка случая, когда malloc завершился неудачно
+		return;
+	}
+
+	// Инициализируем массив count
+	for (int i = 0; i < range; i++) {
 		count[i] = 0;
 	}
-	for (int i = 0; i < size; i++)
-	{
+
+	// Считаем количество файлов для каждого размера
+	for (int i = 0; i < size; i++) {
 		count[files[i].size - min]++;
 	}
-	for (int i = 1; i < range; i++)
-	{
+
+	// Обновляем массив count для хранения кумулятивных сумм
+	for (int i = 1; i < range; i++) {
 		count[i] += count[i - 1];
 	}
+
+	// Выделяем память для массива output
 	file* output = (file*)malloc(size * sizeof(file));
+
 	if (order == ASCENDING) {
-		for (int i = size - 1; i >= 0; i--)
-		{
+		// Сортируем файлы в порядке возрастания
+		for (int i = size - 1; i >= 0; i--) {
 			output[count[files[i].size - min] - 1] = files[i];
 			count[files[i].size - min]--;
 		}
 	}
-	else if (order == DESCENDING)
-	{
-		for (int i = 0; i < size; i++)
-		{
+	else if (order == DESCENDING) {
+		// Сортируем файлы в порядке убывания
+		for (int i = 0; i < size; i++) {
 			output[size - count[files[i].size - min]] = files[i];
 			count[files[i].size - min]--;
 		}
 	}
-	for (int i = 0; i < size; i++)
-	{
+
+	// Копируем отсортированный результат обратно в исходный массив
+	for (int i = 0; i < size; i++) {
 		files[i] = output[i];
 	}
+
+	// Освобождаем выделенную память
 	free(count);
 	free(output);
 }
