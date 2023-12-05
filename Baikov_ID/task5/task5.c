@@ -15,9 +15,9 @@ struct FileInfo {
     long fileSize;
 };
 
-struct FileInfo currentFile;
-struct FileInfo* fileList;
-intptr_t fileHandle;
+struct _finddata_t currentFileWindows;
+struct _finddata_t* fileListWindows;
+intptr_t fileHandleWindows;
 
 void changeDirectory() {
     printf("Введите путь к директории: ");
@@ -36,9 +36,9 @@ void printAscending(int size) {
     printf("----         ---- %24c   ----\n", ' ');
     for (int i = 0; i < size; i++) {
         char buffer[30];
-        ctime_s(buffer, _countof(buffer), &fileList[i].writeTime);
+        ctime_s(buffer, _countof(buffer), &fileListWindows[i].time_write);
         if (count <= 20) {
-            printf("%-12.12s %.24s  %10ld Байт\n", fileList[i].name, buffer, fileList[i].fileSize);
+            printf("%-12.12s %.24s  %10ld Байт\n", fileListWindows[i].name, buffer, fileListWindows[i].size);
         }
         count++;
     }
@@ -52,9 +52,9 @@ void printDescending(int size) {
     printf("----         ---- %24c   ----\n", ' ');
     for (int i = size - 1; i >= 0; i--) {
         char buffer[30];
-        ctime_s(buffer, _countof(buffer), &fileList[i].writeTime);
+        ctime_s(buffer, _countof(buffer), &fileListWindows[i].time_write);
         if (count <= 20) {
-            printf("%-12.12s %.24s  %10ld Байт\n", fileList[i].name, buffer, fileList[i].fileSize);
+            printf("%-12.12s %.24s  %10ld Байт\n", fileListWindows[i].name, buffer, fileListWindows[i].size);
         }
         count++;
     }
@@ -62,82 +62,82 @@ void printDescending(int size) {
 }
 
 void bubbleSort(int size) {
-    struct FileInfo temp;
+    struct _finddata_t tempFile;
     int i, j;
     for (i = 0; i < size; i++) {
         for (j = size - 1; j > i; j--) {
-            if (fileList[j].fileSize < fileList[j - 1].fileSize) {
-                temp = fileList[j];
-                fileList[j] = fileList[j - 1];
-                fileList[j - 1] = temp;
+            if (fileListWindows[j].size < fileListWindows[j - 1].size) {
+                tempFile = fileListWindows[j];
+                fileListWindows[j] = fileListWindows[j - 1];
+                fileListWindows[j - 1] = tempFile;
             }
         }
     }
 }
 
 void selectionSort(int size) {
-    struct FileInfo temp;
+    struct _finddata_t tempFile;
     int i, j, k;
     for (i = 0; i < size; i++) {
         k = i;
-        temp = fileList[i];
+        tempFile = fileListWindows[i];
         for (j = i + 1; j < size; j++) {
-            if (fileList[j].fileSize < temp.fileSize) {
+            if (fileListWindows[j].size < tempFile.size) {
                 k = j;
-                temp = fileList[j];
+                tempFile = fileListWindows[j];
             }
-            fileList[k] = fileList[i];
-            fileList[i] = temp;
+            fileListWindows[k] = fileListWindows[i];
+            fileListWindows[i] = tempFile;
         }
     }
 }
 
 void insertionSort(int size) {
-    struct FileInfo temp;
+    struct _finddata_t tempFile;
     int i, j;
     for (i = 0; i < size; i++) {
-        temp = fileList[i];
-        for (j = i - 1; j >= 0 && fileList[j].fileSize > temp.fileSize; j--) {
-            fileList[j + 1] = fileList[j];
+        tempFile = fileListWindows[i];
+        for (j = i - 1; j >= 0 && fileListWindows[j].size > tempFile.size; j--) {
+            fileListWindows[j + 1] = fileListWindows[j];
         }
-        fileList[j + 1] = temp;
+        fileListWindows[j + 1] = tempFile;
     }
 }
 
 void mergeSort1(int left, int mid, int right) {
-    struct FileInfo* temp = (struct FileInfo*)malloc((right - left + 1) * sizeof(struct FileInfo));
+    struct _finddata_t* tempFile = (struct _finddata_t*)malloc((right - left + 1) * sizeof(struct _finddata_t));
     int k = 0, i = left, j = mid + 1;
     while (k < (right - left + 1)) {
         while ((i <= mid) && (j <= right)) {
-            if (fileList[i].fileSize < fileList[j].fileSize) {
-                temp[k] = fileList[i];
+            if (fileListWindows[i].size < fileListWindows[j].size) {
+                tempFile[k] = fileListWindows[i];
                 i++;
             }
             else {
-                temp[k] = fileList[j];
+                tempFile[k] = fileListWindows[j];
                 j++;
             }
             k++;
         }
         if (i > mid) {
             while (j <= right) {
-                temp[k] = fileList[j];
+                tempFile[k] = fileListWindows[j];
                 j++;
                 k++;
             }
         }
         else {
             while (i <= mid) {
-                temp[k] = fileList[i];
+                tempFile[k] = fileListWindows[i];
                 i++;
                 k++;
             }
         }
     }
     for (i = left; i <= right; i++) {
-        fileList[i] = temp[i - left];
+        fileListWindows[i] = tempFile[i - left];
     }
-    free(temp);
+    free(tempFile);
 }
 
 void mergeSort(int left, int right) {
@@ -156,21 +156,21 @@ void mergeSort(int left, int right) {
     mergeSort1(left, mid, right);
 }
 
-void quickSort(struct FileInfo* array, int size) {
+void quickSort(struct _finddata_t* array, int size) {
     int i = 0, j = size - 1;
-    struct FileInfo temp, p;
-    p = array[size >> 1];
+    struct _finddata_t tempFile, pivot;
+    pivot = array[size >> 1];
     do {
-        while (array[i].fileSize < p.fileSize) {
+        while (array[i].size < pivot.size) {
             i++;
         }
-        while (array[j].fileSize > p.fileSize) {
+        while (array[j].size > pivot.size) {
             j--;
         }
         if (i <= j) {
-            temp = array[i];
+            tempFile = array[i];
             array[i] = array[j];
-            array[j] = temp;
+            array[j] = tempFile;
             i++;
             j--;
         }
@@ -185,16 +185,16 @@ void quickSort(struct FileInfo* array, int size) {
 
 void shellSort(int size) {
     int gap = 4, j;
-    struct FileInfo temp;
+    struct _finddata_t tempFile;
     while (gap > 0) {
         for (int i = 0; i < size; i++) {
             j = i;
-            temp = fileList[i];
-            while ((j >= gap) && (fileList[j - gap].fileSize > temp.fileSize)) {
-                fileList[j] = fileList[j - gap];
+            tempFile = fileListWindows[i];
+            while ((j >= gap) && (fileListWindows[j - gap].size > tempFile.size)) {
+                fileListWindows[j] = fileListWindows[j - gap];
                 j = j - gap;
             }
-            fileList[j] = temp;
+            fileListWindows[j] = tempFile;
         }
         if (gap > 1) {
             gap /= 2;
@@ -206,112 +206,130 @@ void shellSort(int size) {
 }
 
 void countingSort(int size) {
-    struct FileInfo temp;
-    int max, min, i, j;
-    min = max = fileList[0].fileSize;
-    for (i = 1; i < size; i++) {
-        if (fileList[i].fileSize > max) {
-            max = fileList[i].fileSize;
-        }
-        if (fileList[i].fileSize < min) {
-            min = fileList[i].fileSize;
+    long maxFileSize = fileListWindows[0].size;
+    for (int i = 1; i < size; i++) {
+        if (fileListWindows[i].size > maxFileSize) {
+            maxFileSize = fileListWindows[i].size;
         }
     }
-    int range = max - min + 1;
-    int* count = (int*)malloc(range * sizeof(int));
-    struct FileInfo* output = (struct FileInfo*)malloc(size * sizeof(struct FileInfo));
-    for (i = 0; i < size; i++) {
+    long* count = (long*)malloc((maxFileSize + 1) * sizeof(long));
+    for (long i = 0; i <= maxFileSize; i++) {
         count[i] = 0;
     }
-    for (i = 0; i < size; i++) {
-        count[fileList[i].fileSize - min]++;
+    for (int i = 0; i < size; i++) {
+        count[fileListWindows[i].size]++;
     }
-    for (i = 1; i < range; i++) {
+    for (long i = 1; i <= maxFileSize; i++) {
         count[i] += count[i - 1];
     }
-    for (i = size - 1; i >= 0; i--) {
-        output[count[fileList[i].fileSize - min] - 1] = fileList[i];
-        count[fileList[i].fileSize - min]--;
+
+    struct _finddata_t* tempFile = (struct _finddata_t*)malloc(size * sizeof(struct _finddata_t));
+
+    for (int i = size - 1; i >= 0; i--) {
+        tempFile[count[fileListWindows[i].size] - 1] = fileListWindows[i];
+        count[fileListWindows[i].size]--;
     }
-    for (i = 0; i < size; i++) {
-        fileList[i] = output[i];
+
+    for (int i = 0; i < size; i++) {
+        fileListWindows[i] = tempFile[i];
     }
+
     free(count);
-    free(output);
+    free(tempFile);
 }
 
-void copyFiles(struct FileInfo arr[], int size) {
+void copyFiles(struct _finddata_t arr[], int size) {
     for (int i = 0; i < size; i++) {
-        fileList[i] = arr[i];
+        fileListWindows[i] = arr[i];
     }
 }
 
 int ascendingOrDescending() {
-    int order;
+    int choice;
     printf("\nСортировка по возрастанию или убыванию? (1 - возрастание, 2 - убывание): ");
-    scanf_s("%d", &order);
-    return order;
+    scanf_s("%d", &choice);
+    return choice;
 }
 
 int exitProgram() {
-    int decision;
+    int choice;
     printf("\n\nВыйти из программы? (1 - Да, 2 - Нет): ");
-    scanf_s("%d", &decision);
-    return decision;
+    scanf_s("%d", &choice);
+    return choice;
 }
 
 int main() {
     setlocale(LC_ALL, "Rus");
 
-
     changeDirectory();
 
-    if ((fileHandle = _findfirst("*.*", &currentFile)) == -1L) {
+    if ((fileHandleWindows = _findfirst("*.*", &currentFileWindows)) == -1L) {
         printf("Не найдено ни одного файла.\n");
     }
     else {
         int count = 0;
         do {
             count++;
-        } while (_findnext(fileHandle, &currentFile) == 0);
-        _findclose(fileHandle);
-        fileList = (struct FileInfo*)malloc(count * sizeof(struct FileInfo));
-        fileHandle = _findfirst("*.*", &currentFile);
+        } while (_findnext(fileHandleWindows, &currentFileWindows) == 0);
+        _findclose(fileHandleWindows);
+        fileListWindows = (struct _finddata_t*)malloc(count * sizeof(struct _finddata_t));
+        fileHandleWindows = _findfirst("*.*", &currentFileWindows);
         for (int i = 0; i < count; i++) {
-            fileList[i] = currentFile;
-            _findnext(fileHandle, &currentFile);
+            fileListWindows[i] = currentFileWindows;
+            _findnext(fileHandleWindows, &currentFileWindows);
         }
-        _findclose(fileHandle);
+        _findclose(fileHandleWindows);
 
         printf("\nНачальный список файлов:\n");
         printAscending(count);
 
         int choice;
         do {
-            printf("\nВыберите метод сортировки (1 - пузырек, 2 - выбор, 3 - вставка, 4 - слияние, 5 - Хоара, 6 - Шелла, 7 - подсчет, 0 - выход): ");
+            printf("\nВыберите метод сортировки (1 - пузырек, 2 - выбор, 3 - вставка, "
+                "4 - слияние, 5 - Хоара, 6 - Шелла, 7 - подсчет, 0 - выход: ");
             scanf_s("%d", &choice);
+
+            double startTime, endTime;
+
             switch (choice) {
             case 1:
+                startTime = omp_get_wtime();
                 bubbleSort(count);
+                endTime = omp_get_wtime();
                 break;
             case 2:
+                startTime = omp_get_wtime();
                 selectionSort(count);
+                endTime = omp_get_wtime();
                 break;
             case 3:
+                startTime = omp_get_wtime();
                 insertionSort(count);
+                endTime = omp_get_wtime();
                 break;
             case 4:
+                startTime = omp_get_wtime();
                 mergeSort(0, count - 1);
+                endTime = omp_get_wtime();
                 break;
             case 5:
-                quickSort(fileList, count);
+                startTime = omp_get_wtime();
+                quickSort(fileListWindows, count);
+                endTime = omp_get_wtime();
                 break;
             case 6:
+                startTime = omp_get_wtime();
                 shellSort(count);
+                endTime = omp_get_wtime();
                 break;
             case 7:
+                startTime = omp_get_wtime();
                 countingSort(count);
+                endTime = omp_get_wtime();
                 break;
+                //           case 8: 
+                //               changeDirectory();
+                //               break;
             case 0:
                 break;
             default:
@@ -327,9 +345,10 @@ int main() {
                     printDescending(count);
                 }
             }
+            printf("\nВремя выполнения: %f секунд\n", endTime - startTime);
         } while (choice != 0);
 
-        free(fileList);
+        free(fileListWindows);
     }
 
     return 0;
