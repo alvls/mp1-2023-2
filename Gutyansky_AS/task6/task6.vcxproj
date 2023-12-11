@@ -111,6 +111,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source.c" />
+    <ClCompile Include="tailor_math.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="taylor_math.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
