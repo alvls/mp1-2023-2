@@ -47,7 +47,7 @@ void insertSort(struct Files* a, long size) {
     unsigned long long x;
     long i, j;
 
-    for (i = 0; i < size; i++) {  
+    for (i = 0; i < size; i++) {  //i = 1, тк для 0 итерации нет
         x = a[i].size;
         for (j = i - 1; j >= 0 && a[j].size > x; j--)
             swap(a, j + 1, j); 
@@ -116,8 +116,6 @@ void shellSort(struct Files* a, long size) {
             tmp[0].size = a[i].size;
             strcpy(tmp[0].name, a[i].name);
             for (j = i - inc; (j >= 0) && (a[j].size > tmp[0].size); j -= inc) {
-                //a[j + inc].size = a[j].size;
-                //strcpy(a[j + inc].name, a[j].name);
                 swap(a, j + inc, j);
             }
             a[j + inc].size = tmp[0].size;
@@ -143,7 +141,7 @@ int countingSort(struct Files* files, int len) {
     
     unsigned long long  range = maxSize - minSize + 1;
     // maybe even less
-    if (range > 100000) { printf("Too big files. Please change sorting method \n"); return -1; }
+    //if (range > 100000) { printf("Too big files. Please change sorting method \n"); return -1; }
     unsigned long long* count =  (unsigned long long*)calloc(range, sizeof(unsigned long long));
 
     struct Files* tmp = (struct Files*)malloc(sizeof(struct Files) * len);
