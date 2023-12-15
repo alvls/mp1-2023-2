@@ -49,7 +49,7 @@ int main()
 {
 	func_arr();
 	int func, flag, mode, count;
-	double x, acrc;
+	double x, acrc, pi = 3.141592;
 	setlocale(LC_ALL, "rus");
 	printf("\nВыберите функцию:\n1.sin(x)\n2.cos(x)\n3.e^x\n4.csc(x)\n");
 	do
@@ -87,6 +87,11 @@ int main()
 			else
 				flag = 1;
 		} while (flag == 0);
+		if ((func == 1) || (func == 2))
+		{
+			while (x > (2 * pi))
+				x = x - 2 * pi;
+		}
 		funct(acrc, mode, count, x, func);
 		break;
 	case 2:
@@ -101,6 +106,11 @@ int main()
 			else
 				flag = 1;
 		} while (flag == 0);
+		if ((func == 1) || (func == 2))
+		{
+			while (x > (2 * pi))
+				x = x - 2 * pi;
+		}
 		funct(1, mode, count, x, func);
 		break;
 	default:
