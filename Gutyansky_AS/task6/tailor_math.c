@@ -1,5 +1,7 @@
 #include "taylor_math.h"
 
+#include <math.h>
+
 #define PI 3.14159265358979323846
 
 double taylor_exp(double x, unsigned int members_count, double accuracy) {
@@ -15,7 +17,7 @@ double taylor_exp(double x, unsigned int members_count, double accuracy) {
 
 		member *= (x / i);
 
-		if (member < accuracy) {
+		if (abs(member) < accuracy) {
 			break;
 		}
 	}
@@ -36,7 +38,7 @@ double taylor_sin(double x, unsigned int members_count, double accuracy) {
 
 		member *= -(x * x) / ((2*i) * (2*i + 1));
 
-		if (member < accuracy) {
+		if (abs(member) < accuracy) {
 			break;
 		}
 	}
@@ -57,7 +59,7 @@ double taylor_cos(double x, unsigned int members_count, double accuracy) {
 
 		member *= -(x * x) / ((2 * i) * (2 * i - 1));
 
-		if (member < accuracy) {
+		if (abs(member) < accuracy) {
 			break;
 		}
 	}
@@ -78,7 +80,7 @@ double taylor_arcsin(double x, unsigned int members_count, double accuracy) {
 
 		member *= (x * x) * (i * i) / ((i + 1) * (i + 2));
 
-		if (member < accuracy) {
+		if (abs(member) < accuracy) {
 			break;
 		}
 	}
