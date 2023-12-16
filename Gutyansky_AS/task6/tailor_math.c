@@ -17,7 +17,7 @@ double taylor_exp(double x, unsigned int members_count, double accuracy) {
 
 		member *= (x / i);
 
-		if (abs(member) < accuracy) {
+		if (fabs(member) < accuracy) {
 			break;
 		}
 	}
@@ -38,7 +38,7 @@ double taylor_sin(double x, unsigned int members_count, double accuracy) {
 
 		member *= -(x * x) / ((2*i) * (2*i + 1));
 
-		if (abs(member) < accuracy) {
+		if (fabs(member) < accuracy) {
 			break;
 		}
 	}
@@ -51,6 +51,10 @@ double taylor_cos(double x, unsigned int members_count, double accuracy) {
 	double member;
 	unsigned int i;
 
+	if (fabs(x) > 1.0) {
+		return NAN;
+	}
+
 	res = 0.0;
 	member = 1.0;
 
@@ -59,7 +63,7 @@ double taylor_cos(double x, unsigned int members_count, double accuracy) {
 
 		member *= -(x * x) / ((2 * i) * (2 * i - 1));
 
-		if (abs(member) < accuracy) {
+		if (fabs(member) < accuracy) {
 			break;
 		}
 	}
@@ -72,6 +76,10 @@ double taylor_arcsin(double x, unsigned int members_count, double accuracy) {
 	double member;
 	unsigned int i;
 
+	if (fabs(x) > 1.0) {
+		return NAN;
+	}
+
 	res = 0.0;
 	member = x;
 
@@ -80,7 +88,7 @@ double taylor_arcsin(double x, unsigned int members_count, double accuracy) {
 
 		member *= (x * x) * (i * i) / ((i + 1) * (i + 2));
 
-		if (abs(member) < accuracy) {
+		if (fabs(member) < accuracy) {
 			break;
 		}
 	}

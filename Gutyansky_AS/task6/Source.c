@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <math.h>
 #include "taylor_math.h"
 
 #define FUNCTIONS_COUNT 5
@@ -11,11 +12,12 @@
 #define STR_(X) #X
 #define STR(X) STR_(X)
 
+typedef double (*StdFunction)(double);
 typedef double (*MathFunction)(double, unsigned int, double);
 
 typedef struct {
 	int mode;
-	MathFunction function;
+	int function_index;
 	double val;
 	union {
 		struct {
@@ -26,12 +28,20 @@ typedef struct {
 	};
 } CalculationInfo;
 
-const MathFunction math_functions[FUNCTIONS_COUNT] = {
+const MathFunction taylor_functions[FUNCTIONS_COUNT] = {
 	taylor_exp,
 	taylor_sin,
 	taylor_cos,
 	taylor_arcsin,
 	taylor_arccos
+};
+
+const StdFunction std_functions[FUNCTIONS_COUNT] = {
+	exp,
+	sin,
+	cos,
+	asin,
+	acos
 };
 
 void user_loop(void);
@@ -42,6 +52,7 @@ void mode_menu(CalculationInfo* calc_info);
 void members_count_menu(CalculationInfo* calc_info);
 void experiment_count_menu(CalculationInfo* calc_info);
 void single_calculation(CalculationInfo* calc_info);
+void experiment_calculation(CalculationInfo* calc_info);
 int try_read_int(int* result, int min_value, int max_value);
 
 int main() {
@@ -79,6 +90,7 @@ void user_loop(void) {
 			}
 			else {
 				experiment_count_menu(&info);
+				experiment_calculation(&info);
 			}
 		}
 	}
@@ -97,7 +109,7 @@ void function_menu(CalculationInfo* calc_info) {
 		printf(">>> ");
 	} while (!try_read_int(&menu_choice, 1, FUNCTIONS_COUNT));
 
-	calc_info->function = math_functions[menu_choice - 1];
+	calc_info->function_index = menu_choice - 1;
 }
 
 void number_menu(CalculationInfo* calc_info) {
@@ -107,7 +119,7 @@ void number_menu(CalculationInfo* calc_info) {
 	do {
 		read_arguments = 0;
 		printf("Выберите число, от которого нужно посчитать функцию:\n");
-		printf(">>>");
+		printf(">>> ");
 		read_arguments = scanf("%lf", &val);
 		while (getchar() != '\n');
 	} while (read_arguments != 1);
@@ -168,9 +180,25 @@ void experiment_count_menu(CalculationInfo* calc_info) {
 void single_calculation(CalculationInfo* calc_info) {
 	double res;
 
-	res = calc_info->function(calc_info->val, calc_info->members_count, calc_info->accuracy);
+	res = taylor_functions[calc_info->function_index](calc_info->val, calc_info->members_count, calc_info->accuracy);
 
 	printf("Результат вычисления: %lf\n", res);
+}
+
+void experiment_calculation(CalculationInfo* calc_info) {
+	int i;
+	double res_taylor;
+	double res_mathlib;
+	double error;
+
+	printf("Кол-во слагаемых Оценка          Эталонное знач. Абс. ошибка\n");
+	printf("---------------- --------------- --------------- ---------------\n");
+	for (i = 1; i <= calc_info->n_max; i++) {
+		res_taylor = taylor_functions[calc_info->function_index](calc_info->val, i, 0);
+		res_mathlib = std_functions[calc_info->function_index](calc_info->val);
+		error = fabs(res_mathlib - res_taylor);
+		printf("%16d %-15lf %-15lf %-15lf\n", i, res_taylor, res_mathlib, error);
+	}
 }
 
 int try_read_int(int* result, int min_value, int max_value) {
