@@ -18,7 +18,7 @@ typedef enum ApplicationState {
 
 void user_loop(ProductDatabase* database, Check* check);
 Barcode read_barcode(void);
-ApplicationState main_menu(Check* check);
+ApplicationState user_loop(Check* check);
 ApplicationState main_menu_check(void);
 ApplicationState main_menu_no_check(void);
 ApplicationState product_info_menu(ProductDatabase* database, Check* check);
@@ -60,7 +60,7 @@ void user_loop(ProductDatabase* database, Check* check) {
 	while (app_state != EXIT) {
 		switch (app_state) {
 		case MAIN_MENU:
-			app_state = main_menu(check);
+			app_state = user_loop(check);
 			break;
 		case PRODUCT_INFO:
 			app_state = product_info_menu(database, check);
@@ -81,7 +81,7 @@ void user_loop(ProductDatabase* database, Check* check) {
 	}
 }
 
-ApplicationState main_menu(Check* check) {
+ApplicationState user_loop(Check* check) {
 	if (check->length > 0) {
 		return main_menu_check();
 	}

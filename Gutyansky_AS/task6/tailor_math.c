@@ -2,7 +2,7 @@
 
 #define PI 3.14159265358979323846
 
-double taylor_exp(double x, unsigned int members_count) {
+double taylor_exp(double x, unsigned int members_count, double accuracy) {
 	double res;
 	double member;
 	unsigned int i;
@@ -14,12 +14,16 @@ double taylor_exp(double x, unsigned int members_count) {
 		res += member;
 
 		member *= (x / i);
+
+		if (member < accuracy) {
+			break;
+		}
 	}
 
 	return res;
 }
 
-double taylor_sin(double x, unsigned int members_count) {
+double taylor_sin(double x, unsigned int members_count, double accuracy) {
 	double res;
 	double member;
 	unsigned int i;
@@ -31,12 +35,16 @@ double taylor_sin(double x, unsigned int members_count) {
 		res += member;
 
 		member *= -(x * x) / ((2*i) * (2*i + 1));
+
+		if (member < accuracy) {
+			break;
+		}
 	}
 
 	return res;
 }
 
-double taylor_cos(double x, unsigned int members_count) {
+double taylor_cos(double x, unsigned int members_count, double accuracy) {
 	double res;
 	double member;
 	unsigned int i;
@@ -48,12 +56,16 @@ double taylor_cos(double x, unsigned int members_count) {
 		res += member;
 
 		member *= -(x * x) / ((2 * i) * (2 * i - 1));
+
+		if (member < accuracy) {
+			break;
+		}
 	}
 
 	return res;
 }
 
-double taylor_arcsin(double x, unsigned int members_count) {
+double taylor_arcsin(double x, unsigned int members_count, double accuracy) {
 	double res;
 	double member;
 	unsigned int i;
@@ -65,11 +77,15 @@ double taylor_arcsin(double x, unsigned int members_count) {
 		res += member;
 
 		member *= (x * x) * (i * i) / ((i + 1) * (i + 2));
+
+		if (member < accuracy) {
+			break;
+		}
 	}
 
 	return res;
 }
 
-double taylor_arccos(double x, unsigned int members_count) {
-	return (PI * 0.5) - taylor_arcsin(x, members_count);
+double taylor_arccos(double x, unsigned int members_count, double accuracy) {
+	return (PI * 0.5) - taylor_arcsin(x, members_count, accuracy);
 }

@@ -21,7 +21,7 @@ size_t get_files_count_in_directory(const char* path);
 FileData* get_all_files_from_directory(const char* path, size_t* length);
 void read_path(char path[MAX_PATH_LENGTH + 1]);
 void sort_menu(char path[MAX_PATH_LENGTH + 1]);
-void main_menu(char path[MAX_PATH_LENGTH + 1]);
+void user_loop(char path[MAX_PATH_LENGTH + 1]);
 void benchmark(char path[MAX_PATH_LENGTH + 1]);
 void free_files(FileData* files, size_t length);
 void reverse(FileData* files, int length);
@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
     SetConsoleOutputCP(1251);
 
     read_path(path);
-    main_menu(path);
+    user_loop(path);
 
     return 0;
 }
@@ -149,7 +149,7 @@ void read_path(char path[MAX_PATH_LENGTH + 1]) {
     printf("Найдено %llu файлов\n", get_files_count_in_directory(path));
 }
 
-void main_menu(char path[MAX_PATH_LENGTH + 1]) {
+void user_loop(char path[MAX_PATH_LENGTH + 1]) {
     int user_choice;
 
     while (1) {
