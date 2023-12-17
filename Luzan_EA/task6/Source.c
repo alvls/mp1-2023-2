@@ -8,12 +8,7 @@
 
 // !!!!!!!!!!!!!!!!!упрощение аргумента на tg практически чек
 
-
-// массив функций:
-// чек ввода (корректность через возврат 1),мб можно какую то общую, типа, что не строка, а число
-// пользовательские
-// из math
-int getInp() {
+int getfNum() {
 	int fNum;
 	printf("Enter function number for calculation\n");
 	printf("1 - exp, 2 - sin, 3 - cos\n");
@@ -32,36 +27,33 @@ int getInp() {
 
 int main()
 {
-	printf("%i\n", SIZE);
 	double out = 0; double xpow = 1; unsigned long long fact = 1;
-	double x = 3.5; int fNum = -10; //in
+	double x = 0.0; int fNum = -10; //in
 	TfuncPart Tfuncs[SIZE] = { expPart, sinPart, cosPart };
 	TfuncInpWork TMaths[SIZE] = { exp, sin, cos };
 
-	fNum = getInp();
+	fNum = getfNum();
 	fNum--;
 
+	x = getArgument();
 	int sgn = 1; 
 	double xc = x;
-	if ( (fNum == 1) || (fNum == 2) ) { sgn = simplByPeriod(&xc, intervals, fNum); }
+	
+	if ( (fNum == 1) || (fNum == 2) || (fNum == 3) || (fNum == 4) ) 
+		sgn = simplArgument(&xc, intervals, fNum);  // &sgn
+	else {
+		xc = checkArgument(xc, intervals, fNum);
+	}
+
+
+	printf("\n-----------------------------------------------------------------\n");
+	// output 
 	for (int i = 0; i < 25; i++) {
 		out += sgn * Tfuncs[fNum](xc, i, &xpow, &fact);          
-		printf("on %i step: %.20f\n", i, out);
+		printf("on %i step: %.20f\n", i+1, out);
 	}
 
 	printf("MATH: %.20f\n", TMaths[fNum](x));
 	system("pause");
 	return 0;
 }
-
-/*
-void mainii() {
-	simplByPeriod(300.0, intervals, 2);
-	printf("\n\n\n");
-	/*for (int i = 0; i < SIZE; i++) {
-		for (int j = 0; j < 2; j++)
-			printf("%f  ", intervals[i][j]);
-		printf("\n");
-	} //
-	system("pause");
-}*/

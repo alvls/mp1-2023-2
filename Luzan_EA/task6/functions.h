@@ -12,7 +12,11 @@ typedef double (*TfuncPart) (double, int, double*, unsigned long long*);
 typedef double (*TfuncInpWork) (double);      //хорошая ли рпактика передавать аргумент указателем 
 									    	  //или лучше присваиаваить возват функции
 
-int simplByPeriod(double* x, double noPeriodZone[SIZE][2], int i);
+double checkArgument(double x, double RoAV[SIZE][2], int index);
+
+double getArgument();
+
+int simplArgument(double* x, double noPeriodZone[SIZE][2], int i);
 
 double expPart(double x, int n, double* preX, unsigned long long* preFac);
 

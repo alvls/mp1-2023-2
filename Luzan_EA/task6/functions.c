@@ -2,17 +2,18 @@
 #include <stdio.h>
 #include <math.h>
 #include "functions.h"
+#include <limits.h>
 
 double intervals[SIZE][2] = {
-		{-1000, 1000}, // почему подчёркивает?
+		{-5, 5},
 		{-pi / 2, pi / 2},
 		{0, pi}
 };
 
-int simplByPeriod(double* x, double noPeriodZone[SIZE][2], int i) { //noPeriodZone через **?
-	int sgn = 1, tgTrue = ((i == 3) || (i == 4)) ? -1 : 1; // вместо 3 и 4 вписать номера tg и ctg
-	while (*x > noPeriodZone[i][1]) { *x -= pi; sgn *= -1 * tgTrue; }
-	while (*x < noPeriodZone[i][0]) { *x += pi; sgn *= -1 * tgTrue; }
+int simplArgument (double* x, double noPeriodZone[SIZE][2], int index) { //noPeriodZone через **?
+	int sgn = 1, tgTrue = ((index == 3) || (index == 4)) ? -1 : 1; // вместо 3 и 4 вписать номера tg и ctg
+	while (*x > noPeriodZone[index][1]) { *x -= pi; sgn *= -1 * tgTrue; }
+	while (*x < noPeriodZone[index][0]) { *x += pi; sgn *= -1 * tgTrue; }
 	/* Обоснования вот этого вот всего
 	sin(x - pi) == -sin(x)
 	sin(x + pi) == -sin(x)
@@ -25,9 +26,28 @@ int simplByPeriod(double* x, double noPeriodZone[SIZE][2], int i) { //noPeriodZo
 	return sgn;
 };
 
-int checkInput();
+double getArgument() { 
+	double x = 0.1;
+	printf("Enter x: ");
+	scanf("%lf", &x);
+	scanf("%*[^\n]");
+	getchar();
 
-int checkArgument();
+	return x;
+};
+
+double checkArgument(double x, double RoAV[SIZE][2], int index) { //RoAV = the range of acceptable values
+	while ((x < RoAV[index][0]) || (x > RoAV[index][1])) {
+		printf("Incorrect number. \n");
+		printf("Argument for this function must be from %f till %f, else you will have worse accuracy.\n", RoAV[index][0], RoAV[index][1]);
+		printf("Try again: ");
+		scanf("%lf", &x);
+		scanf("%*[^\n]");
+		getchar();
+		printf("\n");
+	}
+	return x;
+}
 
 double expPart(double x, int n, double* preX, unsigned long long* preFac) { //preX first = 1, preFac = 1
 	double res = 0.0;
