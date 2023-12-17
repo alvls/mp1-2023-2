@@ -1,12 +1,15 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "functions.h"
 
+//area of acceptable values && periods
 double intervals[SIZE][2] = {
 		{-5, 5},
 		{-pi / 2, pi / 2},
-		{0, pi}
+		{0, pi},
+		{-1, 1}
 };
 
+//other funcs
 void mode1(TfuncPart Tfunc, TfuncInpWork TMath, double x, int sgn) {
 	printf("Enter precision (must be >= 0.000001): ");
 	double precision = -1;
@@ -81,11 +84,12 @@ int getfNum() {
 	int fNum;
 	printf("Choose a function for calculation\n");
 	printf("1 - exp(x), 2 - sin(x), 3 - cos(x)\n");
+	printf("1 - arth(x)\n");
 	printf("Enter a function number: ");
 	scanf("%i", &fNum);
 	scanf("%*[^\n]"); // delete all symbols till \n, not including \n
 	getchar(); // delete \n
-	while ((fNum < 1) || (fNum > 3)) {
+	while ((fNum < 1) || (fNum > 4)) {
 		printf("Incorrect number. Try again\n");
 		scanf("%i", &fNum);
 		scanf("%*[^\n]");
@@ -103,18 +107,18 @@ double getArgument() {
 	return x;
 };
 
-int simplArgument (double* x, double noPeriodZone[SIZE][2], int index) { //noPeriodZone через **?
-	int sgn = 1, tgTrue = ((index == 3) || (index == 4)) ? -1 : 1; // вместо 3 и 4 вписать номера tg и ctg
+int simplArgument (double* x, double noPeriodZone[SIZE][2], int index) { 
+	int sgn = 1, tgTrue = ((index == NULL) || (index == NULL)) ? -1 : 1; // вместо NULL вписать номера tg и ctg
 	while (*x > noPeriodZone[index][1]) { *x -= pi; sgn *= -1 * tgTrue; }
 	while (*x < noPeriodZone[index][0]) { *x += pi; sgn *= -1 * tgTrue; }
-	/* Обоснования вот этого вот всего
+	/* Обоснование
 	sin(x - pi) == -sin(x)
 	sin(x + pi) == -sin(x)
 	cos(x - pi) == -cos(x)
 	cos(x + pi) == -cos(x)
 
-	tgTrue = -1, если у нас в руках тг или ктг
-	тогда на 15 - 16 строках при +-pi знак выражения изменяться не будет, тк у tg/ctg период = pi
+	tgTrue = -1, если у нас в руках tg или ctg
+	тогда на 109 - 110 строках при +-pi знак выражения изменяться не будет, тк у tg/ctg период = pi
 	*/
 	return sgn;
 };
@@ -133,6 +137,7 @@ double checkArgument(double x, double RoAV[SIZE][2], int index) { //RoAV = the r
 	return x;
 }
 
+//Tfuncs
 double expPart(double x, int n, double* preX, unsigned long long* preFac) { //preX first = 1, preFac = 1
 	double res= 0.0;
 	if (n == 0)
@@ -180,3 +185,18 @@ double cosPart(double x, int n, double* preX, unsigned long long* preFac) {
 	return res;
 }
 
+double arthPart(double x, int n, double* preX, unsigned long long* placeHolder) {
+	double res = 0.0;
+	if (n == 0) {
+		return 0;
+	}
+
+	if (n % 2 == 0) {
+		*preX *= x;
+		return 0;
+	}
+
+	res = (*preX * x) / (double)(n);
+	*preX *= x;
+	return res;
+}

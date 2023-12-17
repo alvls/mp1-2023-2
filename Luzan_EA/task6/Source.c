@@ -3,12 +3,12 @@
 #include <time.h>
 
 //функция на первый член
-// !!!!!!!!!!!!!!!!!упрощение аргумента на tg практически чек
+// !!!!!!!!!!!!!!!!!упрощение аргумента на tg практически проверить
 
 int main() {
 	double x = 0.0; int fNum = -10; //in
-	TfuncPart Tfuncs[SIZE] = { expPart, sinPart, cosPart };
-	TfuncInpWork TMaths[SIZE] = { exp, sin, cos };
+	TfuncPart Tfuncs[SIZE] = { expPart, sinPart, cosPart, arthPart };
+	TfuncInpWork TMaths[SIZE] = { exp, sin, cos, atanh};
 
 	fNum = getfNum();
 	fNum--;
@@ -18,7 +18,7 @@ int main() {
 	x = getArgument();
 	int sgn = 1; 
 	double xc = x;
-	if ((fNum == 1) || (fNum == 2) || (fNum == 3) || (fNum == 4)) 
+	if ((fNum == 1) || (fNum == 2) || (fNum == NULL) || (fNum == NULL)) 
 		sgn = simplArgument(&xc, intervals, fNum);  // &sgn
 	else 
 		xc = checkArgument(xc, intervals, fNum);

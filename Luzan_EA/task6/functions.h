@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#define SIZE 3
+#define SIZE 4
 #define pi 3.1415926535897
 
 double intervals[SIZE][2];
@@ -33,3 +33,4 @@ double sinPart(double x, int n, double* preX, unsigned long long* preFac);
 
 double cosPart(double x, int n, double* preX, unsigned long long* preFac);
 
+double arthPart(double x, int n, double* preX, unsigned long long* placeHolder);
