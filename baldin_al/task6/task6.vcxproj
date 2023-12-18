@@ -111,6 +111,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source.c" />
+    <ClCompile Include="Taylor_row.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Taylor_row.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
