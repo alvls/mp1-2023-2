@@ -62,15 +62,16 @@ double tey_sinh(double x, double precision, int n, int* elemcount) {
 }
 
 double tey_cosh(double x, double precision, int n, int* elemcount) {
-	int i = 1, nextmult = 3;
-	unsigned long long fact = 2;
-	double res = 1, value = cos(x), tek = 1;
+	int i = 1, nextmult = 1;
+	unsigned long long fact = 1;
+	double res = 1, value = cosh(x), tek = 1;
 	while (fabs(res - value) > precision && i++ < n)
 	{
-		res += tek / fact;
 		tek *= x * x;
 		fact *= nextmult++;
 		fact *= nextmult++;
+		res += tek / fact;
+		
 	}
 	*elemcount = i;
 	return res;

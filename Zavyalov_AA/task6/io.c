@@ -223,6 +223,5 @@ void mode2( func_ptr_t func, standart_func_ptr_t standartfunc) {
 			printf(" ");
 		}
 		printf("| %llf\n", fabs(res - reference));
-
 	}
 }
