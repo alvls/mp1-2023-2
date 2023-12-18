@@ -39,7 +39,6 @@ double getprecision() {
 
 			if (endptr == buffer || *endptr != '\n') {
 				printf("Please enter real number.\n");
-				//if (*endptr != '\n') while (getchar() != '\n');
 			}
 			else if (precision >= 0.000001)
 				return precision;
@@ -67,7 +66,6 @@ double getargument() {
 
 			if (endptr == buffer || *endptr != '\n') {
 				printf("Please enter real number.\n");
-				//if (*endptr != '\n') while (getchar() != '\n');
 			}
 			else {
 				if (argument > 10)
