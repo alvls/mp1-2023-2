@@ -9,7 +9,6 @@ int main() {
 		mode1(funcPtr, standartFuncPtr);
 	else
 		mode2(funcPtr, standartFuncPtr);
-
 	system("pause");
 	return 0;
 }

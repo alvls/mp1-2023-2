@@ -12,22 +12,26 @@ double tey_sin(double x, double precision, int n, int* elemcount) {
 		fact *= nextmult++;
 		sign = -sign;
 	}
+	if (i == n)
+		i--;
 	*elemcount = i;
 	return res;
 }
 
 double tey_cos(double x, double precision, int n, int* elemcount) {
-	int i = 1, sign = -1, nextmult = 3;
-	unsigned long long fact = 2;
+	int i = 1, sign = 1, nextmult = 1;
+	unsigned long long fact = 1;
 	double res = 1, value = cos(x), tek = 1;
 	while (fabs(res - value) > precision && i++ < n)
 	{
-		res += sign * tek / fact;
 		tek *= x * x;
 		fact *= nextmult++;
 		fact *= nextmult++;
 		sign = -sign;
+		res += sign * tek / fact;
 	}
+	if (i == n)
+		i--;
 	*elemcount = i;
 	return res;
 }
@@ -57,6 +61,8 @@ double tey_sinh(double x, double precision, int n, int* elemcount) {
 		fact *= nextmult++;
 		fact *= nextmult++;
 	}
+	if (i == n)
+		i--;
 	*elemcount = i;
 	return res;
 }
@@ -72,6 +78,8 @@ double tey_cosh(double x, double precision, int n, int* elemcount) {
 		fact *= nextmult++;
 		res += tek / fact;
 	}
+	if (i == n)
+		i--;
 	*elemcount = i;
 	return res;
 }

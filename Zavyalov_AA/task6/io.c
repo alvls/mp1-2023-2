@@ -180,7 +180,7 @@ void mode1(func_ptr_t func, standart_func_ptr_t standartfunc) {
 		mode1(func, standartfunc);
 	}
 	else {
-		printf("Reference value: %llf\nFunction value at this point is approximately %llf\nDifference between reference value and approximate value is %llf\nAmount of calculated elements is %i\n", reference, res, reference - res, elemcount);
+		printf("Reference value: %llf\nFunction value at this point is approximately %llf\nDifference between reference value and approximate value is %llf\nAmount of calculated elements is %i\n", reference, res, fabs(reference - res), elemcount);
 	}
 }
 
