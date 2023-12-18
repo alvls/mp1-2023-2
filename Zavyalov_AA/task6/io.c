@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void getmode(int* mode) { // TODO если сразу нажать ентер, то ничего не произойдет
+void getmode(int* mode) {
 	char foo;
 	printf("Select the operating mode of the program by typing 1 or 2 where: \n1 stands for a single calculation of the function at a given point \n2 stands for serial experiment \nEnter the number: ");
 	while (1) {

@@ -71,7 +71,6 @@ double tey_cosh(double x, double precision, int n, int* elemcount) {
 		fact *= nextmult++;
 		fact *= nextmult++;
 		res += tek / fact;
-		
 	}
 	*elemcount = i;
 	return res;
