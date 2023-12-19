@@ -8,14 +8,14 @@
 #include <locale.h>
 #include <omp.h>
 
-#define MAX_FILES_PER_PAGE 100
+#define MAX_FILES_PER_PAGE 600
 #define DIRECTORY_SIZE 1000
 #define COUTNSORT_MAXFILESIZE 1000000
 
 
 // Possible commands
 typedef
-enum {Skip, Exit, O_Dir, O_File, Back, Conf, NPage, PPage, Help} CommandType;
+enum {Skip, Exit, ODir, OFile, Back, Conf, NPage, PPage, Help} CommandType;
 
 
 // User Settings structure
@@ -107,10 +107,10 @@ int main(void)
         case Exit:
             break;
         
-        case O_Dir: OpenDirectory(CurrentFiles, &CurrentFilesCount, CurrentDirectory, 0, &CurrentPage, UserSettings);
+        case ODir: OpenDirectory(CurrentFiles, &CurrentFilesCount, CurrentDirectory, 0, &CurrentPage, UserSettings);
             break;
 
-        case O_File: OpenFile(CurrentFiles, &CurrentFilesCount, CurrentDirectory, &CurrentPage, UserSettings);
+        case OFile: OpenFile(CurrentFiles, &CurrentFilesCount, CurrentDirectory, &CurrentPage, UserSettings);
             break;
         
         case Back: GoBack(CurrentFiles, &CurrentFilesCount, &CurrentPage, CurrentDirectory, UserSettings);
@@ -158,9 +158,9 @@ int UserInput()
         {
             case 'Q': return Exit;
 
-            case 'O': return O_Dir;
+            case 'O': return ODir;
 
-            case 'F': return O_File;
+            case 'F': return OFile;
 
             case 'B': return Back;
 
