@@ -57,7 +57,6 @@ double getprecision() {
 double getargument() {
 	double argument;
 	char buffer[100];
-
 	printf("Enter the argument: ");
 	while (1) {
 		if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
@@ -68,8 +67,6 @@ double getargument() {
 				printf("Please enter real number.\n");
 			}
 			else {
-				if (argument > 10)
-					printf("!!! WARNING !!!\nWith arguments very different from 0, the program may not work correctly (especially for trigonomical functions).\n");
 				return argument;
 			}
 		}
@@ -170,7 +167,10 @@ void getfunc(func_ptr_t* target, standart_func_ptr_t* standart) {
 }
 
 void mode1(func_ptr_t func, standart_func_ptr_t standartfunc) {
-	double x = getargument(), precision = getprecision();
+	if (func == tey_sin || func == tey_cos)
+		printf("It is recommended to enter arguments close to 0.\n");
+	double x = getargument();
+	double precision = getprecision();
 	int n = getquantity(), elemcount;
 	double res = func(x, precision, n, &elemcount), reference = standartfunc(x);
 	if (res == INFINITY) {
@@ -183,6 +183,8 @@ void mode1(func_ptr_t func, standart_func_ptr_t standartfunc) {
 }
 
 void mode2( func_ptr_t func, standart_func_ptr_t standartfunc) {
+	if (func == tey_sin || func == tey_cos)
+		printf("It is recommended to enter arguments close to 0.\n");
 	double x = getargument();
 	int nmax = getnmax(), foo, mxlen = 17;
 	double reference = standartfunc(x);

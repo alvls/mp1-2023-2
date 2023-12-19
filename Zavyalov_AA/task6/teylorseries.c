@@ -1,6 +1,10 @@
 #include <math.h>
 
+
 double tey_sin(double x, double precision, int n, int* elemcount) {
+	double pi = 3.14159265358979323846; 
+	x = fmod(x, pi * 2); // getting rid of period
+
 	int i = 0, sign = 1, nextmult = 2; // current step, sign, next multiplier for factorial
 	unsigned long long fact = 1; // current factorial value
 	double res = 0, value = sin(x), tek = x; // result, exact value of sin(x), current multiplier for res
@@ -19,6 +23,9 @@ double tey_sin(double x, double precision, int n, int* elemcount) {
 }
 
 double tey_cos(double x, double precision, int n, int* elemcount) {
+	double pi = 3.14159265358979323846;
+	x = fmod(x, pi * 2);
+
 	int i = 1, sign = 1, nextmult = 1;
 	unsigned long long fact = 1;
 	double res = 1, value = cos(x), tek = 1;
