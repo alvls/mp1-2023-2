@@ -62,14 +62,44 @@ double tSin(double x, unsigned n) {
 	return sig*res;
 }
 
+double sinArg(double x, int* sig) {
+	x = argWrap(x, 2 * pi);
+	int s = (x < 0) ? -1 : 1;
+	x *= s;
+	if (x > pi) {
+		x -= pi;
+		s *= -1;
+	}
+	if (x > pi / 2) {
+		x = pi - x;
+	}
+	*sig = s;
+	return x;
+}
+
+void tpSin(double x, unsigned n, double* term, double* ans) {
+	if (n == 0) {
+		*ans = x;
+		*term = x;
+	}
+	else {
+		*term *= -1 * x * x / ((2 * n) * (2 * n + 1));
+		*ans += *term;
+	}
+	
+}
+
 void Taylor(double x, unsigned n) {
-	double ans = 0;
+	double ans;
 	double t;
 	double e = sin(x);
+	int sig;
+	double sx = sinArg(x, &sig);
 	for (unsigned i = 0; i < n;i++) {
-		t = partSin(x, i);
-		ans += t;
-		printf("%lf %lf %lf < %lf\n",tSin(x, i), ans, t, fabs(ans-e));
+		tpSin(sx, i, &t, &ans);
+		
+	
+		printf("%lf %lf %lf < %lf\n",tSin(x, i), ans*sig, t, fabs(ans-e));
 	}
 	printf("%lf = Ethanol: ", e);
 }
@@ -80,7 +110,7 @@ int main() {
 		printf("%llu %lf \n",f, (double)f );
 	}*/
 
-	Taylor(3*pi/2, 10);
+	Taylor(pi/2, 10);
 	system("pause");
 	return 0;
 }
