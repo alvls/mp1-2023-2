@@ -14,5 +14,13 @@
     <ClCompile Include="Task6.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="taylor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="taylor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
