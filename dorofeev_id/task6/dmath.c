@@ -28,7 +28,7 @@ double sin_taylor(double x, int precision, int max_iterations, int* terms_count)
     {
         term = pow(-1, i) * pow(x, 2 * i + 1) / factorial(2 * i + 1);
         result += term;
-        *terms_count++;
+        (*terms_count)++;
 
         if (fabs(term) < precision_value) 
         {
@@ -53,7 +53,7 @@ double cos_taylor(double x, int precision, int max_iterations, int* terms_count)
     {
         term = pow(-1, i) * pow(x, 2 * i) / factorial(2 * i);
         result += term;
-        *terms_count++;
+        (*terms_count)++;
 
         if (fabs(term) < precision_value) 
         {
@@ -75,7 +75,7 @@ double exp_taylor(double x, int precision, int max_iterations, int* terms_count)
     {
         term = pow(x, i) / factorial(i);
         result += term;
-        *terms_count++;
+        (*terms_count)++;
 
         if (fabs(term) < precision_value) 
         {
@@ -101,7 +101,7 @@ double arccot_taylor(double x, int precision, int max_iterations, int* terms_cou
     {
         term = pow(-1, i) * pow(x, 2 * i + 1) / (2 * i + 1);
         result += term;
-        *terms_count++;
+        (*terms_count)++;
 
         if (fabs(term) < precision_value) 
         {
@@ -126,7 +126,7 @@ double tan_taylor(double x, int precision, int max_iterations, int* terms_count)
     {
         term = pow(x, i) / factorial(i);
         result += (i % 4 == 1) ? term : -term;
-        *terms_count++;
+        (*terms_count)++;
 
         if (fabs(term) < precision_value) 
         {
@@ -150,7 +150,7 @@ double cot_taylor(double x, int precision, int max_iterations, int* terms_count)
     for (int i = 0; i < max_iterations; ++i) {
         term = pow(x, 2 * i + 1) / factorial(2 * i + 1);
         result += (i % 2 == 0) ? term : -term;
-        *terms_count++;
+        (*terms_count)++;
 
         if (fabs(term) < precision_value) 
         {
@@ -173,7 +173,7 @@ double arcsin_taylor(double x, int precision, int max_iterations, int* terms_cou
     {
         term = factorial(2 * i) * pow(x, 2 * i + 1) / pow(4, i) / pow(factorial(i), 2) / (2 * i + 1);
         result += (i % 2 == 0) ? term : -term;
-        *terms_count++;
+        (*terms_count)++;
 
         if (fabs(term) < precision_value) 
         {
@@ -198,7 +198,7 @@ double arccos_taylor(double x, int precision, int max_iterations, int* terms_cou
     {
         term = factorial(2 * i) * pow(x, 2 * i) / pow(4, i) / pow(factorial(i), 2) / (2 * i + 1);
         result += (i % 2 == 0) ? term : -term;
-        *terms_count++;
+        (*terms_count)++;
 
         if (fabs(term) < precision_value) 
         {
@@ -222,7 +222,7 @@ double arctan_taylor(double x, int precision, int max_iterations, int* terms_cou
     {
         term = pow(-1, i) * pow(x, 2 * i + 1) / (2 * i + 1);
         result += term;
-        *terms_count++;
+        (*terms_count)++;
 
         if (fabs(term) < precision_value) 
         {
@@ -242,5 +242,159 @@ double acot(double x)
 {
     return atan(1 / x);
 }
+
+double ln_taylor(double x, int precision, int max_iterations, int* terms_count)
+{
+    double result = 0;
+    double term;
+    double precision_value = calculate_precision(precision);
+    *terms_count = 0;
+
+    for (int i = 1; i <= max_iterations; ++i)
+    {
+        term = pow(-1, i + 1) * pow(x, i) / i;
+        result += term;
+        (*terms_count)++;
+
+        if (fabs(term) < precision_value)
+        {
+            break;
+        }
+    }
+
+    return result;
+}
+
+double sqrt_taylor(double x, int precision, int max_iterations, int* terms_count)
+{
+    double result = 0;
+    double term;
+    double precision_value = calculate_precision(precision);
+    *terms_count = 0;
+
+    for (int i = 0; i < max_iterations; ++i)
+    {
+        term = pow(-1, i) * pow(x, i) / (2 * i + 1) / factorial(i);
+        result += term;
+        (*terms_count)++;
+
+        if (fabs(term) < precision_value)
+        {
+            break;
+        }
+    }
+
+    return result;
+}
+
+double sh_taylor(double x, int precision, int max_iterations, int* terms_count)
+{
+    double result = 0;
+    double term;
+    double precision_value = calculate_precision(precision);
+    *terms_count = 0;
+
+    for (int i = 0; i < max_iterations; ++i)
+    {
+        term = pow(x, 2 * i + 1) / factorial(2 * i + 1);
+        result += term;
+        (*terms_count)++;
+
+        if (fabs(term) < precision_value)
+        {
+            break;
+        }
+    }
+
+    return result;
+}
+
+double ch_taylor(double x, int precision, int max_iterations, int* terms_count)
+{
+    double result = 0;
+    double term;
+    double precision_value = calculate_precision(precision);
+    *terms_count = 0;
+
+    for (int i = 0; i < max_iterations; ++i)
+    {
+        term = pow(x, 2 * i) / factorial(2 * i);
+        result += term;
+        (*terms_count)++;
+
+        if (fabs(term) < precision_value)
+        {
+            break;
+        }
+    }
+
+    return result;
+}
+
+double th_taylor(double x, int precision, int max_iterations, int* terms_count)
+{
+    double sh_x = sh_taylor(x, precision, max_iterations, terms_count);
+    double ch_x = ch_taylor(x, precision, max_iterations, terms_count);
+
+    return sh_x / ch_x;
+}
+
+double cth_taylor(double x, int precision, int max_iterations, int* terms_count)
+{
+    double sh_x = sh_taylor(x, precision, max_iterations, terms_count);
+    double ch_x = ch_taylor(x, precision, max_iterations, terms_count);
+
+    return ch_x / sh_x;
+}
+
+double arsh_taylor(double x, int precision, int max_iterations, int* terms_count)
+{
+    double result = 0;
+    double term;
+    double precision_value = calculate_precision(precision);
+    *terms_count = 0;
+
+    for (int i = 0; i < max_iterations; ++i)
+    {
+        term = factorial(2 * i - 1) * pow(x, 2 * i + 1) / pow(factorial(i), 2) / (2 * i + 1);
+        result += term;
+        (*terms_count)++;
+
+        if (fabs(term) < precision_value)
+        {
+            break;
+        }
+    }
+
+    return result;
+}
+
+double arth_taylor(double x, int precision, int max_iterations, int* terms_count)
+{
+    double result = 0;
+    double term;
+    double precision_value = calculate_precision(precision);
+    *terms_count = 0;
+
+    for (int i = 1; i <= max_iterations; i += 2)
+    {
+        term = pow(x, i) / i;
+        result += (i % 4 == 1) ? term : -term;
+        (*terms_count)++;
+
+        if (fabs(term) < precision_value)
+        {
+            break;
+        }
+    }
+
+    return result;
+}
+
+double csc_taylor(double x, int precision, int max_iterations, int* terms_count)
+{
+    return 1 / sin_taylor(x, precision, max_iterations, terms_count);
+}
+
 
 

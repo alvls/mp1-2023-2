@@ -9,9 +9,11 @@ void mode2();
 double get_reference_value(double x, int choice);
 double calculate_estimate(double x, int choice, int terms_count);
 
-double (*taylor_functions[9])(double, int, int, int*) =
+double (*taylor_functions[18])(double, int, int, int*) =
 {
     exp_taylor,
+    ln_taylor,
+    sqrt_taylor,
 
     sin_taylor,
     cos_taylor,
@@ -21,25 +23,51 @@ double (*taylor_functions[9])(double, int, int, int*) =
     arcsin_taylor,
     arccos_taylor,
     arctan_taylor,
-    arccot_taylor
+    arccot_taylor,
+
+    sh_taylor,
+    ch_taylor,
+    th_taylor,
+    cth_taylor,
+
+    arsh_taylor,
+    arth_taylor,
+
+    csc_taylor
 };
 
-double (*с_functions[9])(double) =
+double (*с_functions[18])(double) =
 {
-     exp,
+    exp,
+    sqrt,
+    log,
+
     sin,
     cos,
     tan,
     cot,
+
     asin,
     acos,
     atan,
-    acot
+    acot,
+
+    sinh,
+    cosh,
+    tanh,
+    coth,
+
+    asinh,
+    atanh,
+
+    csc
 };
 
-wchar_t* function_names[9] =
+wchar_t* function_names[18] =
 {
     L"exp(x)",
+    L"ln(1+x)",
+    L"sqrt(1+x)"
 
     L"sin(x)",
     L"cos(x)",
@@ -49,7 +77,17 @@ wchar_t* function_names[9] =
     L"arcsin(x)",
     L"arccos(x)",
     L"arctan(x)",
-    L"arccot(x)"
+    L"arccot(x)",
+
+    L"sh(x)",
+    L"ch(x)",
+    L"th(x)",
+    L"cth(x)",
+
+    L"arsh(x)",
+    L"arth(x)",
+
+    L"csc(x)"
 };
 
 int main()
@@ -132,8 +170,16 @@ void mode1()
         return;
     }
 
-    result = taylor_functions[choice - 1](x_value, precision, max_iterations, &terms_count);
-    result_c = с_functions[choice - 1](x_value);
+    if (choice == 2 || choice == 3)
+    {
+        result = taylor_functions[choice - 1](x_value + 1, precision, max_iterations, &terms_count);
+        result_c = с_functions[choice - 1](x_value + 1);
+    }
+    else
+    {
+        result = taylor_functions[choice - 1](x_value, precision, max_iterations, &terms_count);
+        result_c = с_functions[choice - 1](x_value);
+    }
     rz = fabs(result - result_c);
 
     wprintf(L"Эталонное значение %s: %lf\n", function_names[choice - 1], result_c);
@@ -147,6 +193,8 @@ void mode2()
 {
     int choice;
     double x_value;
+    double estimate;
+    double reference_value;
     int experiments_count;
     int terms_count;
 
@@ -165,7 +213,14 @@ void mode2()
     printf("Введите число экспериментов (от 1 до 25):\n");
     scanf("%d", &experiments_count);
 
-    double reference_value = get_reference_value(x_value, choice);
+    if (choice == 2 || choice == 3)
+    {
+        reference_value = get_reference_value(x_value + 1, choice);
+    }
+    else
+    {
+        reference_value = get_reference_value(x_value, choice);
+    }
 
     printf("Эталонное значение: %lf\n", reference_value);
     printf("Таблица результатов:\n");
@@ -173,7 +228,14 @@ void mode2()
 
     for (int i = 1; i <= experiments_count; ++i) 
     {
-        double estimate = taylor_functions[choice - 1](x_value, 10000, i, &terms_count);
+        if (choice == 2 || choice == 3)
+        {
+            estimate = taylor_functions[choice - 1](x_value + 1, 10000, i, &terms_count);
+        }
+        else
+        {
+            estimate = taylor_functions[choice - 1](x_value, 10000, i, &terms_count);
+        }
         double difference = fabs(estimate - reference_value);
         printf("| %-16d | %-16lf | %-8lf |\n", i, estimate, difference);
     }
