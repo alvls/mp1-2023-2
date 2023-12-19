@@ -2,32 +2,40 @@
 #include "functions.h"
 #include <time.h>
 
-//функция на первый член
-// !!!!!!!!!!!!!!!!!упрощение аргумента на tg практически проверить
 
 int main() {
-	double x = 0.0; int fNum = -10; //in
-	TfuncPart Tfuncs[SIZE] = { expPart, sinPart, cosPart, arthPart };
-	TfuncInpWork TMaths[SIZE] = { exp, sin, cos, atanh};
+	int inp = 1;
+	while (inp != 0) {
+		double x = 0.0; int fNum = -10; 
+		TfuncPart Tfuncs[SIZE] = { expPart, sinPart, cosPart, arthPart };
+		TfuncInpWork TMaths[SIZE] = { exp, sin, cos, atanh};
+		TfuncArgCheck TChecks[SIZE] = { checkArgumentIntervl, simplArgument, simplArgument,
+									   checkArgumentIntervl };
+		// selecting function number
+		fNum = getfNum();
+		fNum--;
+		TfuncPart Tfunc = Tfuncs[fNum];
+		TfuncInpWork TMath = TMaths[fNum];
+		TfuncArgCheck TCheck = TChecks[fNum];
 
-	fNum = getfNum();
-	fNum--;
-	TfuncPart Tfunc = Tfuncs[fNum];
-	TfuncInpWork TMath = TMaths[fNum];
-
-	x = getArgument();
-	int sgn = 1; 
-	double xc = x;
-	if ((fNum == 1) || (fNum == 2) || (fNum == NULL) || (fNum == NULL)) 
-		sgn = simplArgument(&xc, intervals, fNum);  // &sgn
-	else 
-		xc = checkArgument(xc, intervals, fNum);
+		//argument
+		x = getArgument();
+		int sgn = 1; 
+		TCheck(&x, &sgn, intervals, &fNum);
 	
-	int mode = getMode();
-	if (mode == 1)
-		mode1(Tfunc, TMath, xc, sgn);
-	else
-		mode2(Tfunc, TMath, xc, sgn);
+		// mode
+		int mode = getMode();
+		if (mode == 1)
+			mode1(Tfunc, TMath, x, sgn);
+		else
+			mode2(Tfunc, TMath, x, sgn);
+
+		//end
+		printf("If you want to exit, enter '0'\nIf you want to repeat, enter something else\n");
+		scanf("%i", &inp);
+		scanf("%*[^\n]"); 
+		getchar();
+	}
 
 	system("pause");
 	return 0;

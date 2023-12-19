@@ -9,7 +9,7 @@ double intervals[SIZE][2] = {
 		{-1, 1}
 };
 
-//other funcs
+//modes
 void mode1(TfuncPart Tfunc, TfuncInpWork TMath, double x, int sgn) {
 	printf("Enter precision (must be >= 0.000001): ");
 	double precision = -1;
@@ -27,7 +27,7 @@ void mode1(TfuncPart Tfunc, TfuncInpWork TMath, double x, int sgn) {
 		getchar();
 	}
 
-	double res = 0, Mres = TMath(x);
+	double res = 0, Mres = sgn*TMath(x);
 	unsigned int elmInd = 0; unsigned long long fact = 1; double xpow = 1;
 	while ((elmInd < elmNum) && (fabs(res - Mres) > precision)) {
 		res += sgn * Tfunc(x, elmInd, &xpow, &fact);
@@ -49,7 +49,7 @@ void mode2(TfuncPart Tfunc, TfuncInpWork TMath, double x, int sgn) {
 		getchar();
 	}
 
-	double res = 0, Mres = TMath(x);
+	double res = 0, Mres = sgn*TMath(x);
 	unsigned int expInd = 0; unsigned long long fact = 1; double xpow = 1;
 
 	printf("Exact value of the function value at this point: %.20lf\n", Mres);
@@ -61,6 +61,7 @@ void mode2(TfuncPart Tfunc, TfuncInpWork TMath, double x, int sgn) {
 	}
 }
 
+//inp work
 int getMode() {
 	printf("Select the mode type: \n");
 	printf("1 stands for One-time calculation of the function at a given point \n");
@@ -84,7 +85,7 @@ int getfNum() {
 	int fNum;
 	printf("Choose a function for calculation\n");
 	printf("1 - exp(x), 2 - sin(x), 3 - cos(x)\n");
-	printf("1 - arth(x)\n");
+	printf("4 - arth(x)\n");
 	printf("Enter a function number: ");
 	scanf("%i", &fNum);
 	scanf("%*[^\n]"); // delete all symbols till \n, not including \n
@@ -107,10 +108,11 @@ double getArgument() {
 	return x;
 };
 
-int simplArgument (double* x, double noPeriodZone[SIZE][2], int index) { 
-	int sgn = 1, tgTrue = ((index == NULL) || (index == NULL)) ? -1 : 1; // вместо NULL вписать номера tg и ctg
-	while (*x > noPeriodZone[index][1]) { *x -= pi; sgn *= -1 * tgTrue; }
-	while (*x < noPeriodZone[index][0]) { *x += pi; sgn *= -1 * tgTrue; }
+//checking Argument
+void simplArgument(double* x, int* sgn, double noPeriodZone[SIZE][2], int* index) {
+	int tgTrue = ((*index == NULL) || (*index == NULL)) ? -1 : 1; // вместо NULL вписать номера tg и ctg
+	while (*x > noPeriodZone[*index][1]) { *x -= pi; *sgn *= -1 * tgTrue; }
+	while (*x < noPeriodZone[*index][0]) { *x += pi; *sgn *= -1 * tgTrue; }
 	/* ќбоснование
 	sin(x - pi) == -sin(x)
 	sin(x + pi) == -sin(x)
@@ -120,13 +122,12 @@ int simplArgument (double* x, double noPeriodZone[SIZE][2], int index) {
 	tgTrue = -1, если у нас в руках tg или ctg
 	тогда на 109 - 110 строках при +-pi знак выражени€ измен€тьс€ не будет, тк у tg/ctg период = pi
 	*/
-	return sgn;
 };
 
-double checkArgument(double x, double RoAV[SIZE][2], int index) { //RoAV = the range of acceptable values
-	while ((x < RoAV[index][0]) || (x > RoAV[index][1])) {
+void checkArgumentSegment(double* x, int* sgn, double RoAV[SIZE][2], int* index) { //RoAV = the range of acceptable values
+	while ((*x < RoAV[*index][0]) || (*x > RoAV[*index][1])) {
 		printf("Incorrect number. \n");
-		printf("Argument for this function must be from %f till %f\n",  RoAV[index][0], RoAV[index][1]);
+		printf("Argument for this function must be from %f till %f\n",  RoAV[*index][0], RoAV[*index][1]);
 		printf("otherwise you will have worse accuracy / this argument is out of the range of acceptable values for this function\n" );
 		printf("Try again: ");
 		scanf("%lf", &x);
@@ -134,7 +135,19 @@ double checkArgument(double x, double RoAV[SIZE][2], int index) { //RoAV = the r
 		getchar();
 		printf("\n");
 	}
-	return x;
+}
+
+void checkArgumentIntervl(double* x, int* sgn, double RoAV[SIZE][2], int* index) {
+	while ((*x <= RoAV[*index][0]) || (*x >= RoAV[*index][1])) {
+		printf("Incorrect number. \n");
+		printf("Argument for this function must be from %f till %f (not inclusive)\n", RoAV[*index][0], RoAV[*index][1]);
+		printf("otherwise you will have worse accuracy / this argument is out of the range of acceptable values for this function\n");
+		printf("Try again: ");
+		scanf("%lf", &x);
+		scanf("%*[^\n]");
+		getchar();
+		printf("\n");
+	}
 }
 
 //Tfuncs
