@@ -79,6 +79,11 @@ double Exp_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
 
 double Cth_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
 {
+	double Result = 1 / Th_T(x, TargetAccuracy, N, IgnoreAccuracy);
+
+	return Result;
+
+	/* COOL SOLUTION, BUT DOES NOT WORK!!!!
 	double* B = (double*)malloc((*N + 1) * 2 * sizeof(double));
 	for (int i = 0; i < (*N) * 2; i++)
 		B[i] = 0.f;
@@ -111,6 +116,7 @@ double Cth_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
 
 	free(B);
 	return Result;
+	*/
 }
 
 
@@ -153,6 +159,148 @@ double Ln_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
 		Result += Addition;
 		(*N)++;
 	}
+
+	return Result;
+}
+
+
+double Tan_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
+{
+	int L_N_1 = (*N);
+	int L_N_2 = (*N);
+	
+	double Sin = Sin_T(x, TargetAccuracy, &L_N_1, IgnoreAccuracy);
+	double Cos = Cos_T(x, TargetAccuracy, &L_N_1, IgnoreAccuracy);
+
+	double Result = Sin / Cos;
+	(*N) = L_N_1 + L_N_2;
+	
+	return Result;
+}
+
+
+double Cotan_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
+{
+	double Result = 1 / Tan_T(x, TargetAccuracy, N, IgnoreAccuracy);
+
+	return Result;
+}
+
+
+double Arcsin_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
+{
+	double Result = 0.f;
+
+	int L_N = (*N);
+	(*N) = 0;
+
+	for (int n = 0; n < L_N; n++)
+	{
+		double Addition = Factorial(2 * n, 1) * pow(x, 2*n + 1) / (pow(2, 2 * n) * pow(Factorial(n, 1), 2) * (2 * n + 1));
+
+		if (fabs(Addition) < pow(0.1f, TargetAccuracy) && !IgnoreAccuracy)
+			break;
+
+		Result += Addition;
+		(*N)++;
+	}
+
+	return Result;
+}
+
+
+double Arccos_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
+{
+	double Result = (PI / 2.f) - Arcsin_T(x, TargetAccuracy, N, IgnoreAccuracy);
+
+	return Result;
+}
+
+
+double Arctan_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
+{
+	double Result = 0.f;
+
+	int L_N = (*N);
+	(*N) = 0;
+
+	for (int n = 1; n < L_N; n++)
+	{
+		double Addition = pow(-1, n - 1) * pow(x, 2*n - 1) / (2 * n - 1);
+
+		if (fabs(Addition) < pow(0.1f, TargetAccuracy) && !IgnoreAccuracy)
+			break;
+
+		Result += Addition;
+		(*N)++;
+	}
+
+	return Result;
+}
+
+
+double Arccotan_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
+{
+	double Result = (PI / 2.f) - Arctan_T(x, TargetAccuracy, N, IgnoreAccuracy);
+
+	return Result;
+}
+
+
+double Sh_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
+{
+	double Result = 0.f;
+
+	int L_N = (*N);
+	(*N) = 0;
+
+	for (int n = 0; n < L_N; n++)
+	{
+		double Addition = pow(x, 2*n + 1) / Factorial(2*n + 1, 1);
+
+		if (fabs(Addition) < pow(0.1f, TargetAccuracy) && !IgnoreAccuracy)
+			break;
+
+		Result += Addition;
+		(*N)++;
+	}
+
+	return Result;
+}
+
+
+double Ch_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
+{
+	double Result = 0.f;
+
+	int L_N = (*N);
+	(*N) = 0;
+
+	for (int n = 0; n < L_N; n++)
+	{
+		double Addition = pow(x, 2 * n) / Factorial(2 * n, 1);
+
+		if (fabs(Addition) < pow(0.1f, TargetAccuracy) && !IgnoreAccuracy)
+			break;
+
+		Result += Addition;
+		(*N)++;
+	}
+
+	return Result;
+}
+
+
+double Th_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy)
+{
+	int L_N_1 = (*N);
+	int L_N_2 = (*N);
+
+	double Sh = Sh_T(x, TargetAccuracy, &L_N_1, IgnoreAccuracy);
+	double Ch = Ch_T(x, TargetAccuracy, &L_N_1, IgnoreAccuracy);
+
+	double Result = Sh / Ch;
+	(*N) = L_N_1 + L_N_2;
 
 	return Result;
 }

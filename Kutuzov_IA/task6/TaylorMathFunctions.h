@@ -19,6 +19,23 @@ double Sqrt_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy);
 
 double Ln_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy);
 
+double Tan_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy);
+
+double Cotan_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy);
+
+double Arcsin_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy);
+
+double Arccos_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy);
+
+double Arctan_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy);
+
+double Arccotan_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy);
+
+double Sh_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy);
+
+double Ch_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy);
+
+double Th_T(double x, int TargetAccuracy, int* N, int IgnoreAccuracy);
 
 // Factorial calculation function
 double Factorial(int x, int order);

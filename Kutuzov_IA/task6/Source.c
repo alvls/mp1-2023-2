@@ -108,8 +108,6 @@ void Mode_1()
 
 	printf("\n");
 
-	_Dcomplex z = { x , 0.f };
-
 	switch (Function)
 	{
 	case 0: 
@@ -129,7 +127,7 @@ void Mode_1()
 
 	case 3:
 		Result = Cth_T(x, TargetAccuracy, &N, 0);
-		TargetValue = creal(catanh(z));
+		TargetValue = 1 / tanh(x);
 		break;
 
 	case 4:
@@ -140,6 +138,51 @@ void Mode_1()
 	case 5:
 		Result = Ln_T(x, TargetAccuracy, &N, 0);
 		TargetValue = log(1 + x);
+		break;
+
+	case 6:
+		Result = Tan_T(x, TargetAccuracy, &N, 0);
+		TargetValue = tan(x);
+		break;
+
+	case 7:
+		Result = Cotan_T(x, TargetAccuracy, &N, 0);
+		TargetValue = 1 / tan(x);
+		break;
+
+	case 8:
+		Result = Arcsin_T(x, TargetAccuracy, &N, 0);
+		TargetValue = asin(x);
+		break;
+
+	case 9:
+		Result = Arccos_T(x, TargetAccuracy, &N, 0);
+		TargetValue = acos(x);
+		break;
+
+	case 10:
+		Result = Arctan_T(x, TargetAccuracy, &N, 0);
+		TargetValue = atan(x);
+		break;
+
+	case 11:
+		Result = Arccotan_T(x, TargetAccuracy, &N, 0);
+		TargetValue = (PI / 2.f) - atan(x);
+		break;
+
+	case 12:
+		Result = Sh_T(x, TargetAccuracy, &N, 0);
+		TargetValue = sinh(x);
+		break;
+
+	case 13:
+		Result = Ch_T(x, TargetAccuracy, &N, 0);
+		TargetValue = cosh(x);
+		break;
+
+	case 14:
+		Result = Th_T(x, TargetAccuracy, &N, 0);
+		TargetValue = tanh(x);
 		break;
 	
 	default:
@@ -183,7 +226,6 @@ void Mode_2()
 
 	printf("\n");
 
-	_Dcomplex z = { x , 0.f };
 	switch (Function)
 	{
 	case 0:
@@ -199,7 +241,7 @@ void Mode_2()
 		break;
 
 	case 3:
-		TargetValue = creal(catanh(z));
+		TargetValue = 1 / tanh(x);
 		break;
 
 	case 4:
@@ -208,6 +250,42 @@ void Mode_2()
 
 	case 5:
 		TargetValue = log(1 + x);
+		break;
+
+	case 6:
+		TargetValue = tan(x);
+		break;
+
+	case 7:
+		TargetValue = 1 / tan(x);
+		break;
+
+	case 8:
+		TargetValue = asin(x);
+		break;
+
+	case 9:
+		TargetValue = acos(x);
+		break;
+
+	case 10:
+		TargetValue = atan(x);
+		break;
+
+	case 11:
+		TargetValue = (PI / 2.f) - atan(x);
+		break;
+
+	case 12:
+		TargetValue = sinh(x);
+		break;
+
+	case 13:
+		TargetValue = cosh(x);
+		break;
+
+	case 14:
+		TargetValue = tanh(x);
 		break;
 
 	default:
@@ -247,6 +325,42 @@ void Mode_2()
 
 		case 5:
 			Result = Ln_T(x, 0, &L_N, 1);
+			break;
+
+		case 6:
+			Result = Tan_T(x, 0, &L_N, 1);
+			break;
+
+		case 7:
+			Result = Cotan_T(x, 0, &L_N, 1);
+			break;
+
+		case 8:
+			Result = Arcsin_T(x, 0, &L_N, 1);
+			break;
+
+		case 9:
+			Result = Arccos_T(x, 0, &L_N, 1);
+			break;
+
+		case 10:
+			Result = Arctan_T(x, 0, &L_N, 1);
+			break;
+
+		case 11:
+			Result = Arccotan_T(x, 0, &L_N, 1);
+			break;
+
+		case 12:
+			Result = Sh_T(x, 0, &L_N, 1);
+			break;
+
+		case 13:
+			Result = Ch_T(x, 0, &L_N, 1);
+			break;
+
+		case 14:
+			Result = Th_T(x, 0, &L_N, 1);
 			break;
 
 		default:
@@ -339,10 +453,10 @@ int ReceiveFunctionInput()
 
 	do
 	{
-		printf("\nInput function to calculate:\n  0 - sin(x);\n  1 - cos(x);\n  2 - exp(x);\n  3 - cth(x);\n  4 - sqrt(1 + x)\n  5 - ln(1 + x)\n\nYour Choice: ");
+		printf("\nInput function to calculate:\n  0 - sin(x);\n  1 - cos(x);\n  2 - exp(x);\n  3 - cth(x);\n  4 - sqrt(1 + x)\n  5 - ln(1 + x);\n  6 - tan(x);\n  7 - cotan(x);\n  8 - arcsin(x);\n  9 - arccos(x);\n  10 - arcttan(x);\n  11 - arccotan(x);\n  12 - sh(x);\n  13 - ch(x);\n  14 - th(x);\n\nYour Choice: ");
 		scanf_s("%i", &Function);
 
-		Inputing = !(Function >= 0 && Function <= 5);
+		Inputing = !(Function >= 0 && Function <= 14);
 		if (Inputing)
 			printf("Invalid Function!\n\n");
 
