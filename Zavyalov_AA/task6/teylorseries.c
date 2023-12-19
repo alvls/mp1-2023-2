@@ -1,6 +1,5 @@
 #include <math.h>
 
-
 double tey_sin(double x, double precision, int n, int* elemcount) {
 	double pi = 3.14159265358979323846; 
 	x = fmod(x, pi * 2); // getting rid of period

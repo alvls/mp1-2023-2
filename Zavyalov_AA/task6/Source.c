@@ -1,5 +1,6 @@
 #include "header.h"
 #include <stdio.h>
+
 int main() {
 	int mode; getmode(&mode);
 	func_ptr_t funcPtr;

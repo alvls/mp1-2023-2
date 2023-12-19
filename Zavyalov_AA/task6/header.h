@@ -2,7 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <math.h>
 
-typedef double (*func_ptr_t)(double, double, int, int* elemcount);
+typedef double (*func_ptr_t)(double, double, int, int*);
 typedef double (*standart_func_ptr_t)(double);
 void getmode(int* mode);
 void getfunc(func_ptr_t* target, standart_func_ptr_t* standart);
