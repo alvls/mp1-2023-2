@@ -28,9 +28,9 @@ void mode1(TfuncPart Tfunc, TfuncInpWork TMath, double x, int sgn) {
 	}
 
 	double res = 0, Mres = sgn*TMath(x);
-	unsigned int elmInd = 0; unsigned long long fact = 1; double xpow = 1;
+	unsigned int elmInd = 0; unsigned long long fact = 1, n = 1; double xpow = 1;
 	while ((elmInd < elmNum) && (fabs(res - Mres) > precision)) {
-		res += sgn * Tfunc(x, elmInd, &xpow, &fact);
+		res += sgn * Tfunc(x, &n, &xpow, &fact, elmInd);
 		elmInd++;
 	}
 	printf("Exact value of the function value at this point: %.20lf\n", Mres);
@@ -50,12 +50,12 @@ void mode2(TfuncPart Tfunc, TfuncInpWork TMath, double x, int sgn) {
 	}
 
 	double res = 0, Mres = sgn*TMath(x);
-	unsigned int expInd = 0; unsigned long long fact = 1; double xpow = 1;
+	unsigned int expInd = 0; unsigned long long fact = 1, n = 1; double xpow = 1;
 
 	printf("Exact value of the function value at this point: %.20lf\n", Mres);
-	printf("Exp %14c Evalution %19c Difference\n", ' ', ' ');
+	printf("Exp %10c Evalution %15c Difference\n", ' ', ' ');
 	while (expInd < nMax) {
-		res += sgn * Tfunc(x, expInd, &xpow, &fact);
+		res += sgn * Tfunc(x, &n, &xpow, &fact, expInd);
 		printf("%-2u     %-35.20lf    %-35.20lf\n", expInd+1, res, fabs(res - Mres));
 		expInd++;
 	}
@@ -110,27 +110,29 @@ double getArgument() {
 
 //checking Argument
 void simplArgument(double* x, int* sgn, double noPeriodZone[SIZE][2], int* index) {
-	int tgTrue = ((*index == NULL) || (*index == NULL)) ? -1 : 1; // вместо NULL вписать номера tg и ctg
+	int tgTrue = ((*index == 33) || (*index == 33)) ? -1 : 1; // NULL <-> tg/ctg num
 	while (*x > noPeriodZone[*index][1]) { *x -= pi; *sgn *= -1 * tgTrue; }
 	while (*x < noPeriodZone[*index][0]) { *x += pi; *sgn *= -1 * tgTrue; }
-	/* Обоснование
+	/* Justification
 	sin(x - pi) == -sin(x)
 	sin(x + pi) == -sin(x)
 	cos(x - pi) == -cos(x)
 	cos(x + pi) == -cos(x)
 
-	tgTrue = -1, если у нас в руках tg или ctg
+	tgTrue = -1,if we have tg or ctg
+	then on "while" - strings +-pi won't change the sgn, because period of tg/ctg is pi 
 	тогда на 109 - 110 строках при +-pi знак выражения изменяться не будет, тк у tg/ctg период = pi
 	*/
 };
 
-void checkArgumentSegment(double* x, int* sgn, double RoAV[SIZE][2], int* index) { //RoAV = the range of acceptable values
+void checkArgumentSegment(double* x, int* sgn, double RoAV[SIZE][2], int* index) { 
+	//RoAV = the range of acceptable values
 	while ((*x < RoAV[*index][0]) || (*x > RoAV[*index][1])) {
 		printf("Incorrect number. \n");
 		printf("Argument for this function must be from %f till %f\n",  RoAV[*index][0], RoAV[*index][1]);
 		printf("otherwise you will have worse accuracy / this argument is out of the range of acceptable values for this function\n" );
 		printf("Try again: ");
-		scanf("%lf", &x);
+		scanf("%lf", x);
 		scanf("%*[^\n]");
 		getchar();
 		printf("\n");
@@ -143,7 +145,7 @@ void checkArgumentIntervl(double* x, int* sgn, double RoAV[SIZE][2], int* index)
 		printf("Argument for this function must be from %f till %f (not inclusive)\n", RoAV[*index][0], RoAV[*index][1]);
 		printf("otherwise you will have worse accuracy / this argument is out of the range of acceptable values for this function\n");
 		printf("Try again: ");
-		scanf("%lf", &x);
+		scanf("%lf", x);
 		scanf("%*[^\n]");
 		getchar();
 		printf("\n");
@@ -151,59 +153,69 @@ void checkArgumentIntervl(double* x, int* sgn, double RoAV[SIZE][2], int* index)
 }
 
 //Tfuncs
-double expPart(double x, int n, double* preX, unsigned long long* preFac) { //preX first = 1, preFac = 1
+double expPart(double x, unsigned long long* n, double* preX, unsigned long long* preFac, unsigned int elmInd) { //firstly, preX = 1 and preFac = 1
 	double res= 0.0;
-	if (n == 0)
-		return 1;
-	res = (*preX * x) / (double)(n * *preFac);
-	*preX *= x; *preFac *= n;
-	return res;
-}
-
-double sinPart(double x, int n, double* preX, unsigned long long* preFac) {
-	double res = 0.0;
-	if (n == 0) {
-		return 0;
-	}
-
-	if (n % 2 == 0) {
-		*preX *= x; *preFac *= n;
-		return 0;
-	}
-	double sign = 1.0;
-	if (n % 4 == 3) {
-		sign = -1.0;
-	}
-	res = (*preX * x) / (double)(n * *preFac) * sign;;
-	*preX *= x; *preFac *= n;
-	return res;
-}
-
-double cosPart(double x, int n, double* preX, unsigned long long* preFac) {
-	double res = 0.0;
-	if (n == 0) {
+	if (*n == 1) {
+		*preX *= x;
+		*n += 1;
 		return 1;
 	}
 
-	if (n % 2 == 1) {
-		*preX *= x; *preFac *= n;
-		return 0;
-	}
-	double sign = 1.0;
-	if (n % 4 == 2) {
-		sign = -1.0;
-	}
-	res = (*preX * x) / (double)(n * *preFac) * sign;;
-	*preX *= x; *preFac *= n;
+	res = (*preX) / (double)(*preFac);
+	*preX *= x; *preFac *= (*n);
+	*n+=1;
 	return res;
 }
 
-double arthPart(double x, int n, double* preX, unsigned long long* placeHolder) {
+double sinPart(double x, unsigned long long* n, double* preX, unsigned long long* preFac, unsigned int elmInd) {
 	double res = 0.0;
-	if (n == 0) {
-		return 0;
+	double sign = (elmInd % 2 == 1) ? -1.0 : 1.0; //elmInd начинается с 0, так что здесь не == 0, а == 1
+	if (*n == 1) {
+		*preX = *preX * x * x * x; 
+		*preFac = *preFac * (*n+2) * (*n + 1);
+		*n = *n + 2;
+		return x;
+	}
+	
+	res = (*preX) / (double)(*preFac) * sign;
+
+	*preX = *preX * x * x; 
+	*preFac = *preFac * (*n + 2) * (*n + 1);
+	*n = *n + 2;
+	return res;
+}
+
+double cosPart(double x, unsigned long long* n, double* preX, unsigned long long* preFac, unsigned int elmInd) {
+	double res = 0.0;
+	double sign = (elmInd % 2 == 1) ? -1.0 : 1.0;
+	
+	if (*n == 1) {
+		*preX = *preX * x * x; *preFac = *preFac * (*n + 1);
+		*n = *n + 1;
+		return 1;
 	}
 
+	res = (*preX) / (double)(*preFac) * sign;
+	*preX = *preX * x * x;
+	*preFac = *preFac * (*n + 2) * (*n + 1);
+	*n = *n + 2;
+	return res;
+}
+
+double arthPart(double x, unsigned long long* n, double* preX, unsigned long long* placeHolder, unsigned int elmInd) {
+	double res = 0.0; //*n
+	if (*n == 1) {
+		*preX *= x * x * x;
+		*n += 2;
+		return x;
+	}
+	
+	res = (*preX) / (double)(*n);
+	*preX *= x * x;
+	*n += 2;
+	return res;
+
+	/*
 	if (n % 2 == 0) {
 		*preX *= x;
 		return 0;
@@ -211,5 +223,5 @@ double arthPart(double x, int n, double* preX, unsigned long long* placeHolder) 
 
 	res = (*preX * x) / (double)(n);
 	*preX *= x;
-	return res;
+	return res;*/
 }

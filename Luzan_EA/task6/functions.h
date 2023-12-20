@@ -8,7 +8,7 @@
 
 double intervals[SIZE][2];
 
-typedef double (*TfuncPart) (double, int, double*, unsigned long long*);
+typedef double (*TfuncPart) (double, unsigned long long*, double*, unsigned long long*, unsigned int );
 
 typedef double (*TfuncInpWork) (double);      //хорошая ли рпактика передавать аргумент указателем 
 									    	  //или лучше присваиаваить возват функции
@@ -24,16 +24,16 @@ int getfNum();
 
 double getArgument();
 
-void simplArgument(double x, int* sgn, double noPeriodZone[SIZE][2], int* i);
+void simplArgument(double* x, int* sgn, double noPeriodZone[SIZE][2], int* i);
 
 void checkArgument(double* x, int* sgn, double RoAV[SIZE][2], int* index);
 
 void checkArgumentIntervl(double* x, int* sgn, double RoAV[SIZE][2], int* index);
 
-double expPart(double x, int n, double* preX, unsigned long long* preFac);
+double expPart(double x, unsigned long long* n, double* preX, unsigned long long* preFac, unsigned int elmInd);
 
-double sinPart(double x, int n, double* preX, unsigned long long* preFac);
+double sinPart(double x, unsigned long long* n, double* preX, unsigned long long* preFac, unsigned int elmInd);
 
-double cosPart(double x, int n, double* preX, unsigned long long* preFac);
+double cosPart(double x, unsigned long long* n, double* preX, unsigned long long* preFac, unsigned int elmInd);
 
-double arthPart(double x, int n, double* preX, unsigned long long* placeHolder);
+double arthPart(double x, unsigned long long* n, double* preX, unsigned long long* preFac, unsigned int elmInd);

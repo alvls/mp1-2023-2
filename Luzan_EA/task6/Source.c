@@ -1,7 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "functions.h"
-#include <time.h>
 
+// tg проверить
+// +- ф-ия на первый член
+//  
 
 int main() {
 	int inp = 1;
