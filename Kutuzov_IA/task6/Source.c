@@ -7,6 +7,10 @@
 // Commnad type enumeration
 typedef enum {C_Exit, C_SelectMode, C_Continue} CommandT;
 
+// Function pointers types
+typedef double (*MathFunc_T)(double, int, int*, int);
+typedef double (*MathFunc_C)(double);
+
 
 // Operation mode 1 function
 void Mode_1();
@@ -28,6 +32,24 @@ void ClearKeyboardBuffer();
 
 // Receives function input from the user
 int ReceiveFunctionInput();
+
+
+//Custom c functions
+double cotanh(double x);
+double sqrt_1(double x);
+double log_1(double x);
+double cotan(double x);
+double acotan(double x);
+
+
+// Math functions arrays
+MathFunc_T Taylor_Functions[15] = {
+	&Sin_T, &Cos_T, &Exp_T, &Cth_T, &Sqrt_T, &Ln_T, &Tan_T, &Cotan_T, &Arcsin_T, &Arccos_T, &Arctan_T, &Arccotan_T, &Sh_T, &Ch_T, &Th_T
+};
+
+MathFunc_C C_Functions[15] = {
+	&sin, &cos, &exp, &cotanh, &sqrt_1, &log_1, &tan, &cotan, &asin, &acos, &atan,&acotan, &sinh, &cosh, &tanh
+};
 
 
 
@@ -108,82 +130,9 @@ void Mode_1()
 
 	printf("\n");
 
-	switch (Function)
-	{
-	case 0: 
-		Result = Sin_T(x, TargetAccuracy, &N, 0);
-		TargetValue = sin(x);
-		break;
-
-	case 1:
-		Result = Cos_T(x, TargetAccuracy, &N, 0);
-		TargetValue = cos(x);
-		break;
-
-	case 2:
-		Result = Exp_T(x, TargetAccuracy, &N, 0);
-		TargetValue = exp(x);
-		break;
-
-	case 3:
-		Result = Cth_T(x, TargetAccuracy, &N, 0);
-		TargetValue = 1 / tanh(x);
-		break;
-
-	case 4:
-		Result = Sqrt_T(x, TargetAccuracy, &N, 0);
-		TargetValue = sqrt(1 + x);
-		break;
-
-	case 5:
-		Result = Ln_T(x, TargetAccuracy, &N, 0);
-		TargetValue = log(1 + x);
-		break;
-
-	case 6:
-		Result = Tan_T(x, TargetAccuracy, &N, 0);
-		TargetValue = tan(x);
-		break;
-
-	case 7:
-		Result = Cotan_T(x, TargetAccuracy, &N, 0);
-		TargetValue = 1 / tan(x);
-		break;
-
-	case 8:
-		Result = Arcsin_T(x, TargetAccuracy, &N, 0);
-		TargetValue = asin(x);
-		break;
-
-	case 9:
-		Result = Arccos_T(x, TargetAccuracy, &N, 0);
-		TargetValue = acos(x);
-		break;
-
-	case 10:
-		Result = Arctan_T(x, TargetAccuracy, &N, 0);
-		TargetValue = atan(x);
-		break;
-
-	case 11:
-		Result = Arccotan_T(x, TargetAccuracy, &N, 0);
-		TargetValue = (PI / 2.f) - atan(x);
-		break;
-
-	case 12:
-		Result = Sh_T(x, TargetAccuracy, &N, 0);
-		TargetValue = sinh(x);
-		break;
-
-	case 13:
-		Result = Ch_T(x, TargetAccuracy, &N, 0);
-		TargetValue = cosh(x);
-		break;
-
-	case 14:
-		Result = Th_T(x, TargetAccuracy, &N, 0);
-		TargetValue = tanh(x);
-		break;
+	
+	Result = Taylor_Functions[Function](x, TargetAccuracy, &N, 0);
+	TargetValue = C_Functions[Function](x);
 	
 	default:
 		printf("!ERROR! Function executing failed!\n\n");
@@ -226,67 +175,8 @@ void Mode_2()
 
 	printf("\n");
 
-	switch (Function)
-	{
-	case 0:
-		TargetValue = sin(x);
-		break;
 
-	case 1:
-		TargetValue = cos(x);
-		break;
-
-	case 2:
-		TargetValue = exp(x);
-		break;
-
-	case 3:
-		TargetValue = 1 / tanh(x);
-		break;
-
-	case 4:
-		TargetValue = sqrt(1 + x);
-		break;
-
-	case 5:
-		TargetValue = log(1 + x);
-		break;
-
-	case 6:
-		TargetValue = tan(x);
-		break;
-
-	case 7:
-		TargetValue = 1 / tan(x);
-		break;
-
-	case 8:
-		TargetValue = asin(x);
-		break;
-
-	case 9:
-		TargetValue = acos(x);
-		break;
-
-	case 10:
-		TargetValue = atan(x);
-		break;
-
-	case 11:
-		TargetValue = (PI / 2.f) - atan(x);
-		break;
-
-	case 12:
-		TargetValue = sinh(x);
-		break;
-
-	case 13:
-		TargetValue = cosh(x);
-		break;
-
-	case 14:
-		TargetValue = tanh(x);
-		break;
+	TargetValue = C_Functions[Function](x);
 
 	default:
 		printf("!ERROR! Function executing failed!\n\n");
@@ -298,70 +188,7 @@ void Mode_2()
 
 	for (int N = 0; N <= NMax; N++)
 	{
-		double Result = 0.f;
-		
-		int L_N = N;
-		switch (Function)
-		{
-		case 0:
-			Result = Sin_T(x, 0, &L_N, 1);
-			break;
-
-		case 1:
-			Result = Cos_T(x, 0, &L_N, 1);
-			break;
-
-		case 2:
-			Result = Exp_T(x, 0, &L_N, 1);
-			break;
-
-		case 3:
-			Result = Cth_T(x, 0, &L_N, 1);
-			break;
-
-		case 4:
-			Result = Sqrt_T(x, 0, &L_N, 1);
-			break;
-
-		case 5:
-			Result = Ln_T(x, 0, &L_N, 1);
-			break;
-
-		case 6:
-			Result = Tan_T(x, 0, &L_N, 1);
-			break;
-
-		case 7:
-			Result = Cotan_T(x, 0, &L_N, 1);
-			break;
-
-		case 8:
-			Result = Arcsin_T(x, 0, &L_N, 1);
-			break;
-
-		case 9:
-			Result = Arccos_T(x, 0, &L_N, 1);
-			break;
-
-		case 10:
-			Result = Arctan_T(x, 0, &L_N, 1);
-			break;
-
-		case 11:
-			Result = Arccotan_T(x, 0, &L_N, 1);
-			break;
-
-		case 12:
-			Result = Sh_T(x, 0, &L_N, 1);
-			break;
-
-		case 13:
-			Result = Ch_T(x, 0, &L_N, 1);
-			break;
-
-		case 14:
-			Result = Th_T(x, 0, &L_N, 1);
-			break;
+		double Result = Taylor_Functions[Function](x, TargetAccuracy, &N, 0);
 
 		default:
 			printf("!ERROR! Function executing failed!\n\n");
@@ -431,6 +258,7 @@ CommandT ReceiveCommandInput()
 
 		default:
 			printf("Invalid Command!\n\n");
+			ClearKeyboardBuffer();
 			break;
 		}
 
@@ -463,4 +291,30 @@ int ReceiveFunctionInput()
 	} while (Inputing);
 
 	return Function;
+}
+
+
+double cotanh(double x)
+{
+	return 1 / tanh(x);
+}
+
+double sqrt_1(double x)
+{
+	return sqrt(1 + x);
+}
+
+double log_1(double x)
+{
+	return log(1 + x);
+}
+
+double cotan(double x)
+{
+	return 1 / tan(x);
+}
+
+double acotan(double x)
+{
+	return (PI / 2.f) - atan(x);
 }
