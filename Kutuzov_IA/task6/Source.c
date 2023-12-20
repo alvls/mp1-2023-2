@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <math.h>
-#include <complex.h>
-#include <tgmath.h>
 #include "TaylorMathFunctions.h"
 
 // Commnad type enumeration
