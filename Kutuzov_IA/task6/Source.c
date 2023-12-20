@@ -7,7 +7,7 @@
 // Commnad type enumeration
 typedef enum {C_Exit, C_SelectMode, C_Continue} CommandT;
 
-// Function pointers types
+// Function pointer types
 typedef double (*MathFunc_T)(double, int, int*, int);
 typedef double (*MathFunc_C)(double);
 
@@ -42,7 +42,7 @@ double cotan(double x);
 double acotan(double x);
 
 
-// Math functions arrays
+// Math function arrays
 MathFunc_T Taylor_Functions[15] = {
 	&Sin_T, &Cos_T, &Exp_T, &Cth_T, &Sqrt_T, &Ln_T, &Tan_T, &Cotan_T, &Arcsin_T, &Arccos_T, &Arctan_T, &Arccotan_T, &Sh_T, &Ch_T, &Th_T
 };
@@ -55,7 +55,7 @@ MathFunc_C C_Functions[15] = {
 
 int main()
 {
-	printf("TAYLOR SERIES\n\nPossible Commands:\n  C - Continue with current mode;\n  M - Choose an operation mode;\n  Q - Exit program\n\n");
+	printf("TAYLOR SERIES\n\nPossible Commands:\n  C - Continue with current mode;\n  M - Choose an operation mode;\n  Q - Exit program\n\nNote that some functions only give correct results for small enough x, \npassing in values high enough can result into incorrect results!\n\n");
 
 	int Running = 1;
 	int CurrentMode = 0;
@@ -136,13 +136,8 @@ void Mode_1()
 	
 	Result = Taylor_Functions[Function](x, TargetAccuracy, &N, 0);
 	TargetValue = C_Functions[Function](x);
-	
-	default:
-		printf("!ERROR! Function executing failed!\n\n");
-	}
 
 	printf("Target Value: %lf\nCalculated Approximation: %lf\nError: %lf\nNumber of calculated elements: %i\n\n\n", TargetValue, Result, Result - TargetValue, N);
-	ClearKeyboardBuffer();
 }
 
 
@@ -164,7 +159,6 @@ void Mode_2()
 	scanf_s("%lf", &x);
 	ClearKeyboardBuffer();
 
-
 	do
 	{
 		printf("Input NMax - maximum number of series elements to calculate (1 - 25): ");
@@ -177,27 +171,16 @@ void Mode_2()
 
 	} while (Inputing);
 
-
 	printf("\n");
 
-
 	TargetValue = C_Functions[Function](x);
-
-	default:
-		printf("!ERROR! Function executing failed!\n\n");
-	}
-
 	printf("Target Value = %lf\n\n\n", TargetValue);
 
 	printf("N        Value         Error\n\n");
-
 	for (int N = 0; N <= NMax; N++)
 	{
-		double Result = Taylor_Functions[Function](x, TargetAccuracy, &N, 0);
-
-		default:
-			printf("!ERROR! Function executing failed!\n\n");
-		}
+		int L_N = N;
+		double Result = Taylor_Functions[Function](x, 0, &L_N, 1);
 
 		printf("%-5i  %10.6lf  %10.6lf\n", N, Result, Result - TargetValue);
 	}
@@ -264,7 +247,6 @@ CommandT ReceiveCommandInput()
 
 		default:
 			printf("Invalid Command!\n\n");
-			ClearKeyboardBuffer();
 			break;
 		}
 
@@ -275,7 +257,7 @@ CommandT ReceiveCommandInput()
 void ClearKeyboardBuffer()
 {
 	int ch;
-	while (ch = getchar() != '\n' && c != EOF)
+	while ((ch = getchar() != '\n') && ch != EOF)
 		;
 }
 
