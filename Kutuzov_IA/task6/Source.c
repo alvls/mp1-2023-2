@@ -55,7 +55,7 @@ MathFunc_C C_Functions[15] = {
 
 int main()
 {
-	printf("TAYLOR SERIES\n\nPossible Commands:\n  C - Continue with current mode;\n  M - Choose an operation mode;\n  Q - Exit program\n\nNote that some functions only give correct results for small enough x, \npassing in values high enough can result into incorrect results!\n\n");
+	printf("TAYLOR SERIES\n\nPossible Commands:\n  C - Continue with current mode;\n  M - Choose an operation mode;\n  Q - Exit program\n\nNote that some functions only give correct results for small enough x, \npassing in values high enough can result in incorrect values!\n\n");
 
 	int Running = 1;
 	int CurrentMode = 0;
