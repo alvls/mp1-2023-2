@@ -104,11 +104,13 @@ void Mode_1()
 
 	printf("Input x: ");
 	scanf_s("%lf", &x);
+	ClearKeyboardBuffer();
 
 	do
 	{
 		printf("Input Target Accuracy (Number of digits after dot: 1 - 6): ");
 		scanf_s("%i", &TargetAccuracy);
+		ClearKeyboardBuffer();
 
 		Inputing = !(TargetAccuracy > 0 && TargetAccuracy < 7);
 		if (Inputing)
@@ -120,6 +122,7 @@ void Mode_1()
 	{
 		printf("Input N - maximum number of series elements to calculate (1 - 1000): ");
 		scanf_s("%i", &N);
+		ClearKeyboardBuffer();
 
 		Inputing = !(N > 0 && N < 1001);
 		if (Inputing)
@@ -159,12 +162,14 @@ void Mode_2()
 
 	printf("Input x: ");
 	scanf_s("%lf", &x);
+	ClearKeyboardBuffer();
 
 
 	do
 	{
 		printf("Input NMax - maximum number of series elements to calculate (1 - 25): ");
 		scanf_s("%i", &NMax);
+		ClearKeyboardBuffer();
 
 		Inputing = !(NMax > 0 && NMax < 26);
 		if (Inputing)
@@ -198,7 +203,6 @@ void Mode_2()
 	}
 
 	printf("\n\n");
-	ClearKeyboardBuffer();
 }
 
 
@@ -211,6 +215,7 @@ void SelectMode(int* ModeOut)
 	{
 		printf("\nInput Operation Mode (0 - Single Calculation, 1 - Mass calculation experiment): ");
 		scanf_s("%i", &NewMode);
+		ClearKeyboardBuffer();
 		
 		Inputing = !(NewMode == 0 || NewMode == 1);
 		if (Inputing)
@@ -247,6 +252,7 @@ CommandT ReceiveCommandInput()
 	{
 		printf("Input Command (C, M or Q): ");
 		scanf_s("%c", &CommandC);
+		ClearKeyboardBuffer();
 		
 		switch (CommandC)
 		{
@@ -269,7 +275,7 @@ CommandT ReceiveCommandInput()
 void ClearKeyboardBuffer()
 {
 	int ch;
-	while (ch = getchar() != '\n')
+	while (ch = getchar() != '\n' && c != EOF)
 		;
 }
 
@@ -283,6 +289,7 @@ int ReceiveFunctionInput()
 	{
 		printf("\nInput function to calculate:\n  0 - sin(x);\n  1 - cos(x);\n  2 - exp(x);\n  3 - cth(x);\n  4 - sqrt(1 + x)\n  5 - ln(1 + x);\n  6 - tan(x);\n  7 - cotan(x);\n  8 - arcsin(x);\n  9 - arccos(x);\n  10 - arcttan(x);\n  11 - arccotan(x);\n  12 - sh(x);\n  13 - ch(x);\n  14 - th(x);\n\nYour Choice: ");
 		scanf_s("%i", &Function);
+		ClearKeyboardBuffer();
 
 		Inputing = !(Function >= 0 && Function <= 14);
 		if (Inputing)
