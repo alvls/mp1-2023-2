@@ -14,5 +14,13 @@
     <ClCompile Include="task5.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="task5 - file.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="task5 - func.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
