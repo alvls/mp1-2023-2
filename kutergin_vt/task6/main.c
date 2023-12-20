@@ -5,12 +5,7 @@
 
 void main() {
     char program_mode[20] = {0}; // название режима работы программы
-    
-    if (-0.000000 == 0)
-        printf("-0.000000 == 0 \n");
-    else
-        printf("-0.000000 != 0 \n");
-    
+        
     printf("Select the program operating mode: \n");
     printf("- mode1;\n"); // Однократный расчет функции в заданной точке
     printf("- mode2;\n"); // Серийный эксперимент

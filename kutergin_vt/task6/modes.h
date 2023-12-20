@@ -58,8 +58,8 @@ void mode1() {
             scanf("%d", &N);
         }
     } else if (func_num == 4) {
-        while ((N < 1) || (N > 20)) {
-            printf("The number of series elemets for hyperbolic tangent must be from 1 to 20 \n");
+        while ((N < 1) || (N > 10)) {
+            printf("The number of series elemets for hyperbolic tangent must be from 1 to 10 \n");
             printf("This is due to the complexity of calculating Bernoulli numbers \n");
             printf("Enter again the number of Taylor series elements to perform the calculation: ");
             scanf("%d", &N);
@@ -121,8 +121,8 @@ void mode2() {
             scanf("%d", &NMax);
         }
     } else if (func_num == 4) {
-        while ((NMax < 1) || (NMax > 20)) {
-            printf("The number of series elemets for hyperbolic tangent must be from 1 to 20 \n");
+        while ((NMax < 1) || (NMax > 10)) {
+            printf("The number of series elemets for hyperbolic tangent must be from 1 to 10 \n");
             printf("This is due to the complexity of calculating Bernoulli numbers \n");
             printf("Enter again the number of Taylor series elements to perform the calculation: ");
             scanf("%d", &NMax);
@@ -142,3 +142,4 @@ void mode2() {
 }
 
 #endif
+
