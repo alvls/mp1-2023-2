@@ -3,10 +3,10 @@
 
 //area of acceptable values && periods
 double intervals[SIZE][4] = {
-		{1, -5, 5, 1},
-		{1, -pi / 2, pi / 2, 1},
-		{1, 0, pi, 1},
-		{0, -1, 1, 0}
+		{1, -5, 5, 1}, // [-5, 5]
+		{1, -pi / 2, pi / 2, 1}, // [ -pi / 2, pi / 2]
+		{1, 0, pi, 1}, // [0, pi]
+		{0, -1, 1, 0} // (-1; 1)
 };
 
 //modes
