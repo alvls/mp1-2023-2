@@ -11,20 +11,23 @@ int main() {
 		double x = 0.0; int fNum = -10; 
 		TfuncPart Tfuncs[SIZE] = { expPart, sinPart, cosPart, arthPart };
 		TfuncInpWork TMaths[SIZE] = { exp, sin, cos, atanh};
-		TfuncArgCheck TChecks[SIZE] = { checkArgumentIntervl, simplArgument, simplArgument,
-									   checkArgumentIntervl };
+
 		// selecting function number
 		fNum = getfNum();
 		fNum--;
 		TfuncPart Tfunc = Tfuncs[fNum];
 		TfuncInpWork TMath = TMaths[fNum];
-		TfuncArgCheck TCheck = TChecks[fNum];
 
 		//argument
 		x = getArgument();
 		int sgn = 1; 
-		TCheck(&x, &sgn, intervals, &fNum);
-	
+		if ((fNum == 0) || (fNum == 1)) {
+			simplArgument(&x, &sgn, intervals, fNum);
+		}
+		else {
+			checkArg(&x, intervals, fNum);
+		}
+
 		// mode
 		int mode = getMode();
 		if (mode == 1)

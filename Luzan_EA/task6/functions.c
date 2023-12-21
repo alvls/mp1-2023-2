@@ -2,11 +2,11 @@
 #include "functions.h"
 
 //area of acceptable values && periods
-double intervals[SIZE][2] = {
-		{-5, 5},
-		{-pi / 2, pi / 2},
-		{0, pi},
-		{-1, 1}
+double intervals[SIZE][4] = {
+		{1, -5, 5, 1},
+		{1, -pi / 2, pi / 2, 1},
+		{1, 0, pi, 1},
+		{0, -1, 1, 0}
 };
 
 //modes
@@ -21,14 +21,15 @@ void mode1(TfuncPart Tfunc, TfuncInpWork TMath, double x, int sgn) {
 
 	printf("Enter number of elements in row (must be <= 1000): ");
 	unsigned int elmNum = 1001;
-	while ( (scanf("%ui", &elmNum) < 1) || (elmNum > 1000) || (elmNum < 1)) {
+	while ( (scanf("%u", &elmNum) < 1) || (elmNum > 1000) || (elmNum < 1)) {
 		printf("\nIncorrect  number of elements. Try again: ");
 		scanf("%*[^\n]");
 		getchar();
 	}
 
 	double res = 0, Mres = sgn*TMath(x);
-	unsigned int elmInd = 0; unsigned long long fact = 1, n = 1; double xpow = 1;
+	unsigned long long fact = 1, n = 1; double xpow = 1;
+	unsigned int elmInd = 0;
 	while ((elmInd < elmNum) && (fabs(res - Mres) > precision)) {
 		res += sgn * Tfunc(x, &n, &xpow, &fact, elmInd);
 		elmInd++;
@@ -50,7 +51,8 @@ void mode2(TfuncPart Tfunc, TfuncInpWork TMath, double x, int sgn) {
 	}
 
 	double res = 0, Mres = sgn*TMath(x);
-	unsigned int expInd = 0; unsigned long long fact = 1, n = 1; double xpow = 1;
+	unsigned int expInd = 0; 
+	unsigned long long fact = 1, n = 1; double xpow = 1;
 
 	printf("Exact value of the function value at this point: %.20lf\n", Mres);
 	printf("Exp %10c Evalution %15c Difference\n", ' ', ' ');
@@ -109,10 +111,10 @@ double getArgument() {
 };
 
 //checking Argument
-void simplArgument(double* x, int* sgn, double noPeriodZone[SIZE][2], int* index) {
-	int tgTrue = ((*index == 33) || (*index == 33)) ? -1 : 1; // NULL <-> tg/ctg num
-	while (*x > noPeriodZone[*index][1]) { *x -= pi; *sgn *= -1 * tgTrue; }
-	while (*x < noPeriodZone[*index][0]) { *x += pi; *sgn *= -1 * tgTrue; }
+void simplArgument(double* x, int* sgn, double noPeriodZone[SIZE][4], int index) {
+	int tgTrue = ((index == 33) || (index == 33)) ? -1 : 1; // NULL <-> tg/ctg num
+	while (*x > noPeriodZone[index][2]) { *x -= pi; *sgn *= -1 * tgTrue; }
+	while (*x < noPeriodZone[index][1]) { *x += pi; *sgn *= -1 * tgTrue; }
 	/* Justification
 	sin(x - pi) == -sin(x)
 	sin(x + pi) == -sin(x)
@@ -125,24 +127,22 @@ void simplArgument(double* x, int* sgn, double noPeriodZone[SIZE][2], int* index
 	*/
 };
 
-void checkArgumentSegment(double* x, int* sgn, double RoAV[SIZE][2], int* index) { 
-	//RoAV = the range of acceptable values
-	while ((*x < RoAV[*index][0]) || (*x > RoAV[*index][1])) {
+void checkArg(double* x, double RoAV[SIZE][4], int index) {
+	while ((*x <= RoAV[index][1]) || (*x >= RoAV[index][2])) {
+		if ((*x == RoAV[index][1]) && (RoAV[index][0] == 1) || (*x == RoAV[index][2]) && (RoAV[index][3] == 1))
+			break;
 		printf("Incorrect number. \n");
-		printf("Argument for this function must be from %f till %f\n",  RoAV[*index][0], RoAV[*index][1]);
-		printf("otherwise you will have worse accuracy / this argument is out of the range of acceptable values for this function\n" );
-		printf("Try again: ");
-		scanf("%lf", x);
-		scanf("%*[^\n]");
-		getchar();
-		printf("\n");
-	}
-}
 
-void checkArgumentIntervl(double* x, int* sgn, double RoAV[SIZE][2], int* index) {
-	while ((*x <= RoAV[*index][0]) || (*x >= RoAV[*index][1])) {
-		printf("Incorrect number. \n");
-		printf("Argument for this function must be from %f till %f (not inclusive)\n", RoAV[*index][0], RoAV[*index][1]);
+		printf("Argument for this function must be from %f (", RoAV[index][1]);
+		if (RoAV[index][0] != 1) {
+			printf("not ");
+		}
+		printf("inclusive) till %f (", RoAV[index][2]);
+		if (RoAV[index][3] != 1) {
+			printf("not ");
+		}
+		printf("inclusive)\n");
+
 		printf("otherwise you will have worse accuracy / this argument is out of the range of acceptable values for this function\n");
 		printf("Try again: ");
 		scanf("%lf", x);
