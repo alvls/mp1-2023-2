@@ -10,8 +10,8 @@ double intervals[SIZE][4];
 
 typedef double (*TfuncPart) (double, unsigned long long*, double*, unsigned long long*, unsigned int );
 
-typedef double (*TfuncInpWork) (double);      //хорошая ли рпактика передавать аргумент указателем 
-									    	  //или лучше присваиаваить возват функции						  
+typedef double (*TfuncInpWork) (double);     
+
 void mode1(TfuncPart Tfunc, TfuncInpWork TMath, double x, int sgn);
 
 void mode2(TfuncPart Tfunc, TfuncInpWork TMath, double x, int sgn);

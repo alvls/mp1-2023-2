@@ -113,7 +113,6 @@
   <ItemGroup>
     <ClCompile Include="functions.c" />
     <ClCompile Include="Source.c" />
-    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functions.h" />
