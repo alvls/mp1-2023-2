@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 double TrigArgWrap(double arg);
 
 void tpSin(double x, unsigned n, double* t, double* ans);

@@ -13,6 +13,7 @@ void rinput(unsigned* v, unsigned l, unsigned r) {
 
 int main() {
 	setlocale(LC_ALL, "");
+
 	while (1) {
 		void (*func)(double, unsigned, double*, double*);
 		double (*et)(double);
@@ -21,7 +22,7 @@ int main() {
 		unsigned choose = 0;
 		int mode = 1;
 		unsigned n = 1;
-		printf("Выберите функцию:\n0) exp - экспонента\n1) sin - синус\n2) cos - косинус\n3) sinh - гиперболический синус\n4) cosh - гиперболический косинус\n");
+		printf("\nВыберите функцию:\n0) exp - экспонента\n1) sin - синус\n2) cos - косинус\n3) sinh - гиперболический синус\n4) cosh - гиперболический косинус\n");
 		rinput(&choose, 0, 4);
 		printf("Выберите режим: 1 - однократный расчёт 2 - серийный эксперимент\n");
 		rinput(&mode, 1, 2);
@@ -74,8 +75,7 @@ int main() {
 		}
 		if (choose == 1 || choose == 2)
 			x = TrigArgWrap(x);
-		Taylor(tpSh, sinh, x, n, todigit, mode);
+		Taylor(func, et, x, n, todigit, mode);
 	}
-	//system("pause");
 	return 0;
 }
