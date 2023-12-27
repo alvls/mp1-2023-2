@@ -12,6 +12,16 @@ void menu_mode_2();
 double get_value(double x, int choice);
 double calc_est(double x, int choice, int count);
 
+int scan_methods(int* result, int min_v, int max_v)
+{
+    int methods;
+    methods = scanf_s("%d", result);
+    while (getchar() != '\n');
+    if (methods == 1 && *result >= min_v && *result <= max_v)
+        return 1;
+    return 0;
+}
+
 double (*taylor_func[4])(double, int, int, int*) =
 {
     taylor_exp,
@@ -20,7 +30,7 @@ double (*taylor_func[4])(double, int, int, int*) =
     taylor_arcsin,
 };
 
-double (*сur_func[4])(double) =
+double (*СЃur_func[4])(double) =
 {
     exp,
     sin,
@@ -35,13 +45,12 @@ int main()
 
     while (flag == 1)
     {
-        printf("Привет!\nЭта программа позволяет выполнять расчет значений для некоторого набора функций \nв заданной точке с заданной погрешностью за счет разложения этих функций в ряд Тейлора.\nВыбери режим работы программы:\n");
-        printf("1) Однократный расчет функции в заданной точке\n2) Серийный эксперимент\n3) Выключить программу\n>>> ");
-        if (scanf("%d", &choice) != 1)
+        do
         {
-            while (getwchar() != "\n");
-            continue;
-        }
+            system("cls");
+            printf("РџСЂРёРІРµС‚!\nР­С‚Р° РїСЂРѕРіСЂР°РјРјР° РїРѕР·РІРѕР»СЏРµС‚ РІС‹РїРѕР»РЅСЏС‚СЊ СЂР°СЃС‡РµС‚ Р·РЅР°С‡РµРЅРёР№ РґР»СЏ РЅРµРєРѕС‚РѕСЂРѕРіРѕ РЅР°Р±РѕСЂР° С„СѓРЅРєС†РёР№ \nРІ Р·Р°РґР°РЅРЅРѕР№ С‚РѕС‡РєРµ СЃ Р·Р°РґР°РЅРЅРѕР№ РїРѕРіСЂРµС€РЅРѕСЃС‚СЊСЋ Р·Р° СЃС‡РµС‚ СЂР°Р·Р»РѕР¶РµРЅРёСЏ СЌС‚РёС… С„СѓРЅРєС†РёР№ РІ СЂСЏРґ РўРµР№Р»РѕСЂР°.\nР’С‹Р±РµСЂРё СЂРµР¶РёРј СЂР°Р±РѕС‚С‹ РїСЂРѕРіСЂР°РјРјС‹:\n");
+            printf("1) РћРґРЅРѕРєСЂР°С‚РЅС‹Р№ СЂР°СЃС‡РµС‚ С„СѓРЅРєС†РёРё РІ Р·Р°РґР°РЅРЅРѕР№ С‚РѕС‡РєРµ\n2) РЎРµСЂРёР№РЅС‹Р№ СЌРєСЃРїРµСЂРёРјРµРЅС‚\n3) Р’С‹РєР»СЋС‡РёС‚СЊ РїСЂРѕРіСЂР°РјРјСѓ\n>>> ");
+        } while (!scan_methods(&choice, 1, 3));
 
         switch (choice)
         {
@@ -68,45 +77,37 @@ void menu_mode_1()
     int mode, accuracy, N, count, flag = 1;;
     double x, result, result_cur, diff;
 
+    do
+    {
+        system("cls");
+        printf("Р’С‹Р±РµСЂРёС‚Рµ С„СѓРЅРєС†РёСЋ:\n1) РЎРёРЅСѓСЃ - sin(x)\n2) РљРѕСЃРёРЅСѓСЃ - cos(x)\n3) Р­РєСЃРїРѕРЅРµРЅС‚Р° - exp(x)\n4) РђСЂРєСЃРёРЅСѓСЃ - arcsin(x)\n>>> ");
+    } while (!scan_methods(&mode, 1, 4));
     system("cls");
-    printf("Выберите функцию:\n1) Синус - sin(x)\n2) Косинус - cos(x)\n3) Экспонента - exp(x)\n4) Арксинус - arcsin(x)\n5) Выйти в меню\n>>> ");
-    if (scanf("%d", &mode) != 1 || mode < 1 || mode > 5)
+    do
     {
-        printf("Ошибка ввода. Попробуйте ещё раз.\n");
-        return;
-    }
-    system("cls");
-    printf("Задайте точку x, в которой необходимо вычислить значение: \n");
-    if (scanf("%lf", &x) != 1)
+        printf("Р—Р°РґР°Р№С‚Рµ С‚РѕС‡РєСѓ x, РІ РєРѕС‚РѕСЂРѕР№ РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹С‡РёСЃР»РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ:\n>>> ");
+    } while (scanf("%lf", &x) != 1);
+    do
     {
-        printf("Ошибка ввода. Попробуйте ещё раз.\n");
-        return;
-    }
-    printf(L"Введите нужную точность (кол-во знаков после запятой)\n");
-    if (scanf("%d", &accuracy) != 1 || accuracy < 0)
+        printf("Р’РІРµРґРёС‚Рµ РЅСѓР¶РЅСѓСЋ С‚РѕС‡РЅРѕСЃС‚СЊ (РєРѕР»-РІРѕ Р·РЅР°РєРѕРІ РїРѕСЃР»Рµ Р·Р°РїСЏС‚РѕР№):\n>>> ");
+    } while (scanf("%d", &accuracy) != 1 || accuracy < 0);
+    do
     {
-        printf("Ошибка ввода. Попробуйте ещё раз.\n");
-        return;
-    }
-    printf("Введите максимальное количество членов ряда\n");
-    if (scanf("%d", &N) != 1 || N <= 0)
-    {
-        printf("Ошибка ввода. Попробуйте ещё раз.\n");
-        return;
-    }
+        printf("Р’РІРµРґРёС‚Рµ РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ С‡Р»РµРЅРѕРІ СЂСЏРґР°:\n>>> ");
+    } while (scanf("%d", &N) != 1 || N <= 0);
     if (mode == 2 || mode == 3)
     {
         result = taylor_func[mode - 1](x + 1, accuracy, N, &count);
-        result_cur = сur_func[mode - 1](x + 1);
+        result_cur = СЃur_func[mode - 1](x + 1);
     }
     else
     {
         result = taylor_func[mode - 1](x, accuracy, N, &count);
-        result_cur = сur_func[mode - 1](x);
+        result_cur = СЃur_func[mode - 1](x);
     }
     diff = fabs(result - result_cur);
     system("cls");
-    printf("Эталонное значение: %lf\nОценка значения функции: %lf\nРазница между оценкой и эталонным значением: %lf\nКоличество вычесленных слагаемых: %d\n", result_cur, result, diff, count);
+    printf("Р­С‚Р°Р»РѕРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ: %lf\nРћС†РµРЅРєР° Р·РЅР°С‡РµРЅРёСЏ С„СѓРЅРєС†РёРё: %lf\nР Р°Р·РЅРёС†Р° РјРµР¶РґСѓ РѕС†РµРЅРєРѕР№ Рё СЌС‚Р°Р»РѕРЅРЅС‹Рј Р·РЅР°С‡РµРЅРёРµРј: %lf\nРљРѕР»РёС‡РµСЃС‚РІРѕ РІС‹С‡РµСЃР»РµРЅРЅС‹С… СЃР»Р°РіР°РµРјС‹С…: %d\n", result_cur, result, diff, count);
     system("pause");
 }
 
@@ -115,22 +116,20 @@ void menu_mode_2()
     int mode, count, terms;
     double x, est, refer_value;
 
-    system("cls");
-    printf("Выберите функцию:\n1) Синус - sin(x)\n2) Косинус - cos(x)\n3) Экспонента - exp(x)\n4) Арксинус - arcsin(x)\n5) Выйти в меню\n>>> ");
-    if (scanf("%d", &mode) != 1 || mode < 1 || mode > 5)
+    do
     {
-        printf("Ошибка ввода. Попробуйте ещё раз.\n");
-        return;
-    }
+        system("cls");
+        printf("Р’С‹Р±РµСЂРёС‚Рµ С„СѓРЅРєС†РёСЋ:\n1) РЎРёРЅСѓСЃ - sin(x)\n2) РљРѕСЃРёРЅСѓСЃ - cos(x)\n3) Р­РєСЃРїРѕРЅРµРЅС‚Р° - exp(x)\n4) РђСЂРєСЃРёРЅСѓСЃ - arcsin(x)\n>>> ");
+    } while (!scan_methods(&mode, 1, 4));
     system("cls");
-    printf("Задайте точку x, в которой необходимо вычислить значение: \n");
-    scanf("%lf", &x);
-    printf("Введите число экспериментов (от 1 до 25):\n");
-    if (scanf("%d", &count) != 1 || count < 1 || count > 25)
+    do
     {
-        printf("Ошибка ввода. Попробуйте ещё раз.\n");
-        return;
-    }
+        printf("Р—Р°РґР°Р№С‚Рµ С‚РѕС‡РєСѓ x, РІ РєРѕС‚РѕСЂРѕР№ РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹С‡РёСЃР»РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ:\n>>> ");
+    } while (scanf("%lf", &x) != 1);
+    do
+    {
+        printf("Р’РІРµРґРёС‚Рµ С‡РёСЃР»Рѕ СЌРєСЃРїРµСЂРёРјРµРЅС‚РѕРІ (РѕС‚ 1 РґРѕ 25):\n>>> ");
+    } while (scanf("%d", &count) != 1 || count < 1 || count > 25);
     system("cls");
     if (mode == 2 || mode == 3)
     {
@@ -140,7 +139,7 @@ void menu_mode_2()
     {
         refer_value = get_value(x, mode);
     }
-    printf("Эталонное значение: %lf\nОценка значения   Разница \n", refer_value);
+    printf("Р­С‚Р°Р»РѕРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ: %lf\nРћС†РµРЅРєР° Р·РЅР°С‡РµРЅРёСЏ   Р Р°Р·РЅРёС†Р° \n", refer_value);
     for (int i = 1; i <= count; ++i)
     {
         if (mode == 2 || mode == 3)
@@ -159,5 +158,5 @@ void menu_mode_2()
 
 double get_value(double x, int choice)
 {
-    return сur_func[choice - 1](x);
+    return СЃur_func[choice - 1](x);
 }
