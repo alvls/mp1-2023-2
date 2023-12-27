@@ -1,16 +1,19 @@
 #include "func.h"
 
+// Факториал
 unsigned long long factorial(unsigned long long n)
 {
     if (n == 0)  return 1;
     return n * factorial(n - 1);
 }
 
+// Высчитывание точности
 double calc_acc(int accuracy)
 {
     return pow(10, -accuracy);
 }
 
+// "Тейлоровский" синус
 double taylor_sin(double x, int accuracy, int N, int* count)
 {
     double result = 0, term, accuracy_value = calc_acc(accuracy), period = 2 * PI;
@@ -26,6 +29,7 @@ double taylor_sin(double x, int accuracy, int N, int* count)
     return result;
 }
 
+// "Тейлоровский" косинус
 double taylor_cos(double x, int accuracy, int N, int* count)
 {
     double result = 0, term, accuracy_value = calc_acc(accuracy), period = 2 * PI;
@@ -41,6 +45,7 @@ double taylor_cos(double x, int accuracy, int N, int* count)
     return result;
 }
 
+// "Тейлоровская" эксопнента
 double taylor_exp(double x, int accuracy, int N, int* count)
 {
     double result = 0, term, accuracy_value = calc_acc(accuracy);
@@ -55,6 +60,7 @@ double taylor_exp(double x, int accuracy, int N, int* count)
     return result;
 }
 
+// "Тейлоровский" арксинус
 double taylor_arcsin(double x, int accuracy, int N, int* count)
 {
     double result = 0, term, accuracy_value = calc_acc(accuracy);
