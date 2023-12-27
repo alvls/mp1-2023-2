@@ -6,12 +6,12 @@
 
 #include "func.h"
 
-
+// Объявление функций в правильном порядке
 void menu_mode_1();
 void menu_mode_2();
 double get_value(double x, int choice);
-double calc_est(double x, int choice, int count);
 
+// Считывание вариантов ответа пользователя в меню
 int scan_methods(int* result, int min_v, int max_v)
 {
     int methods;
@@ -22,6 +22,7 @@ int scan_methods(int* result, int min_v, int max_v)
     return 0;
 }
 
+// "Тейлоровские" функции, которые мы создали сами 
 double (*taylor_func[4])(double, int, int, int*) =
 {
     taylor_exp,
@@ -30,6 +31,7 @@ double (*taylor_func[4])(double, int, int, int*) =
     taylor_arcsin,
 };
 
+// Функции из библиотеки math.h
 double (*сur_func[4])(double) =
 {
     exp,
@@ -38,6 +40,7 @@ double (*сur_func[4])(double) =
     asin,
 };
 
+// Основной блок программы (основное меню)
 int main()
 {
     setlocale(LC_ALL, "Rus");
@@ -72,6 +75,7 @@ int main()
     return 0;
 }
 
+// Меню первого режима
 void menu_mode_1()
 {
     int mode, accuracy, N, count, flag = 1;;
@@ -111,6 +115,7 @@ void menu_mode_1()
     system("pause");
 }
 
+// Меню второго режима
 void menu_mode_2()
 {
     int mode, count, terms;
@@ -156,6 +161,7 @@ void menu_mode_2()
     system("pause");
 }
 
+// Функция, позволяющая брать нужную математическую функцию в данный момент
 double get_value(double x, int choice)
 {
     return сur_func[choice - 1](x);
