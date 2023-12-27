@@ -7,7 +7,8 @@
 
 unsigned long long factorial(unsigned long long n);
 double calc_acc(int accuracy);
-double taylor_exp(double x, int accuracy, int N, int* count);
 double taylor_sin(double x, int accuracy, int N, int* count);
 double taylor_cos(double x, int accuracy, int N, int* count);
+double taylor_exp(double x, int accuracy, int N, int* count);
 double taylor_arcsin(double x, int accuracy, int N, int* count);
+
