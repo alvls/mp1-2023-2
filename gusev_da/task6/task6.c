@@ -128,25 +128,11 @@ void menu_mode_2()
         printf("Введите число экспериментов (от 1 до 25):\n>>> ");
     } while (scanf("%d", &count) != 1 || count < 1 || count > 25);
     system("cls");
-    if (mode == 2 || mode == 3)
-    {
-        refer_value = get_value(x + 1, mode);
-    }
-    else
-    {
-        refer_value = get_value(x, mode);
-    }
+    refer_value = get_value(x, mode);
     printf("Эталонное значение: %lf\nОценка значения   Разница \n", refer_value);
     for (int i = 1; i <= count; ++i)
     {
-        if (mode == 2 || mode == 3)
-        {
-            est = taylor_func[mode - 1](x + 1, 10000, i, &terms);
-        }
-        else
-        {
-            est = taylor_func[mode - 1](x, 10000, i, &terms);
-        }
+        est = taylor_func[mode - 1](x, 10000, i, &terms);
         double difference = fabs(est - refer_value);
         printf("%-16lf  %-8lf \n", est, difference);
     }
