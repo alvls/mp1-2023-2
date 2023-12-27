@@ -25,18 +25,18 @@ int scan_methods(int* result, int min_v, int max_v)
 // "Тейлоровские" функции, которые мы создали сами 
 double (*taylor_func[4])(double, int, int, int*) =
 {
-    taylor_exp,
     taylor_sin,
     taylor_cos,
+    taylor_exp,
     taylor_arcsin,
 };
 
 // Функции из библиотеки math.h
 double (*сur_func[4])(double) =
 {
-    exp,
     sin,
     cos,
+    exp,
     asin,
 };
 
@@ -99,16 +99,8 @@ void menu_mode_1()
     {
         printf("Введите максимальное количество членов ряда:\n>>> ");
     } while (scanf("%d", &N) != 1 || N <= 0);
-    if (mode == 2 || mode == 3)
-    {
-        result = taylor_func[mode - 1](x + 1, accuracy, N, &count);
-        result_cur = сur_func[mode - 1](x + 1);
-    }
-    else
-    {
-        result = taylor_func[mode - 1](x, accuracy, N, &count);
-        result_cur = сur_func[mode - 1](x);
-    }
+    result = taylor_func[mode - 1](x, accuracy, N, &count);
+    result_cur = сur_func[mode - 1](x);
     diff = fabs(result - result_cur);
     system("cls");
     printf("Эталонное значение: %lf\nОценка значения функции: %lf\nРазница между оценкой и эталонным значением: %lf\nКоличество вычесленных слагаемых: %d\n", result_cur, result, diff, count);
@@ -166,3 +158,4 @@ double get_value(double x, int choice)
 {
     return сur_func[choice - 1](x);
 }
+
