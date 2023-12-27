@@ -55,7 +55,7 @@ void mode2(TfuncPart Tfunc, TfuncInpWork TMath, double x, int sgn) {
 	unsigned long long fact = 1, n = 1; double xpow = 1;
 
 	printf("Exact value of the function value at this point: %.20lf\n", Mres);
-	printf("Exp %10c Evalution %15c Difference\n", ' ', ' ');
+	printf("Exp %10c Evalution %27c Difference\n", ' ', ' ');
 	while (expInd < nMax) {
 		res += sgn * Tfunc(x, &n, &xpow, &fact, expInd);
 		printf("%-2u     %-35.20lf    %-35.20lf\n", expInd+1, res, fabs(res - Mres));

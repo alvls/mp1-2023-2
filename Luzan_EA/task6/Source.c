@@ -17,7 +17,7 @@ int main() {
 		//argument
 		x = getArgument();
 		int sgn = 1; 
-		if ((fNum == 0) || (fNum == 1)) {
+		if ((fNum == 1) || (fNum == 2)) {
 			simplArgument(&x, &sgn, intervals, fNum);
 		}
 		else {
