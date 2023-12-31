@@ -63,7 +63,7 @@ void print_files(file* files, int file_count)
     wprintf(L"----                                                                           ---------------- %8c   -----------\n", ' ');
     for (int i = 0; i < file_count; ++i)
     {
-        wprintf(L"%-78.78ls %.19ls    %ld\n", files[i].name, files[i].time_created, files[i].size);
+        wprintf(L"%-78.78ls %.19ls    %llu\n", files[i].name, files[i].time_created, files[i].size);
     }
     wprintf(L"\n\n\n");
 }

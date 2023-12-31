@@ -10,7 +10,7 @@ typedef struct
 {
 	wchar_t name[256];
 	wchar_t time_created[30];
-	long size; //bytes
+	unsigned long long size; //bytes
 } file;
 
 

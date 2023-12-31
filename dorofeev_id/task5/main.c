@@ -36,7 +36,7 @@ int main()
 {
     setlocale(LC_ALL, "rus");
 
-    wchar_t path[256] = L"c:/*.*";
+    wchar_t path[256] = L"D:/test3/*.*";
     int file_count;
     file* lol = get_files(path, &file_count);
 
@@ -202,7 +202,7 @@ int main()
                     }
                     else
                     {
-                        measure_time(shell_name, lol, file_count, order, "Counting Sort by name");
+                        measure_time(shell_name, lol, file_count, order, "Shell Sort by name");
                         fl = 0;
                         break;
                     }
