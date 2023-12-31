@@ -328,7 +328,6 @@ void main() {
 		{
 			num = 0;
 		}
-
 		switch (num) {
 		case 0:
 			wa = 0;
