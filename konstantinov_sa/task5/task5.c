@@ -15,7 +15,6 @@ enum Stype
 {
     size = 0,
     name = 1,
-    //time = 2
 };
 
 int cmp(file a, file b, enum Stype type, int rev) {
@@ -196,9 +195,9 @@ void countingSort(file a[], long size, enum Stype type, int rev) {
 
     // Подсчитываем частоты размеров файлов
     for (long i = 0; i < size; i++) {
-        //a[i].size %= MAX_SIZE+1;//a[i].size % (MAX_SIZE+1)
+
         count[a[i].size % (MAX_SIZE + 1)]++;
-        //printf(">>> %-25.25s %25u\n", a[i].name, a[i].size);
+
         
     }
 
@@ -226,7 +225,6 @@ void countingSort(file a[], long size, enum Stype type, int rev) {
     if (!rev) {
         for (long i = 0; i < size; i++) {
             a[i] = temp[i];
-            //printf(">%-25.25s %25u\n", a[i].name, a[i].size);
         }
     }
     else {
@@ -242,8 +240,6 @@ void countingSort(file a[], long size, enum Stype type, int rev) {
 void printfiles(file* f, int count) {
     printf("\nИМЯ %40c РАЗМЕР\n",' ');
     for (int i = 0; i < count;i++) {
-        //printf("%-12.12s %.24s  %10ld\n", c_file.name, buffer, c_file.size);
-        //printf("%s %d\n", f[i].name, f[i].size);
         printf("%-25.25s %25u\n", f[i].name, f[i].size);
     }
 }
@@ -291,9 +287,6 @@ int main() {
             printf("Папка пуста или не существует!\n");
         else
         {
-            //printf("Listing of .c files\n\n");
-            //printf("FILE         DATE %24c   SIZE\n", ' ');
-            //printf("----         ---- %24c   ----\n", ' ');
             do {
                 char buffer[30];
                 ctime_s(buffer, _countof(buffer), &c_file.time_write);
@@ -360,7 +353,4 @@ int main() {
 
         printf("\nВремя выполнения = %lf\n", end - start);
     }
-    //isSortValid(files, count);
- 
-    //system("pause");
 }
