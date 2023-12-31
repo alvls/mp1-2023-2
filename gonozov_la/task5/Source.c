@@ -7,7 +7,7 @@
 #include <time.h>  
 #include <omp.h>
 
-#define M 100 //максимальное число файлов, обрабатываемое программой
+#define M 500 //максимальное число файлов, обрабатываемое программой
 struct direct {
     char * name;
     long int size;
@@ -76,7 +76,6 @@ void shellSort(long int sorted_massive[], long int size) { //Сортировка Шелла
     long int inc, i, j, seq[40];
     int s;
     s = increment(seq, size); // вычисление последовательности приращений
-    printf("%ld %ld %ld %ld %ld", seq[0], seq[1], seq[2], seq[3], seq[4]);
     while (s >= 0) {// сортировка вставками с инкрементами inc[] 
         inc = seq[s--];
         for (i = inc; i < size; i++) {
@@ -127,9 +126,12 @@ void main() {
         while (choice!=0) {
             printf("Выберите метод сортировки:\n1.Пузырьком\n2.Выбором\n3.Вставками\n4.Слиянием\n5.Хоара\n6.Шелла\n7.Подсчетом\n0.Вернуться к предыдущему шагу\n");
             do {
-                printf("Введите число от 1 до 7 включительно: ");
+                printf("Введите число от 0 до 7 включительно: ");
                 scanf("%d", &choice);
             } while (choice > 7 || choice < 0);
+            if (choice == 0) {
+                break;
+            }
             if (choice == 1) { //пузырьком
                 start = omp_get_wtime();
                 long int help_in_bubble = 0;
